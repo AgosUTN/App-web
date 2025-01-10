@@ -1,0 +1,66 @@
+services:
+  api:
+    build: ./api
+    volumes:
+      - ./api:/usr/src/api
+      - /usr/src/api/node_modules
+    ports:
+      - "${API_PORT}:${API_PORT}"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    env_file:
+      - ./.env
+
+  mysql:
+    image: mysql:8
+    ports:
+      - "3307:${DB_PORT}" # Mapeo el puerto 3307 de mi pc host al db_port del contenedor. Porque el 3306 lo tengo ocupado en workbench.
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"] # Ejecuta comando para verificar si MySQL responde
+      interval: 10s # Ejecuta el check cada 10 segundos
+      timeout: 5s # El check falla si no responde en 5 segundos
+      retries: 5 # Intenta 5 veces antes de marcar el contenedor como unhealthy
+      # Importante, el test ese se ejecuta adentro del contenedor, por eso se pone localhost y no mysql (nombre del servicio)
+      # Como ya vimos, si te queres conectar desde afuera del contenedor (por ejemplo desde el contenedor de la api) tenes que usar el nombre con el que se conoce al servicio en la red que docker genera.
+      # Este healtcheck es necesario para el caso de borrar los contenedores y volverlos a crear. Si reconstruis los contenedores puede darse (no siempre) que el contenedor de mysql se levante pero no este inicializado del todo.
+  frontend:
+    build: ./frontend
+    volumes:
+      - ./frontend:/usr/src/frontend
+      - /usr/src/frontend/node_modules
+    ports:
+      - "${FRONT_PORT}:${FRONT_PORT}"
+    environment:
+      - NODE_ENV=development
+      # Mi front no tiene un environment.production/development.ts por lo que es un poco opcional ese comando.
+    command: npm start # Comando para iniciar el servidor de desarrollo de Angular
+    depends_on:
+      - api
+    # Opcional, el front maneja bien el caso de que no este la API online.
+    env_file:
+      - ./.env
+    mem_limit: 1.5G
+    # La memoria predeterminada no alcanza para lanzar el servidor.
+
+  servicio-cuotas:
+    build: ./servicio-cuotas
+    volumes:
+      - ./servicio-cuotas:/usr/src/servicio-cuotas
+      - /usr/src/servicio-cuotas/node_modules
+    ports:
+      - "${CUOTAS_PORT}:${CUOTAS_PORT}"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    env_file:
+      - ./.env
+
+volumes:
+  mysql-data:

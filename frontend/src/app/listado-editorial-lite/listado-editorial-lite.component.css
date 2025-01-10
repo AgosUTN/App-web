@@ -1,0 +1,43 @@
+@media (max-width: 768px) {
+  .pagination-lg .page-link {
+    padding: 0.5rem 0.75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+  .pagination-lg .page-item:first-child .page-link {
+    border-top-left-radius: 0.25rem;
+    border-bottom-left-radius: 0.25rem;
+  }
+
+  .pagination-lg .page-item:last-child .page-link {
+    border-top-right-radius: 0.25rem;
+    border-bottom-right-radius: 0.25rem;
+  }
+}
+/* CSS TABLA */
+.tableCustom {
+  border: 3px solid whitesmoke; /* Borde alrededor de toda la tabla */
+  border-radius: 5px; /* Borde redondeado */
+  border-collapse: separate; /* Para que el border-radius funcione */
+  border-spacing: 0; /* Elimina el espacio entre celdas */
+  box-shadow: 0 4px 10px rgba(91, 131, 241, 0.2); /* Sombra */
+}
+
+.tableCustom tr:first-child th:first-child {
+  border-top-left-radius: 5px;
+}
+
+.tableCustom tr:first-child th:last-child {
+  border-top-right-radius: 5px;
+}
+
+.tableCustom tr:last-child td:first-child {
+  border-bottom-left-radius: 5px;
+}
+
+.tableCustom tr:last-child td:last-child {
+  border-bottom-right-radius: 5px;
+}
+.tableCustom tr:last-child td {
+  border-bottom: none; /* Mejora el problema del hover pero sigue viendose un poco */
+}

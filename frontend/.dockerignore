@@ -1,0 +1,52 @@
+# Dependencies
+/node_modules
+/npm-debug.log
+/yarn-debug.log
+/yarn-error.log
+
+# Compiled output
+/dist
+/tmp
+/out-tsc
+/bazel-out
+
+# IDEs and editors
+.idea/
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+.vscode/
+
+# Testing
+/coverage
+/coverage-e2e
+/test-results
+
+# Local config & environment
+.env
+.env.local
+.env.*.local
+*.env.json
+
+# System Files
+.DS_Store
+Thumbs.db
+
+# Angular cache
+.angular/cache
+.sass-cache/
+
+# e2e
+/e2e/*.js
+/e2e/*.map
+
+# Miscellaneous
+/.sass-cache
+/connect.lock
+/libpeerconnection.log
+testem.log
+/typings
+*.log

@@ -1,0 +1,30 @@
+<ng-template #content>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-title">Eliminar {{ crud }}</h4>
+    <button type="button" class="btn-close" (click)="closeModal()"></button>
+  </div>
+  <div class="modal-body">
+    <p>
+      <strong>
+        {{ messageConfirmation }}
+        <span class="text-primary">"{{ nombre }}"</span></strong
+      >
+    </p>
+    <p>
+      Toda la información asociada se perderá.
+      <span class="text-danger">Esta operación no puede revertirse.</span>
+    </p>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-outline-secondary"
+      (click)="closeModal()"
+    >
+      Cancelar
+    </button>
+    <button type="button" class="btn btn-danger" (click)="closeModal(true)">
+      Eliminar {{ crud }}
+    </button>
+  </div>
+</ng-template>

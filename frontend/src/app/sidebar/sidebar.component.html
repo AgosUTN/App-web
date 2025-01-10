@@ -1,0 +1,27 @@
+<div
+  [ngClass]="{ active: sidebarActive }"
+  class="pt-3 pb-4 px-1 sidebarCustom"
+  id="side_nav"
+>
+  <div class="header-box px-2 pt-3 pb-0">
+    <h1 class="fs-4">
+      <span class="text-white px-3">Menú</span>
+    </h1>
+  </div>
+  <hr class="hr-color mx-3" />
+  <ul class="list-unstyled px-2 sidebarCustom">
+    <li
+      *ngFor="let item of menuItems; let i = index"
+      [class.active]="isActive(item.url)"
+      class=""
+    >
+      <a
+        [routerLink]="[item.url]"
+        class="text-decoration-none px-3 py-2 d-block"
+      >
+        <i [ngClass]="item.icon"></i> {{ item.label }}
+      </a>
+    </li>
+  </ul>
+  <hr class="hr-color mx-3" />
+</div>

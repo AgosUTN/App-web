@@ -1,0 +1,232 @@
+<div class="d-flex align-items-center justify-content-center" id="listado">
+  <div class="col-11" id="contenedor-listado-paginacion">
+    <nav class="navbar bg-body-tertiary">
+      <div class="container-fluid">
+        <form class="d-flex">
+          <input
+            class="form-control me-2"
+            placeholder="ID Préstamo"
+            [formControl]="searchText"
+          />
+          <button
+            class="btn btn-outline-primary"
+            type="button"
+            (click)="updatePagination()"
+          >
+            Buscar
+          </button>
+        </form>
+        <div>
+          <div
+            class="btn-group btn-sm-md"
+            role="group"
+            aria-label="Basic radio toggle button group"
+          >
+            <input
+              type="radio"
+              class="btn-check"
+              name="btnradio"
+              id="btnradio1"
+              autocomplete="off"
+              checked
+              (click)="loadPrestamos()"
+            />
+            <label class="btn btn-outline-primary" for="btnradio1"
+              >Préstamos</label
+            >
+
+            <input
+              type="radio"
+              class="btn-check"
+              name="btnradio"
+              id="btnradio2"
+              autocomplete="off"
+              (click)="loadPrestamos('Finalizado')"
+            />
+            <label class="btn btn-outline-primary" for="btnradio2"
+              >Préstamos devueltos</label
+            >
+
+            <input
+              type="radio"
+              class="btn-check"
+              name="btnradio"
+              id="btnradio3"
+              autocomplete="off"
+              (click)="loadPrestamos('Pendiente')"
+            />
+            <label class="btn btn-outline-primary" for="btnradio3"
+              >Préstamos no devueltos</label
+            >
+          </div>
+        </div>
+        <button class="btn btn-primary" [routerLink]="['/prestamo/alta']">
+          Nuevo Préstamo
+        </button>
+      </div>
+    </nav>
+    <div class="col-11 table-responsive" id="contenedor-listado">
+      <table class="table table-hover fs-5 tableCustom">
+        <thead class="table-primary">
+          <tr>
+            <th class="col-2"># ID</th>
+            <th class="col-3">Fecha</th>
+            <th class="col-3">Estado Préstamo</th>
+            <th class="col-2">Cantidad de Libros</th>
+            <th class="col-2">ID Socio</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let prestamo of paginatedPrestamos">
+            <td class="clickeable" (click)="openScrollableContent(prestamo)">
+              {{ prestamo.id }}
+            </td>
+            <td>{{ prestamo.fechaPrestamo }}</td>
+            <td>{{ prestamo.estadoPrestamo }}</td>
+            <td>{{ prestamo.ordenLinea }}</td>
+            <td>{{ prestamo.miSocioPrestamo }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <nav>
+      <ul class="pagination pagination-lg">
+        <li class="page-item">
+          <button
+            class="page-link"
+            (click)="previousPage()"
+            [disabled]="currentPage === 1"
+          >
+            Anterior
+          </button>
+        </li>
+        <li class="page-item">
+          <a class="page-link" (click)="setPage(1)">1</a>
+        </li>
+        <li class="page-item">
+          <a class="page-link">{{ currentPage }}</a>
+        </li>
+        <li class="page-item">
+          <a class="page-link" (click)="setPage(totalPages)">{{
+            totalPages
+          }}</a>
+        </li>
+        <li class="page-item">
+          <button
+            class="page-link"
+            (click)="nextPage()"
+            [disabled]="currentPage === totalPages"
+          >
+            Siguiente
+          </button>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</div>
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h3 class="modal-title">
+      Libros prestados - Préstamo #{{ prestamoModal.id }}
+    </h3>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="closeModals()"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <div
+      *ngFor="let lineaPrestamo of prestamoModal.misLpPrestamo; let i = index"
+    >
+      <h4>Libro {{ i + 1 }} - {{ lineaPrestamo.miEjemplar.miLibro.titulo }}</h4>
+      <div class="divModalLinea">
+        <h5 class="h5ModalLinea">Fecha devolución teórica:</h5>
+        <p class="pModalLinea">
+          {{
+            lineaPrestamo.fechaDevolucionTeorica | date : "yyyy/MM/dd" : "UTC"
+          }}
+        </p>
+      </div>
+      <div class="divModalLinea">
+        <h5 class="h5ModalLinea">ID Libro:</h5>
+        <p class="pModalLinea">
+          {{ lineaPrestamo.miEjemplar.miLibro.id }}
+        </p>
+      </div>
+      <div class="divModalLinea">
+        <h5 class="h5ModalLinea">Número de Ejemplar:</h5>
+        <p class="pModalLinea">
+          {{ lineaPrestamo.miEjemplar.id }}
+        </p>
+      </div>
+      <div class="divModalLinea">
+        <h5 class="h5ModalLinea">Fecha devolución real:</h5>
+        <p class="pModalLinea">
+          {{
+            lineaPrestamo.fechaDevolucionReal
+              ? (lineaPrestamo.fechaDevolucionReal
+                | date : "yyyy/MM/dd" : "UTC")
+              : "Pendiente"
+          }}
+        </p>
+        <button
+          type="button"
+          class="btn btn-success btnModalLinea"
+          [disabled]="lineaPrestamo.fechaDevolucionReal"
+          (click)="
+            validacion(
+              prestamoModal.miSocioPrestamo,
+              lineaPrestamo.miEjemplar.id,
+              lineaPrestamo.miEjemplar.miLibro.id
+            );
+            lineaPrestamoActual = lineaPrestamo.ordenLinea
+          "
+        >
+          Devolver libro
+        </button>
+      </div>
+      <hr />
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="closeModals()">
+      Cerrar
+    </button>
+  </div>
+</ng-template>
+<ng-template #devolucion let-modal>
+  <div class="modal-header">
+    <h3 class="modal-title">Devolver Libro</h3>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="closeModalDevolucion()"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <p class="pModalLinea">{{ bodyDevolucion }}</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary" (click)="submitDevolucion()">
+      Confirmar actualización
+    </button>
+    <button
+      type="button"
+      class="btn btn-danger"
+      (click)="closeModalDevolucion()"
+    >
+      Cancelar
+    </button>
+  </div>
+</ng-template>
+<app-modal-error [title]="'Bad request'">
+  <div modal-body>
+    <p>
+      La solicitud enviada es erronéa. Puede no existir el Socio, Libro,
+      Ejemplar o este último no está pendiente de devolución
+    </p>
+  </div>
+</app-modal-error>

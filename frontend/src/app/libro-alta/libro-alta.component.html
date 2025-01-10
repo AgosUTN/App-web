@@ -1,0 +1,167 @@
+<div class="container-fluid px-1 py-0 mx-auto">
+  <div class="col-xl-7 col-lg-8 col-md-9 col-11 text-center custom">
+    <div class="card">
+      <form class="form-card" [formGroup]="libroForm">
+        <div class="row justify-content-between text-left">
+          <div class="form-group col-sm-5 flex-column d-flex">
+            <label class="form-control-label px-3 fs-3"
+              >Titulo<span class="text-danger"> *</span></label
+            >
+            <input
+              maxlength="60"
+              type="text"
+              formControlName="titulo"
+              placeholder="Titulo del libro"
+            />
+            <div>
+              <small *ngIf="tituloRepetido"
+                >El Título ingresado ya está en uso.</small
+              >
+            </div>
+          </div>
+          <div class="form-group col-sm-4 flex-column d-flex">
+            <label class="form-control-label px-3 fs-3"
+              >Código ISBN<span class="text-danger"> *</span></label
+            >
+            <input
+              maxlength="17"
+              type="text"
+              formControlName="isbn"
+              placeholder="Código ISBN"
+            />
+            <div
+              *ngIf="
+                libroForm.get('isbn')?.invalid && libroForm.get('isbn')?.touched
+              "
+            >
+              <small *ngIf="libroForm.get('isbn')?.errors?.['invalidIsbn']">
+                El ISBN ingresado es inválido.
+              </small>
+            </div>
+            <div>
+              <small *ngIf="isbnRepetido"
+                >El ISBN ingresado ya está en uso.</small
+              >
+            </div>
+          </div>
+          <div class="form-group col-sm-3 flex-column d-flex">
+            <label class="form-control-label px-3 fs-3"
+              >Ejemplares<span class="text-danger"> </span
+            ></label>
+            <input
+              type="number"
+              formControlName="cantEjemplares"
+              placeholder="0"
+              min="0"
+            />
+          </div>
+        </div>
+
+        <div class="form-group col-sm-12 flex-column d-flex">
+          <label class="form-control-label px-3 fs-3"
+            >Descripción<span class="text-danger"> *</span></label
+          >
+          <textarea
+            formControlName="descripcion"
+            placeholder="Descripción del libro"
+            class="custom-textarea"
+            maxlength="500"
+          ></textarea>
+        </div>
+        <div class="row justify-content-between text-left">
+          <div class="form-group col-sm-6 flex-column d-flex">
+            <label class="form-control-label px-3 fs-3"
+              >Autor<span class="text-danger"> *</span></label
+            >
+            <input
+              type="number"
+              min="0"
+              formControlName="miAutor"
+              placeholder="ID del Autor"
+              class="no-spin"
+              (keydown)="onKeyDown($event)"
+            />
+          </div>
+          <div class="form-group col-sm-6 flex-column d-flex">
+            <label class="form-control-label px-3 fs-3"
+              >Editorial<span class="text-danger"> *</span></label
+            >
+            <input
+              type="text"
+              formControlName="miEditorial"
+              placeholder="ID de la Editorial"
+            />
+            <input
+              type="text"
+              placeholder="Nombre Editorial"
+              formControlName="nombreEditorial"
+            />
+            <button
+              class="btn btn-outline-primary mb-2 me-2"
+              (click)="openXl()"
+            >
+              Seleccionar ID
+            </button>
+          </div>
+        </div>
+
+        <div class="row justify-content-end">
+          <div class="form-group col-sm-12">
+            <button
+              [disabled]="!isFormValid()"
+              type="button"
+              class="btn btn-primary"
+              (click)="onSubmit()"
+            >
+              {{ tipoFormulario }}
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div>
+      <h4 class="link-volver" [routerLink]="['/libro']">Volver a listado</h4>
+    </div>
+  </div>
+</div>
+
+<!-- No visible -->
+
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">Buscar Editorial</h4>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="closeModal()"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <app-listado-editorial-lite
+      (datosEditorial)="setDatosEditorial($event)"
+    ></app-listado-editorial-lite>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="closeModal()">
+      Cerrar
+    </button>
+  </div>
+</ng-template>
+
+<div
+  *ngIf="showSuccessDiv"
+  class="alert alert-success alert-dismissible fade show successCustom fs-3 text-center col-8"
+  [@fadeInOut]
+>
+  {{ messageSuccess }}
+  <button type="button" class="close mx-2" (click)="showSuccessDiv = false">
+    <span>&times;</span>
+  </button>
+</div>
+
+<app-modal-error [title]="'Bad request'">
+  <div modal-body>
+    <p>La solicitud enviada es erronéa.</p>
+  </div>
+</app-modal-error>

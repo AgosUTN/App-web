@@ -1,0 +1,120 @@
+<div class="d-flex align-items-center justify-content-center" id="listado">
+  <div class="col-11" id="contenedor-listado-paginacion">
+    <nav class="navbar bg-body-tertiary">
+      <div class="container-fluid">
+        <form class="d-flex">
+          <input
+            class="form-control me-2"
+            placeholder="Nombre editorial"
+            [formControl]="searchText"
+          />
+          <button
+            class="btn btn-outline-primary"
+            type="button"
+            (click)="updatePagination()"
+          >
+            Buscar
+          </button>
+        </form>
+        <button class="btn btn-primary" [routerLink]="['/editorial/alta']">
+          Nueva editorial
+        </button>
+      </div>
+    </nav>
+    <div class="col-11 table-responsive" id="contenedor-listado">
+      <table class="table table-hover fs-5 tableCustom">
+        <thead class="table-primary">
+          <tr>
+            <th class="col-2"># ID</th>
+            <th class="col-4">Nombre editorial</th>
+            <th class="col-4">Cantidad de libros</th>
+            <th class="col-1 text-center">Editar</th>
+            <th class="col-1 text-center">Eliminar</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let editorial of paginatedEditoriales">
+            <td>{{ editorial.id }}</td>
+            <td>{{ editorial.nombre }}</td>
+            <td>{{ editorial.cantLibros }}</td>
+            <td class="text-center">
+              <button
+                class="btn btn-primary"
+                *ngIf="editorial.id"
+                [routerLink]="['/editorial/actualizar', editorial.id]"
+              >
+                <i class="fas fa-edit"></i>
+              </button>
+            </td>
+            <td class="text-center">
+              <button
+                type="button"
+                class="btn btn-danger"
+                *ngIf="editorial.id"
+                (click)="openDeleteModal(editorial.id, editorial.nombre)"
+                [disabled]="editorial.cantLibros != 0"
+              >
+                <i class="fas fa-trash-alt"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <nav>
+      <ul class="pagination pagination-lg">
+        <li class="page-item">
+          <button
+            class="page-link"
+            (click)="previousPage()"
+            [disabled]="currentPage === 1"
+          >
+            Anterior
+          </button>
+        </li>
+        <li class="page-item">
+          <a class="page-link" (click)="setPage(1)">1</a>
+        </li>
+        <li class="page-item">
+          <a class="page-link">{{ currentPage }}</a>
+        </li>
+        <li class="page-item">
+          <a class="page-link" (click)="setPage(totalPages)">{{
+            totalPages
+          }}</a>
+        </li>
+        <li class="page-item">
+          <button
+            class="page-link"
+            (click)="nextPage()"
+            [disabled]="currentPage === totalPages"
+          >
+            Siguiente
+          </button>
+        </li>
+        <button
+          type="button"
+          class="btn"
+          id="popover"
+          popoverTitle="Borrar Editorial"
+          [autoClose]="true"
+          ngbPopover="Para borrar una Editorial, esta no debe tener ningún libro."
+          #popover="ngbPopover"
+          (shown)="onPopoverShow()"
+          (hidden)="onPopoverHide()"
+        >
+          <i
+            [ngClass]="{ 'hover-active': isPopoverActive }"
+            class="fa-solid fa-circle-exclamation"
+            style="color: #cfe2ff; font-size: 50px"
+          ></i>
+        </button>
+      </ul>
+    </nav>
+  </div>
+  <app-modal-delete
+    [messageConfirmation]="mensajeModal"
+    [crud]="'Editorial'"
+    (confirmacionEvento)="handleDelete($event)"
+  ></app-modal-delete>
+</div>

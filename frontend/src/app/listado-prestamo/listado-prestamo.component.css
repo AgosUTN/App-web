@@ -1,0 +1,127 @@
+:host {
+  height: 100%;
+}
+
+#listado {
+  height: 100%;
+}
+#contenedor-listado {
+  width: 100%;
+}
+
+#contenedor-listado-paginacion {
+  margin-bottom: 10%;
+  margin-top: 2%;
+  margin-right: 2%;
+}
+
+/* CSS TABLA */
+.tableCustom {
+  border: 3px solid whitesmoke; /* Borde alrededor de toda la tabla */
+  border-radius: 5px; /* Borde redondeado */
+  border-collapse: separate; /* Para que el border-radius funcione */
+  border-spacing: 0; /* Elimina el espacio entre celdas */
+  box-shadow: 0 4px 10px rgba(91, 131, 241, 0.2); /* Sombra */
+}
+
+.tableCustom tr:first-child th:first-child {
+  border-top-left-radius: 5px;
+}
+
+.tableCustom tr:first-child th:last-child {
+  border-top-right-radius: 5px;
+}
+
+.tableCustom tr:last-child td:first-child {
+  border-bottom-left-radius: 5px;
+}
+
+.tableCustom tr:last-child td:last-child {
+  border-bottom-right-radius: 5px;
+}
+.tableCustom tr:last-child td {
+  border-bottom: none; /* Mejora el problema del hover pero sigue viendose un poco */
+}
+
+/*Fin CSS tabla*/
+#popover {
+  margin-left: auto;
+}
+.hover-active {
+  color: #050d14 !important;
+}
+#popover:hover i {
+  color: #050d14 !important; /* Color del ícono cuando se hace hover */
+
+  transition: all 0.3s ease; /* Suaviza la transición */
+}
+
+@media (max-width: 768px) {
+  /*Sobreescribe la clase .pagination para no romper resolucion mobile*/
+  .pagination-lg .page-link {
+    padding: 0.5rem 0.75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+
+  .pagination-lg .page-item:first-child .page-link {
+    border-top-left-radius: 0.25rem;
+    border-bottom-left-radius: 0.25rem;
+  }
+
+  .pagination-lg .page-item:last-child .page-link {
+    border-top-right-radius: 0.25rem;
+    border-bottom-right-radius: 0.25rem;
+  }
+  #popover {
+    font-size: 15px;
+  }
+  .btn-sm-md {
+    font-size: 12px;
+    padding: 5px 10px;
+    padding-left: 0;
+    z-index: 0;
+  }
+  .divModalLinea .h5ModalLinea,
+  .divModalLinea .pModalLinea {
+    font-size: small !important;
+  }
+  .divModalLinea {
+    display: flex;
+    align-items: baseline;
+
+    margin-right: 0%;
+  }
+  .h5ModalLinea {
+    margin-right: 10px;
+    margin-bottom: 0;
+  }
+  .pModalLinea {
+    margin-right: 10%;
+  }
+
+  .btnModalLinea {
+    margin-left: auto;
+  }
+}
+.clickeable:hover {
+  color: #007bff;
+  cursor: pointer; /* Cambia el cursor para indicar que es interactivo */
+}
+.divModalLinea {
+  display: flex;
+  align-items: baseline;
+  font-size: larger;
+}
+.h5ModalLinea {
+  margin-right: 10px;
+  margin-bottom: 0;
+  font-size: larger;
+}
+.pModalLinea {
+  font-size: larger;
+}
+
+.btnModalLinea {
+  margin-left: auto;
+}

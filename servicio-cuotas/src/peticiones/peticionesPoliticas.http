@@ -1,0 +1,38 @@
+### Get politicas
+GET http://localhost:8080/servicioCuotas/politicasRecargo
+
+
+### Get politica id
+GET http://localhost:8080/servicioCuotas/politicasRecargo/buscar?id=10
+### Get politica dia
+GET http://localhost:8080/servicioCuotas/politicasRecargo/buscar?dias=4
+
+
+### Update politica
+
+PATCH http://localhost:8080/servicioCuotas/politicasRecargo/10
+Content-Type: application/json
+
+{
+    "porcentaje": 0.2
+
+}
+
+### Post politica
+
+PUT http://localhost:8080/servicioCuotas/politicasRecargo/
+Content-Type: application/json
+
+{
+    "diasHasta": 15,
+    "porcentaje": 0.2
+
+}
+
+### Delete politica
+
+DELETE http://localhost:8080/servicioCuotas/politicasRecargo/5
+
+
+### Get politicas
+GET http://localhost:8080/servicioCuotas/sociosFinancieros

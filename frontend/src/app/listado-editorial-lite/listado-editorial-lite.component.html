@@ -1,0 +1,69 @@
+<div class="d-flex align-items-center justify-content-center" id="listado">
+  <div class="col-12" id="contenedor-listado-paginacion">
+    <nav class="navbar col-12 bg-body-light">
+      <div class="container-fluid">
+        <form class="d-flex">
+          <input
+            class="form-control me-2"
+            placeholder="Nombre editorial"
+            [formControl]="searchText"
+          />
+        </form>
+      </div>
+    </nav>
+    <div class="col-12 table-responsive" id="contenedor-listado">
+      <table class="table table-hover fs-5 tableCustom">
+        <thead class="table-primary">
+          <tr>
+            <th class="col-2"># ID</th>
+            <th class="col-5">Nombre editorial</th>
+            <th class="col-5">Cantidad de libros</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="let editorial of paginatedEditoriales"
+            (click)="emitirDatos(editorial.id!, editorial.nombre)"
+          >
+            <td>{{ editorial.id }}</td>
+            <td>{{ editorial.nombre }}</td>
+            <td>{{ editorial.cantLibros }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <nav>
+      <ul class="pagination col-12 pagination-lg">
+        <li class="page-item">
+          <button
+            class="page-link"
+            (click)="previousPage()"
+            [disabled]="currentPage === 1"
+          >
+            Anterior
+          </button>
+        </li>
+        <li class="page-item">
+          <a class="page-link" (click)="setPage(1)">1</a>
+        </li>
+        <li class="page-item">
+          <a class="page-link">{{ currentPage }}</a>
+        </li>
+        <li class="page-item">
+          <a class="page-link" (click)="setPage(totalPages)">{{
+            totalPages
+          }}</a>
+        </li>
+        <li class="page-item">
+          <button
+            class="page-link"
+            (click)="nextPage()"
+            [disabled]="currentPage === totalPages"
+          >
+            Siguiente
+          </button>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</div>
