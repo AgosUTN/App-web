@@ -4,3 +4,4 @@ Para producción en realidad se usan herramientas como FlyWay, pero en mi caso a
 
 Por ahora, algunas variables de entorno quedaron expuestas en el init.sql, para evitarlo
 habria que crear un script.
+Otra opción seria usar un dockerfile para el servicio mysql y copiar el init.sql al momento de la construcción de la imagen, evitando el uso del bind mount y protegiendo asi las variables de entorno. 
