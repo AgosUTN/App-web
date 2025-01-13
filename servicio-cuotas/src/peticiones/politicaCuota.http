@@ -1,0 +1,14 @@
+### Find
+
+GET http://localhost:8080/servicioCuotas/politicaCuota
+
+### Update
+
+PATCH http://localhost:8080/servicioCuotas/politicaCuota
+Content-Type: application/json
+
+{
+    "recargoMaximo": 0.9,
+    "diaMaximoPago": 5
+
+}

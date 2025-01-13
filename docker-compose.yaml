@@ -18,7 +18,7 @@ services:
       - "3307:${DB_PORT}" # Mapeo el puerto 3307 de mi pc host al db_port del contenedor. Porque el 3306 lo tengo ocupado en workbench.
     volumes:
       - mysql-data:/var/lib/mysql
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql # Se usa un bindmount porque no hay un dockerfile para el contenedor de mysql, teoricamente se podria construir una imagen de mysql que tenga el init.sql, pero implicaria reconstruir la imagen cada vez que cambies el init.sql.
 
     environment:
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
@@ -61,6 +61,15 @@ services:
         condition: service_healthy
     env_file:
       - ./.env
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    ports:
+      - "${RABBIT_PORT}:${RABBIT_PORT}"
+      - "${RABBIT_PANEL_PORT}:${RABBIT_PANEL_PORT}"
+    volumes:
+      - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
+      - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
 
 volumes:
   mysql-data:
