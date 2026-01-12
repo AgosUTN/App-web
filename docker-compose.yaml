@@ -49,18 +49,5 @@ services:
     mem_limit: 1.5G
     # La memoria predeterminada no alcanza para lanzar el servidor.
 
-  servicio-cuotas:
-    build: ./servicio-cuotas
-    volumes:
-      - ./servicio-cuotas:/usr/src/servicio-cuotas
-      - /usr/src/servicio-cuotas/node_modules
-    ports:
-      - "${CUOTAS_PORT}:${CUOTAS_PORT}"
-    depends_on:
-      mysql:
-        condition: service_healthy
-    env_file:
-      - ./.env
-
 volumes:
   mysql-data:
