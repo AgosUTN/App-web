@@ -1,0 +1,50 @@
+.sideMenu {
+  width: 100%;
+  height: 100%;
+  padding: 0.3rem 1rem;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  row-gap: 0.5rem;
+  padding-top: 18%;
+}
+
+.sideMenu__li--logout {
+  margin-top: auto;
+  margin-bottom: 10%;
+  font-size: 15px;
+  svg {
+    height: 20px;
+    width: 20px;
+  }
+}
+
+// Activo y no activo
+.sideMenu__li a {
+  color: white;
+  border-radius: 1.5rem;
+  padding: 0.85rem;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.sideMenu__li :hover {
+  color: rgb(106, 223, 51);
+  svg {
+    fill: rgb(106, 223, 51);
+  }
+}
+
+.sideMenu__li--active {
+  svg {
+    fill: black;
+  }
+  a {
+    background-color: rgb(160, 94, 236);
+    color: black;
+  }
+}

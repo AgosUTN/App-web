@@ -14,13 +14,14 @@ const em = orm.em;
 async function buscarEditoriales(
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) {
   try {
     const editoriales = await em.findAll(editorialCount, {});
-    return res
-      .status(200)
-      .json({ message: "Las editoriales encontradas son: PROBANDO DOCKER", data: editoriales });
+    return res.status(200).json({
+      message: "Las editoriales encontradas son: PROBANDO DOCKER",
+      data: editoriales,
+    });
   } catch (error: any) {
     next(error);
   }
@@ -29,7 +30,7 @@ async function buscarEditoriales(
 async function buscarEditorial(
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) {
   try {
     const id = Number.parseInt(req.params.id);
@@ -45,9 +46,7 @@ async function buscarEditorial(
   }
 }
 
-
 async function altaEditorial(req: Request, res: Response, next: NextFunction) {
- 
   try {
     const editorial = em.create(Editorial, req.body);
     await em.flush();
@@ -59,17 +58,15 @@ async function altaEditorial(req: Request, res: Response, next: NextFunction) {
       return res.status(409).json({
         message: "El nombre de la editorial ya existe",
       });
-
     }
     next(error);
   }
 }
 
-
 async function actualizarEditorial(
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) {
   try {
     const id = Number.parseInt(req.params.id);

@@ -1,0 +1,36 @@
+// Variables
+
+$sidenav-expanded-width: 250px;
+$header-height: 64px;
+
+:host {
+  height: 100vh;
+  width: 100%;
+}
+
+.header {
+  color: var(--mat-sys-on-primary);
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 10;
+  width: calc(100% - $sidenav-expanded-width);
+  height: $header-height;
+}
+
+.sidenav {
+  background-color: var(--color-primary);
+  color: var(--color-on-primary);
+  height: 100vh;
+  width: $sidenav-expanded-width;
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+.main {
+  background-color: var(--color-background);
+  width: calc(100% - $sidenav-expanded-width);
+  margin-left: $sidenav-expanded-width;
+  margin-top: $header-height;
+}

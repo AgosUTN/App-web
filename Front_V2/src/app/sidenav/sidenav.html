@@ -1,0 +1,21 @@
+<ul class="sideMenu">
+  <li
+    *ngFor="let item of menuItems; let last = last"
+    class="sideMenu__li"
+    [class.sideMenu__li--active]="isActive(item.route)"
+    [class.sideMenu__li--logout]="last"
+  >
+    <a [routerLink]="item.route">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        height="24px"
+        viewBox="0 -960 960 960"
+        width="24px"
+        fill="white"
+      >
+        <path [attr.d]="item.iconPath" />
+      </svg>
+      <span>{{ item.label }}</span>
+    </a>
+  </li>
+</ul>
