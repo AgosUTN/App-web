@@ -1,5 +1,9 @@
-<div class="sidenav"><app-sidenav [menuItems]="menuItems"></app-sidenav></div>
-<div class="header"><app-toolbar></app-toolbar></div>
-<div class="main">
+<div class="sideNav" [ngClass]="getSideNavClass()">
+  <app-sidenav [menuItems]="menuItems" [sideNavOpen]="sideNavOpen"></app-sidenav>
+</div>
+<div class="header" [class.header--colapsed]="!sideNavOpen && !isMobile">
+  <app-toolbar (menuClick)="toggleSideNav()"></app-toolbar>
+</div>
+<div class="main" [class.main--colapsed]="!sideNavOpen && !isMobile">
   <router-outlet></router-outlet>
 </div>

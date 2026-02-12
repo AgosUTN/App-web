@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -9,4 +9,10 @@ import { MatButtonModule } from '@angular/material/button';
   templateUrl: './toolbar.html',
   styleUrl: './toolbar.scss',
 })
-export class Toolbar {}
+export class Toolbar {
+  @Output() menuClick = new EventEmitter<void>();
+
+  onMenuClick() {
+    this.menuClick.emit();
+  }
+}

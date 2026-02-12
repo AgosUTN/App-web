@@ -1,13 +1,13 @@
-import { Component, signal } from '@angular/core';
+import { Component, HostListener, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-
+import { CommonModule } from '@angular/common';
 import { Toolbar } from './toolbar/toolbar';
 import { MenuItem } from './models/menuItem.model';
 import { Sidenav } from './sidenav/sidenav';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, Sidenav, Toolbar],
+  imports: [RouterOutlet, Sidenav, Toolbar, CommonModule],
   templateUrl: './app.html',
   styleUrl: './app.scss',
 })
@@ -76,4 +76,43 @@ export class App {
       label: 'Cerrar sesión',
     },
   ];
+
+  //
+  MOBILE_BREAKPOINT = 768;
+  sideNavOpen: boolean = true;
+  isMobile: boolean = false;
+
+  constructor() {
+    this.checkMobile();
+  }
+
+  @HostListener('window:resize')
+  onResize() {
+    this.checkMobile();
+  }
+
+  checkMobile() {
+    const wasMobile = this.isMobile;
+    this.isMobile = window.innerWidth < this.MOBILE_BREAKPOINT;
+
+    if (this.isMobile) {
+      // Cerrar sidenav al pasar a mobile
+      this.sideNavOpen = false;
+    } else if (wasMobile && !this.isMobile) {
+      // Abrir sidenav al pasar a desktop
+      this.sideNavOpen = true;
+    }
+  }
+  toggleSideNav() {
+    this.sideNavOpen = !this.sideNavOpen;
+  }
+  getSideNavClass(): string {
+    if (!this.sideNavOpen && !this.isMobile) {
+      return 'sideNav--colapsed';
+    } else if (this.sideNavOpen && this.isMobile) {
+      return 'sideNav--open';
+    } else {
+      return '';
+    }
+  }
 }

@@ -1,4 +1,5 @@
 .sideMenu {
+  margin-top: 0;
   width: 100%;
   height: 100%;
   padding: 0.3rem 1rem;
@@ -6,22 +7,13 @@
   display: flex;
   flex-direction: column;
   row-gap: 0.5rem;
-  padding-top: 18%;
+  padding-top: 70px;
+  overflow-y: auto; // Scroll por si se le da mucho zoom.
+  overflow-x: hidden;
 }
 
-.sideMenu__li--logout {
-  margin-top: auto;
-  margin-bottom: 10%;
-  font-size: 15px;
-  svg {
-    height: 20px;
-    width: 20px;
-  }
-}
-
-// Activo y no activo
 .sideMenu__li a {
-  color: white;
+  color: var(--color-on-primary);
   border-radius: 1.5rem;
   padding: 0.85rem;
   text-decoration: none;
@@ -30,21 +22,59 @@
   gap: 1rem;
   font-size: 15px;
   cursor: pointer;
+  min-height: 50px;
+  min-width: 50px;
+}
+.sideMenu__li--logout {
+  margin-top: auto;
+  margin-bottom: 25px;
+  font-size: 15px;
+  svg {
+    height: 20px;
+    width: 20px;
+  }
 }
 
 .sideMenu__li :hover {
-  color: rgb(106, 223, 51);
+  color: var(--color-text-hover-on-primary);
   svg {
-    fill: rgb(106, 223, 51);
+    fill: var(--color-text-hover-on-primary);
   }
 }
-
 .sideMenu__li--active {
   svg {
-    fill: black;
+    fill: var(--color-on-primary);
   }
   a {
-    background-color: rgb(160, 94, 236);
-    color: black;
+    background-color: var(--color-active-on-primary);
+    color: var(--color-on-primary);
   }
+}
+.sideMenu__li--active :hover {
+  // Sobrescribe el hover normal para que no se muestre en el li activo.
+  svg {
+    fill: var(--color-on-primary);
+  }
+
+  color: var(--color-on-primary);
+}
+
+.sideMenu__label {
+  white-space: nowrap;
+  transition: opacity 0.3s ease;
+}
+
+.sideMenu__label--colapsed {
+  opacity: 0; // Mejora la transición de los labels pero descentra los iconos, solucionado con translateX
+  //display: none; // Mejora el centrado de los iconos pero empeora la transición de los labels
+  pointer-events: none;
+}
+
+.sideMenu__svg--colapsed {
+  transform: translateX(-1px);
+}
+
+svg {
+  flex-shrink: 0; // Evita que el SVG se comprima
+  will-change: transform;
 }

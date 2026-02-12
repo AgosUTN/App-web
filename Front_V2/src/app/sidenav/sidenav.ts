@@ -11,6 +11,7 @@ import { Router, RouterLink } from '@angular/router';
 })
 export class Sidenav {
   @Input() menuItems: MenuItem[] = []; // Los recibe para que cambie según rol.
+  @Input() sideNavOpen: boolean = true;
 
   constructor(private router: Router) {}
 

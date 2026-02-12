@@ -44,9 +44,8 @@ body {
   /* === Primary === */
   --color-primary: #1b84ff;
   --color-on-primary: #ffff;
-
-  // Background
-
+  --color-text-hover-on-primary: #49cedd;
+  --color-active-on-primary: rgba(255, 255, 255, 0.18);
   --color-background: #eef5f9;
 }
 

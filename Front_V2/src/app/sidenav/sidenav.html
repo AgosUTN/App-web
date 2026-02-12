@@ -12,10 +12,13 @@
         viewBox="0 -960 960 960"
         width="24px"
         fill="white"
+        [class.sideMenu__svg--colapsed]="!sideNavOpen"
       >
         <path [attr.d]="item.iconPath" />
       </svg>
-      <span>{{ item.label }}</span>
+      <span class="sideMenu__label" [class.sideMenu__label--colapsed]="!sideNavOpen">{{
+        item.label
+      }}</span>
     </a>
   </li>
 </ul>

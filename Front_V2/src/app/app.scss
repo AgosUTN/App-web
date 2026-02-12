@@ -1,7 +1,12 @@
 // Variables
 
-$sidenav-expanded-width: 250px;
+$sidenav-expanded-width: 210px;
+$sidenav-colapsed-width: 80px;
 $header-height: 64px;
+$transition-time: 0.3s;
+$mobile-breakpoint: 768px;
+
+// Desktop
 
 :host {
   height: 100vh;
@@ -16,9 +21,12 @@ $header-height: 64px;
   z-index: 10;
   width: calc(100% - $sidenav-expanded-width);
   height: $header-height;
+  transition:
+    width $transition-time ease,
+    margin-left $transition-time ease;
 }
 
-.sidenav {
+.sideNav {
   background-color: var(--color-primary);
   color: var(--color-on-primary);
   height: 100vh;
@@ -26,6 +34,9 @@ $header-height: 64px;
   position: fixed;
   top: 0;
   left: 0;
+  transition:
+    width $transition-time ease,
+    margin-left $transition-time ease; // Agregar transición
 }
 
 .main {
@@ -33,4 +44,41 @@ $header-height: 64px;
   width: calc(100% - $sidenav-expanded-width);
   margin-left: $sidenav-expanded-width;
   margin-top: $header-height;
+  transition:
+    width $transition-time ease,
+    margin-left $transition-time ease;
+}
+
+.sideNav--colapsed {
+  width: $sidenav-colapsed-width;
+}
+
+.main--colapsed {
+  width: calc(100% - $sidenav-colapsed-width);
+  margin-left: $sidenav-colapsed-width;
+}
+
+.header--colapsed {
+  width: calc(100% - $sidenav-colapsed-width);
+}
+
+// Mobile
+
+@media (max-width: $mobile-breakpoint) {
+  .sideNav {
+    width: $sidenav-expanded-width;
+    left: -($sidenav-expanded-width);
+    transition: left $transition-time ease;
+    padding-top: 20px;
+  }
+  .main,
+  .header {
+    width: 100%;
+  }
+  .main {
+    margin-left: 0;
+  }
+  .sideNav--open {
+    left: 0;
+  }
 }
