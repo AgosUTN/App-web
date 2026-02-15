@@ -1,9 +1,9 @@
-<div class="sideNav" [ngClass]="getSideNavClass()">
+<div class="sideNavLayout" [ngClass]="getSideNavClass()">
   <app-sidenav [menuItems]="menuItems" [sideNavOpen]="sideNavOpen"></app-sidenav>
 </div>
-<div class="header" [class.header--colapsed]="!sideNavOpen && !isMobile">
+<div class="headerLayout" [class.headerLayout--colapsed]="!sideNavOpen && !isMobile">
   <app-toolbar (menuClick)="toggleSideNav()"></app-toolbar>
 </div>
-<div class="main" [class.main--colapsed]="!sideNavOpen && !isMobile">
+<div class="mainLayout" [class.mainLayout--colapsed]="!sideNavOpen && !isMobile">
   <router-outlet></router-outlet>
 </div>

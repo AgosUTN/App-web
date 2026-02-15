@@ -1,0 +1,24 @@
+@use '../../styles/variables' as *;
+
+.mat-mdc-icon-button {
+  width: 46px;
+  height: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.mat-mdc-icon-button i {
+  font-size: 1.8rem;
+  // color: var(--color-on-surface);
+}
+
+.cus-toolbar {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  // box-shadow: 0 4px 12px var(--color-boxShadow);
+  height: 100%; // La altura la define el componente que maneja el layout.
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  column-gap: 30px;
+  background-color: var(--color-surface);
+}

@@ -1,10 +1,11 @@
-// Variables
+@use './styles/_variables.scss' as *;
+
+// Variables locales
 
 $sidenav-expanded-width: 210px;
 $sidenav-colapsed-width: 80px;
-$header-height: 64px;
+$header-height: 50px;
 $transition-time: 0.3s;
-$mobile-breakpoint: 768px;
 
 // Desktop
 
@@ -13,8 +14,7 @@ $mobile-breakpoint: 768px;
   width: 100%;
 }
 
-.header {
-  color: var(--mat-sys-on-primary);
+.headerLayout {
   position: fixed;
   top: 0;
   right: 0;
@@ -26,9 +26,7 @@ $mobile-breakpoint: 768px;
     margin-left $transition-time ease;
 }
 
-.sideNav {
-  background-color: var(--color-primary);
-  color: var(--color-on-primary);
+.sideNavLayout {
   height: 100vh;
   width: $sidenav-expanded-width;
   position: fixed;
@@ -36,12 +34,13 @@ $mobile-breakpoint: 768px;
   left: 0;
   transition:
     width $transition-time ease,
-    margin-left $transition-time ease; // Agregar transición
+    margin-left $transition-time ease;
 }
 
-.main {
-  background-color: var(--color-background);
+.mainLayout {
+  background-color: var(--color-background); //Para que el fondo del main sea siempre este.
   width: calc(100% - $sidenav-expanded-width);
+  height: calc(100vh - $header-height);
   margin-left: $sidenav-expanded-width;
   margin-top: $header-height;
   transition:
@@ -49,36 +48,36 @@ $mobile-breakpoint: 768px;
     margin-left $transition-time ease;
 }
 
-.sideNav--colapsed {
+.sideNavLayout--colapsed {
   width: $sidenav-colapsed-width;
 }
 
-.main--colapsed {
+.mainLayout--colapsed {
   width: calc(100% - $sidenav-colapsed-width);
   margin-left: $sidenav-colapsed-width;
 }
 
-.header--colapsed {
+.headerLayout--colapsed {
   width: calc(100% - $sidenav-colapsed-width);
 }
 
 // Mobile
 
 @media (max-width: $mobile-breakpoint) {
-  .sideNav {
+  .sideNavLayout {
     width: $sidenav-expanded-width;
     left: -($sidenav-expanded-width);
     transition: left $transition-time ease;
     padding-top: 20px;
   }
-  .main,
-  .header {
+  .mainLayout,
+  .headerLayout {
     width: 100%;
   }
-  .main {
+  .mainLayout {
     margin-left: 0;
   }
-  .sideNav--open {
+  .sideNavLayout--open {
     left: 0;
   }
 }

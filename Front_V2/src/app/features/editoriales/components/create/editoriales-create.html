@@ -1,0 +1,36 @@
+<div class="card">
+  <form class="form" [formGroup]="editorialForm" (ngSubmit)="onSubmit()">
+    <div class="form__field">
+      <label class="form__label" for="nombre"> Nombre editorial * </label>
+
+      <input
+        class="form__input"
+        id="nombre"
+        type="text"
+        formControlName="nombre"
+        placeholder="Nombre editorial"
+        maxlength="15"
+      />
+
+      <small
+        class="error"
+        *ngIf="
+          editorialForm.get('nombre')?.hasError('required') && editorialForm.get('nombre')?.touched
+        "
+      >
+        El nombre es obligatorio
+      </small>
+      <small class="error" *ngIf="repetido">El nombre ingresado ya está en uso.</small>
+    </div>
+
+    <button
+      mat-raised-button
+      class="form__button"
+      type="submit"
+      [disabled]="editorialForm.invalid"
+      [class.form__button--disabled]="editorialForm.invalid"
+    >
+      Crear Editorial
+    </button>
+  </form>
+</div>

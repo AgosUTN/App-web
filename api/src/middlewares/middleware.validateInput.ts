@@ -3,7 +3,7 @@ import { Request, Response, NextFunction } from "express";
 
 export function validateInput(
   schemaReq?: ZodObject<any, any>,
-  schemaBody?: ZodObject<any, any>
+  schemaBody?: ZodObject<any, any>,
 ) {
   return function (req: Request, res: Response, next: NextFunction) {
     try {
@@ -14,7 +14,7 @@ export function validateInput(
       if (error instanceof ZodError) {
         return res.status(400).json({ message: "Bad request params" });
       }
-      next(error);
+      next(error); // Pasa el error a handleInternalError
     }
     try {
       if (schemaBody) {
@@ -26,7 +26,7 @@ export function validateInput(
       }
       next(error);
     }
-    next();
+    next(); // Si no hay error en la validación, sigue flujo.
   };
 }
 

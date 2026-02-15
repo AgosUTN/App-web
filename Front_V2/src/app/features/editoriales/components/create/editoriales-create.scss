@@ -1,0 +1,69 @@
+@use '../../../../styles/_variables.scss' as *;
+
+:host {
+  width: 100%;
+  min-height: 100%;
+  display: flex;
+  padding-top: 100px;
+  justify-content: center;
+}
+.card {
+  margin: 0px 20px; // Mantiene un poco de espacio con los bordes en mobile.
+  flex-shrink: 1; // Explicíto
+  border-radius: 10px;
+  padding: 40px 30px 30px 30px;
+  height: 250px;
+  width: 600px;
+  //background-color: var(--color-background);
+  background-color: var(--color-surface);
+  box-shadow: 0 3px 6px 0 var(--color-boxShadow);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  row-gap: 35px;
+  align-items: center;
+}
+.form__field {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  row-gap: 10px;
+}
+
+.form__button {
+  background-color: var(
+    --color-primary
+  ) !important; // Por algún motivo raro de especificidad, el usar la propiedad font size me obliga a usar important acá.
+  color: var(--color-on-primary) !important ;
+  font-size: $fs-button;
+}
+.form__button:hover {
+  opacity: $hover-opacity-button;
+}
+.form__button--disabled {
+  opacity: $disabled-opacity;
+}
+
+.form__label {
+  font-size: $fs-label;
+  color: var(--color-on-surface);
+}
+
+.form__input {
+  padding: $pading-input;
+  font-size: $fs-input;
+  // border-radius: 5px;
+  // border: 1px solid #ccc;
+}
+
+.error {
+  color: var(--color-text-error);
+}
+
+@media (max-width: $mobile-breakpoint) {
+  :host {
+    padding-top: 60px;
+  }
+}

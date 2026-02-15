@@ -1,0 +1,17 @@
+.breadcrumb {
+  display: flex;
+  align-items: baseline;
+  column-gap: 8px;
+}
+
+.breadcrumb__item {
+  font-size: 18px;
+  color: var(--color-on-surface);
+}
+.breadcrumb__item--first {
+  font-size: 22px;
+}
+.breadcrumb__item--navigable:hover {
+  opacity: 0.65;
+  cursor: pointer;
+}

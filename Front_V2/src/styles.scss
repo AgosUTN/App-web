@@ -41,12 +41,17 @@ body {
 // Paleta propia + Configuraciones globales
 
 :root {
-  /* === Primary === */
   --color-primary: #1b84ff;
   --color-on-primary: #ffff;
   --color-text-hover-on-primary: #49cedd;
   --color-active-on-primary: rgba(255, 255, 255, 0.18);
   --color-background: #eef5f9;
+
+  --color-text-error: var(--mat-sys-error);
+  --color-boxShadow: rgba(0, 0, 0, 0.2);
+
+  --color-on-surface: #1b1b1f;
+  --color-surface: #fcf8fd;
 }
 
 body,

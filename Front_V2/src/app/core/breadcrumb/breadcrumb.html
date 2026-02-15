@@ -1,0 +1,16 @@
+<div class="breadcrumb">
+  <ng-container *ngFor="let breadcrumb of breadcrumbs; let i = index">
+    <span
+      class="breadcrumb__item"
+      [ngClass]="{
+        'breadcrumb__item--first': i === 0,
+        'breadcrumb__item--navigable': isNavigable(i),
+      }"
+      (click)="onBreadcrumbClick(i)"
+    >
+      {{ breadcrumb.label }}
+    </span>
+
+    <span *ngIf="i < breadcrumbs.length - 1" class="breadcrumb__item"> > </span>
+  </ng-container>
+</div>
