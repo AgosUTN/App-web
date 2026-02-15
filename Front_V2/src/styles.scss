@@ -52,6 +52,9 @@ body {
 
   --color-on-surface: #1b1b1f;
   --color-surface: #fcf8fd;
+
+  --color-success: #2cd07e;
+  --color-error: #f8285a;
 }
 
 body,
@@ -62,4 +65,14 @@ body,
 
 * {
   box-sizing: border-box;
+}
+
+.toast-success {
+  background-color: var(--color-success) !important;
+  color: var(--color-on-primary) !important;
+}
+
+.toast-error {
+  background-color: var(--color-error) !important;
+  color: var(--color-on-primary) !important;
 }

@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
+import { NotificationService } from '../../../../shared/services/notification-service';
 
 @Component({
   selector: 'app-editoriales-create',
@@ -17,9 +18,10 @@ export class EditorialesCreate {
     nombre: new FormControl('', [Validators.required, Validators.maxLength(15)]),
   });
 
-  constructor() {}
+  constructor(private notification: NotificationService) {}
 
   onSubmit() {
+    this.notification.error('Editorial creada correctamente');
     console.log('Formulario enviado');
   }
 }
