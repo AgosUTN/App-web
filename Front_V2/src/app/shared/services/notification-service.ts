@@ -5,8 +5,6 @@ import { ToastrService } from 'ngx-toastr';
   providedIn: 'root',
 })
 export class NotificationService {
-  // Centraliza configuración, titulos y separa toastr de los componentes.
-
   constructor(private toastr: ToastrService) {}
 
   success(message: string) {

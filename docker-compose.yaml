@@ -39,7 +39,7 @@ services:
       - "${FRONT_PORT}:${FRONT_PORT}"
     environment:
       - NODE_ENV=development
-      # Mi front no tiene un environment.production/development.ts por lo que es un poco opcional ese comando.
+      # Mi front no tiene un environment.production/development.ts por lo que es un poco opcional ese comando. (comentario viejo 12/2024)
     command: npm start # Comando para iniciar el servidor de desarrollo de Angular
     depends_on:
       - api
