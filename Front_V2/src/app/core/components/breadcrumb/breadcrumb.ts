@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { filter, Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
-import { BreadcrumbItem } from '../models/breadCrumbItem.model';
+import { BreadcrumbItem } from '../../models/breadCrumbItem.model';
 
 @Component({
   selector: 'app-breadcrumb',
@@ -37,7 +37,7 @@ export class Breadcrumb {
     return index > 0; // intermedios navegables
   }
 
-  onBreadcrumbClick(index: number) {
+  onBreadcrumbClick(index: number): void {
     if (this.isNavigable(index)) {
       this.navigateTo(this.breadcrumbs[index]);
     }
@@ -67,7 +67,7 @@ export class Breadcrumb {
     return breadcrumbs;
   }
 
-  private navigateTo(breadcrumb: BreadcrumbItem) {
+  private navigateTo(breadcrumb: BreadcrumbItem): void {
     this.router.navigateByUrl(breadcrumb.url);
     console.log(breadcrumb.url);
   }

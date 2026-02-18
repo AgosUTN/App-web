@@ -8,7 +8,7 @@ const em = orm.em;
 async function buscarPoliticaBiblioteca(
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) {
   try {
     const politica = await em.findOneOrFail(PoliticaBiblioteca, {
@@ -22,7 +22,10 @@ async function buscarPoliticaBiblioteca(
     if (error instanceof NotFoundError) {
       return res
         .status(500)
-        .json({ message: "Politica de biblioteca inaccesible" });
+        .json({
+          message: "Politica de biblioteca inaccesible",
+          code: "SYSTEM_CONFIGURATION_ERROR",
+        }); // Parche temporal
     }
     next(error);
   }
@@ -31,7 +34,7 @@ async function buscarPoliticaBiblioteca(
 async function altaPoliticaBiblioteca(
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) {
   //Funcion para desarrollo, migrar en producción.
   try {
@@ -49,7 +52,7 @@ async function altaPoliticaBiblioteca(
 async function actualizarPoliticaBiblioteca(
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) {
   try {
     const politica = em.getReference(PoliticaBiblioteca, 1);
@@ -66,7 +69,7 @@ async function actualizarPoliticaBiblioteca(
 async function bajaPoliticaBiblioteca(
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) {
   //Funcion para desarollo.
   return res.status(500).json({ message: "Not implemented" });

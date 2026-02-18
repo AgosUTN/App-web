@@ -20,15 +20,17 @@
       >
         El nombre es obligatorio
       </small>
-      <small class="error" *ngIf="repetido">El nombre ingresado ya está en uso.</small>
+      <small class="error" *ngIf="editorialForm.get('nombre')?.hasError('repetido')"
+        >El nombre ingresado ya está en uso.</small
+      >
     </div>
 
     <button
       mat-raised-button
       class="form__button"
       type="submit"
-      [disabled]="editorialForm.invalid"
-      [class.form__button--disabled]="editorialForm.invalid"
+      [disabled]="editorialForm.invalid || this.loading"
+      [class.form__button--disabled]="editorialForm.invalid || this.loading"
     >
       Crear Editorial
     </button>

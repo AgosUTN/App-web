@@ -2,9 +2,10 @@ import { Routes } from '@angular/router';
 import { Dashboard } from './features/dashboard/dashboard';
 import { EditorialesCreate } from './features/editoriales/components/create/editoriales-create';
 import { EditorialesRead } from './features/editoriales/components/read/editoriales-read';
+import { ErrorPage } from './core/pages/error-page/error-page';
 
 export const routes: Routes = [
-  { path: 'dashboard', component: Dashboard },
+  { path: 'dashboard', component: Dashboard, data: { breadcrumb: 'Dashboard' } },
   {
     path: 'editoriales',
     data: {
@@ -18,12 +19,16 @@ export const routes: Routes = [
       },
       {
         path: 'alta',
-        component: EditorialesCreate, // Acá debería ir el de listado
+        component: EditorialesCreate,
         data: {
           breadcrumb: 'Alta',
         },
       },
     ],
   },
+  { path: 'error', component: ErrorPage }, // Solo para desarrollar la page
+  { path: 'error/:code', component: ErrorPage },
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
 ];
+
+// Data es un observable para Angular, por eso se accede con snapshot.

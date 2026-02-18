@@ -31,22 +31,19 @@ services:
       # Como ya vimos, si te queres conectar desde afuera del contenedor (por ejemplo desde el contenedor de la api) tenes que usar el nombre con el que se conoce al servicio en la red que docker genera.
       # Este healtcheck es necesario para el caso de borrar los contenedores y volverlos a crear. Si reconstruis los contenedores puede darse (no siempre) que el contenedor de mysql se levante pero no este inicializado del todo.
   frontend:
-    build: ./frontend
+    build: ./Front_V2
     volumes:
-      - ./frontend:/usr/src/frontend
+      - ./Front_V2:/usr/src/frontend
       - /usr/src/frontend/node_modules
     ports:
       - "${FRONT_PORT}:${FRONT_PORT}"
-    environment:
-      - NODE_ENV=development
-      # Mi front no tiene un environment.production/development.ts por lo que es un poco opcional ese comando. (comentario viejo 12/2024)
-    command: npm start # Comando para iniciar el servidor de desarrollo de Angular
+
     depends_on:
       - api
     # Opcional, el front maneja bien el caso de que no este la API online.
     env_file:
       - ./.env
-    mem_limit: 1.5G
+    # mem_limit: 1.5G
     # La memoria predeterminada no alcanza para lanzar el servidor.
 
 volumes:

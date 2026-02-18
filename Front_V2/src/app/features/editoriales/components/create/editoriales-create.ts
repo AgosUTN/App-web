@@ -1,8 +1,10 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { NotificationService } from '../../../../shared/services/notification-service';
+import { EditorialService } from '../../services/editorial-service';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-editoriales-create',
@@ -12,16 +14,40 @@ import { NotificationService } from '../../../../shared/services/notification-se
   styleUrl: './editoriales-create.scss',
 })
 export class EditorialesCreate {
-  repetido: boolean = true;
+  loading: boolean = false;
 
   editorialForm = new FormGroup({
     nombre: new FormControl('', [Validators.required, Validators.maxLength(15)]),
   });
 
-  constructor(private notification: NotificationService) {}
+  constructor(
+    private notification: NotificationService,
+    private editorialService: EditorialService,
+    private cdr: ChangeDetectorRef,
+  ) {}
 
-  onSubmit() {
-    this.notification.error('Editorial creada correctamente');
-    console.log('Formulario enviado');
+  onSubmit(): void {
+    if (this.editorialForm.invalid) {
+      this.editorialForm.markAllAsTouched();
+      return;
+    }
+
+    const { nombre } = this.editorialForm.getRawValue();
+
+    this.loading = true;
+
+    this.editorialService.post(nombre!).subscribe({
+      next: () => {
+        this.notification.success('Editorial creada correctamente');
+        this.editorialForm.reset();
+        this.loading = false;
+      },
+      error: (err) => {
+        this.loading = false;
+        if (err.status === 409) {
+          this.editorialForm.get('nombre')?.setErrors({ repetido: true });
+        }
+      },
+    });
   }
 }

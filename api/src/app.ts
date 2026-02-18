@@ -37,7 +37,10 @@ app.use("/api/sanciones", sancionRouter);
 app.use(handleInternalError);
 
 app.use((_, res) => {
-  return res.status(404).send({ message: "Recurso no encontrado" });
+  return res.status(404).json({
+    message: "Recurso no encontrado",
+    code: "NOT_FOUND",
+  });
 });
 
 await syncSchema(); // Sacar en producción.

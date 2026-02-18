@@ -12,7 +12,10 @@ export function validateInput(
       }
     } catch (error: any) {
       if (error instanceof ZodError) {
-        return res.status(400).json({ message: "Bad request params" });
+        return res.status(400).json({
+          message: "Request params inválidos: " + error.message,
+          code: "VALIDATION_ERROR",
+        });
       }
       next(error); // Pasa el error a handleInternalError
     }
@@ -22,7 +25,10 @@ export function validateInput(
       }
     } catch (error: any) {
       if (error instanceof ZodError) {
-        return res.status(400).json({ message: "Bad request body" });
+        return res.status(400).json({
+          message: "Request body inválido: " + error.message,
+          codigo: "VALIDATION_ERROR",
+        });
       }
       next(error);
     }

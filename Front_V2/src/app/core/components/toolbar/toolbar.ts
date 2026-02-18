@@ -13,7 +13,7 @@ import { Breadcrumb } from '../breadcrumb/breadcrumb';
 export class Toolbar {
   @Output() menuClick = new EventEmitter<void>();
 
-  onMenuClick() {
+  onMenuClick(): void {
     this.menuClick.emit();
   }
 }

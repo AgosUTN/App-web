@@ -12,7 +12,7 @@ export class EditorialService {
 
   readonly baseurl = `${environment.apiUrl}/api/editoriales`;
 
-  postEditorial(data: string): Observable<Editorial> {
+  post(data: string): Observable<Editorial> {
     const editorial = { nombre: data };
     return this.http.post<Editorial>(this.baseurl, editorial);
   }

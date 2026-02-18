@@ -1,9 +1,9 @@
 import { Component, HostListener, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { Toolbar } from './core/toolbar/toolbar';
+import { Toolbar } from './core/components/toolbar/toolbar';
 import { MenuItem } from './core/models/menuItem.model';
-import { Sidenav } from './core/sidenav/sidenav';
+import { Sidenav } from './core/components/sidenav/sidenav';
 
 @Component({
   selector: 'app-root',
@@ -88,11 +88,11 @@ export class App {
   }
 
   @HostListener('window:resize')
-  onResize() {
+  onResize(): void {
     this.checkMobile();
   }
 
-  checkMobile() {
+  checkMobile(): void {
     const wasMobile = this.isMobile;
     this.isMobile = window.innerWidth < this.MOBILE_BREAKPOINT;
 
@@ -104,7 +104,7 @@ export class App {
       this.sideNavOpen = true;
     }
   }
-  toggleSideNav() {
+  toggleSideNav(): void {
     this.sideNavOpen = !this.sideNavOpen;
   }
   getSideNavClass(): string {
