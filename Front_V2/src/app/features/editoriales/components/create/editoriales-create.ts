@@ -4,7 +4,6 @@ import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { NotificationService } from '../../../../shared/services/notification-service';
 import { EditorialService } from '../../services/editorial-service';
-import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-editoriales-create',

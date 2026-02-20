@@ -1,0 +1,44 @@
+@use '../../../styles/variables' as *;
+
+:host {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  row-gap: 0px;
+  padding-top: 5px;
+}
+
+.error__title {
+  margin: 0;
+  font-size: 23px;
+  margin-bottom: 15px;
+  color: var(--color-on-surface);
+}
+
+.error__message {
+  margin: 0;
+  font-size: 16px;
+  text-align: center;
+  color: var(--color-on-surface);
+  margin-bottom: 30px;
+}
+
+.error__image {
+  width: 400px;
+  height: 400px;
+  object-fit: contain;
+}
+.form__button {
+  background-color: var(--color-primary) !important;
+  color: var(--color-on-primary) !important ;
+  font-size: 14px;
+}
+
+@media (max-width: $mobile-breakpoint) {
+  :host {
+    padding-top: 35px;
+    row-gap: 10px;
+  }
+}

@@ -19,7 +19,7 @@ export class ErrorInterceptor implements HttpInterceptor {
       catchError((error: HttpErrorResponse) => {
         switch (error.status) {
           case 0:
-            this.router.navigate(['/error', 500]);
+            this.router.navigate(['/error', 0]);
             return EMPTY;
           // Red caida
           /*
@@ -44,8 +44,7 @@ export class ErrorInterceptor implements HttpInterceptor {
             return throwError(() => error); // Si es un 400 del controlador, lo maneja componente.
 
           case 500: {
-            const code = error.error?.code ?? 500; // Si es un 500 manejado como el de P. biblioteca, se manda su code.
-            this.router.navigate(['/error', code]);
+            this.router.navigate(['/error', 500]); // El 500 de politica biblioteca entra acá también, no consume el code.
             return EMPTY;
           }
         }

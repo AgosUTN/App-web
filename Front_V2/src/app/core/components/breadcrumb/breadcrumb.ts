@@ -20,6 +20,7 @@ export class Breadcrumb {
   ) {}
 
   ngOnInit(): void {
+    this.breadcrumbs = this.buildBreadcrumb(this.route.root);
     this.subscription = this.router.events
       .pipe(filter((event) => event instanceof NavigationEnd))
       .subscribe(() => {
@@ -39,7 +40,7 @@ export class Breadcrumb {
 
   onBreadcrumbClick(index: number): void {
     if (this.isNavigable(index)) {
-      this.navigateTo(this.breadcrumbs[index]);
+      this.router.navigateByUrl(this.breadcrumbs[index].url);
     }
   }
 
@@ -63,22 +64,18 @@ export class Breadcrumb {
       currentRouteNode = currentRouteNode.firstChild ?? null; // Si no hay más nodos hijos dentro del árbol activo, termina.
     }
 
-    breadcrumbs = this.cleanBreadcrumb(breadcrumbs);
     return breadcrumbs;
   }
 
-  private navigateTo(breadcrumb: BreadcrumbItem): void {
-    this.router.navigateByUrl(breadcrumb.url);
-    console.log(breadcrumb.url);
-  }
-
+  /*
   private cleanBreadcrumb(breadcrumbs: BreadcrumbItem[]): BreadcrumbItem[] {
     for (let x = 0; x < breadcrumbs.length; x++) {
       if (!breadcrumbs[x].label || breadcrumbs[x].label === '') {
         breadcrumbs.splice(x, 1);
       }
-      // Si es undefined por el nodo root, o vacio por el nodo del componente read del CRUD, los quita.
+    
     }
     return breadcrumbs;
   }
+    Esto es un anti patron, lo dejo de referencia de lo que no hay que hacer.*/
 }

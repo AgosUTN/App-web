@@ -1,1 +1,8 @@
-<p>error-page works!</p>
+<img [src]="imageUrl" class="error__image" (load)="imageLoaded = true" />
+<ng-container *ngIf="imageLoaded">
+  <h3 class="error__title">{{ title }}</h3>
+  <p class="error__message">{{ message }}</p>
+  <button mat-raised-button class="form__button" [routerLink]="'/dashboard'">
+    Volver a Dashboard
+  </button>
+</ng-container>
