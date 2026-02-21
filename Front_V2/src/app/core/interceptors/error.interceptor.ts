@@ -22,7 +22,33 @@ export class ErrorInterceptor implements HttpInterceptor {
             this.router.navigate(['/error', 0]);
             return EMPTY;
           // Red caida
-          /*
+          case 400:
+            if (error.error.code === 'INVALID_JSON' || error.error.code === 'VALIDATION_ERROR') {
+              this.router.navigate(['/error', 400]);
+              return EMPTY;
+            }
+            return throwError(() => error); // Si es un 400 del controlador, lo maneja componente.
+
+          case 404:
+            if (error.error.code === 'NOT_FOUND') {
+              this.router.navigate(['/error', 404]);
+              return EMPTY;
+            }
+            return throwError(() => error); // Si es un 404 del controlador, lo maneja el componente.
+
+          case 500: {
+            this.router.navigate(['/error', 500]); // El 500 de politica biblioteca entra acá también, no consume el code.
+            return EMPTY;
+          }
+        }
+
+        return throwError(() => error); // Case desconocido.
+      }),
+    );
+  }
+}
+
+/*
           case 401:
             this.router.navigate(['/login']);
             return EMPTY;
@@ -36,22 +62,3 @@ export class ErrorInterceptor implements HttpInterceptor {
             return EMPTY;
                 
        */
-          case 400:
-            if (error.error.code === 'INVALID_JSON' || error.error.code === 'VALIDATION_ERROR') {
-              this.router.navigate(['/error', 400]);
-              return EMPTY;
-            }
-            return throwError(() => error); // Si es un 400 del controlador, lo maneja componente.
-
-          case 500: {
-            this.router.navigate(['/error', 500]); // El 500 de politica biblioteca entra acá también, no consume el code.
-            return EMPTY;
-          }
-        }
-
-        // 400 → vuelve al componente
-        return throwError(() => error);
-      }),
-    );
-  }
-}

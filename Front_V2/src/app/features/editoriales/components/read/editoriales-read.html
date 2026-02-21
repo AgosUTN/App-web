@@ -1,1 +1,25 @@
-<p>editoriales-read works!</p>
+<div class="card">
+  <table mat-table [dataSource]="editoriales">
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef>ID</th>
+      <td mat-cell *matCellDef="let editorial">{{ editorial.id }}</td>
+    </ng-container>
+    <ng-container matColumnDef="nombre">
+      <th mat-header-cell *matHeaderCellDef>Nombre</th>
+      <td mat-cell *matCellDef="let editorial">{{ editorial.nombre }}</td>
+    </ng-container>
+    <ng-container matColumnDef="cantLibros">
+      <th mat-header-cell *matHeaderCellDef>Cantidad libros</th>
+      <td mat-cell *matCellDef="let editorial">{{ editorial.cantLibros }}</td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </table>
+  <mat-paginator
+    [length]="100"
+    [pageSize]="10"
+    [pageSizeOptions]="[5, 10, 25, 100]"
+    aria-label="Select page"
+  >
+  </mat-paginator>
+</div>

@@ -24,12 +24,6 @@ export class ErrorPage {
 
   private defineErrorPage(code: string | null): void {
     switch (code) {
-      case null:
-        this.title = 'Error 404';
-        this.message = 'La página que está buscando no ha sido encontrada';
-        this.imageUrl = 'images/404.svg';
-        break;
-
       case '0':
         this.title = 'Error 500';
         this.message = 'No se ha podido conectar con el servidor';
@@ -40,6 +34,12 @@ export class ErrorPage {
         this.title = 'Error 400';
         this.message = 'Solicitud incorrecta';
         this.imageUrl = 'images/500.svg';
+        break;
+
+      case '404':
+        this.title = 'Error 404';
+        this.message = 'La página que está buscando no ha sido encontrada';
+        this.imageUrl = 'images/404.svg';
         break;
 
       case '500':

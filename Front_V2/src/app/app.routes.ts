@@ -41,15 +41,12 @@ export const routes: Routes = [
     path: 'error',
     component: EmptyLayoutComponent,
     children: [
-      { path: '', component: ErrorPage }, // Sin este, si pones /error se queda en empty layout component.
+      { path: '', redirectTo: '404', pathMatch: 'full' }, // Sin este, si pones /error se queda en empty layout component.
       { path: ':code', component: ErrorPage },
     ],
   },
   {
     path: '**',
-    component: EmptyLayoutComponent,
-    children: [
-      { path: '', component: ErrorPage }, // Sin código activa 404.
-    ],
+    redirectTo: 'error/404',
   },
 ];

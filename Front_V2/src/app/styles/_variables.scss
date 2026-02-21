@@ -12,3 +12,7 @@ $fs-label: 18px;
 $fs-input: 17px;
 $pading-input: 5px;
 $hover-opacity-button: 0.85;
+
+// Variables globales para cards
+
+$side-margin: 20px; // Se usa para que cuando se achique el ancho de la pantalla, la card no toque los bordes del viewport.

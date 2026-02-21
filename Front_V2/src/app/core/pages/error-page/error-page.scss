@@ -2,12 +2,11 @@
 
 :host {
   width: 100%;
-  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   row-gap: 0px;
-  padding-top: 5px;
+  padding-top: 10px;
 }
 
 .error__title {
@@ -26,11 +25,13 @@
 }
 
 .error__image {
-  width: 400px;
-  height: 400px;
+  width: min(380px, 100%);
+  aspect-ratio: 1 / 1; // Obliga a que la altura sea la misma que el ancho, si la imagen no tiene esa relación se soluciona con object fit.
   object-fit: contain;
+  flex-shrink: 1; // No sirve por que el main axis es la vertical en este caso.
+  // Estas propiedades "raras" son para que se adapte bien en mobile.
 }
-.form__button {
+.error__button {
   background-color: var(--color-primary) !important;
   color: var(--color-on-primary) !important ;
   font-size: 14px;
@@ -38,7 +39,7 @@
 
 @media (max-width: $mobile-breakpoint) {
   :host {
-    padding-top: 35px;
+    padding-top: 40px;
     row-gap: 10px;
   }
 }

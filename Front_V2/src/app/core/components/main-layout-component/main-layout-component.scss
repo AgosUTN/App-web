@@ -10,7 +10,7 @@ $transition-time: 0.3s;
 // Desktop
 
 :host {
-  min-height: 100vh;
+  height: 100vh;
   width: 100%;
 }
 
@@ -46,6 +46,8 @@ $transition-time: 0.3s;
   transition:
     width $transition-time ease,
     margin-left $transition-time ease;
+
+  overflow: auto;
 }
 
 .sideNavLayout--colapsed {

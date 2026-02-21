@@ -1,0 +1,18 @@
+@use '../../../../styles/variables' as *;
+
+:host {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding-top: 30px;
+}
+
+.card {
+  margin: 0px $side-margin;
+  padding: 30px;
+  height: 500px;
+  width: 900px;
+  flex-shrink: 1;
+  background-color: var(--color-surface);
+  box-shadow: 0 3px 6px 0 var(--color-boxShadow);
+}

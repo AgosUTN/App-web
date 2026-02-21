@@ -2,13 +2,13 @@
 
 :host {
   width: 100%;
-  min-height: 100%;
+
   display: flex;
   padding-top: 100px;
   justify-content: center;
 }
 .card {
-  margin: 0px 20px; // Mantiene un poco de espacio con los bordes en mobile.
+  margin: 0px $side-margin;
   flex-shrink: 1; // Explicíto
   border-radius: 10px;
   padding: 40px 30px 30px 30px;

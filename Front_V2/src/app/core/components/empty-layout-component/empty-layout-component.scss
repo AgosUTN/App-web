@@ -1,4 +1,4 @@
 :host {
-  min-height: 100vh;
+  height: 100vh; // El layout component tiene la responsabilidad de definir la altura.
   width: 100%;
 }
