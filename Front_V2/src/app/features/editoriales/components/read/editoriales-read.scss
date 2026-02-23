@@ -15,4 +15,33 @@
   flex-shrink: 1;
   background-color: var(--color-surface);
   box-shadow: 0 3px 6px 0 var(--color-boxShadow);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.form {
+  display: flex;
+  margin-right: auto;
+  padding: 5px;
+  column-gap: 10px;
+  align-items: center;
+}
+
+.form__button {
+  background-color: var(--color-primary) !important;
+  color: var(--color-on-primary) !important ;
+  font-size: 10px !important;
+  padding-top: 8px;
+}
+.form__button:hover {
+  opacity: $hover-opacity-button;
+}
+.form__button--disabled {
+  opacity: $disabled-opacity;
+}
+.form__input {
+  padding: $pading-input;
+  font-size: $fs-input;
 }

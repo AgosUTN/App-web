@@ -1,5 +1,5 @@
 ### Obtener todos los editoriales
-GET http://localhost:3000/api/editoriales/eadw
+GET http://localhost:3000/api/editoriales/
 
 ### Subir editorial
 
@@ -32,3 +32,7 @@ Content-Type: application/json
 
 ### Delete de una editorial por ID
 DELETE  http://localhost:3000/api/editoriales/103
+
+
+### Get primera página
+GET  http://localhost:3000/api/editoriales/byPage?pageIndex=0&pageSize=5&sortColumn=id&sortOrder=asc&filterValue=

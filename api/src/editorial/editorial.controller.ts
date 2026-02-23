@@ -27,6 +27,41 @@ async function buscarEditoriales(
   }
 }
 
+async function buscarEditorialesByPage(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
+  try {
+    const sortOrder = req.query.sortOrder as string;
+    const sortColumn = req.query.sortColumn as string;
+    const filterValue = req.query.filterValue as string; // Viene siempre, pero puede estar vacío.
+    const pageSize = Number(req.query.pageSize as string);
+    const pageIndex = Number(req.query.pageIndex as string);
+
+    const offset = pageSize * pageIndex; // Base 0.
+
+    let filter = {}; // Evita like innecesario.
+    if (filterValue) {
+      filter = { nombre: { $like: `%${filterValue}%` } }; // Mysql no es case sensitive, no hace falta un lower.
+    }
+
+    const [editoriales, totalCount] = await em.findAndCount(
+      editorialCount,
+      filter,
+      { limit: pageSize, offset: offset, orderBy: { [sortColumn]: sortOrder } },
+    );
+
+    return res.status(200).json({
+      message: "Las editoriales encontradas son:",
+      data: editoriales,
+      total: totalCount,
+    });
+  } catch (error: any) {
+    next(error);
+  }
+}
+
 async function buscarEditorial(
   req: Request,
   res: Response,
@@ -100,4 +135,5 @@ export {
   altaEditorial,
   actualizarEditorial,
   bajaEditorial,
+  buscarEditorialesByPage,
 };

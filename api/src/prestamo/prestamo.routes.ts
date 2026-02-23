@@ -27,7 +27,7 @@ prestamoRouter.post("/retirarLibrosPaso3R", retirarLibrosPaso3R);
 // Rutas nuevas/ desacopladas
 
 prestamoRouter.get("/", (req, res, next) => {
-  // Valido el req.params.id en el router anterior para evitar problemas.
+  // Puede venir desde /socios/:id/prestamos o desde /prestamos.
   const { id } = req.params as { id?: string };
   if (id) {
     return buscarPrestamosSocio(req, res, next);
@@ -36,13 +36,13 @@ prestamoRouter.get("/", (req, res, next) => {
 });
 prestamoRouter.get(
   "/listarEjemplaresPendientes",
-  buscarEjemplaresPendientesSocio
+  buscarEjemplaresPendientesSocio,
 ); // Podria moverse a ejemplares quizas. (Actualmente esta anidada a socio) No hay query params, no tiene sentido.
 
 prestamoRouter.patch(
   "/:id/lineas/:idLP/devolver",
   validateInput(devolverLibroParams, devolverLibroRequest),
-  devolverLibroD
+  devolverLibroD,
 ); // Linea préstamo no tiene controlador ni rutas, por eso el endpoint este.
 
 /* Query Params para buscarPrestamos y buscarPrestamosSocio:

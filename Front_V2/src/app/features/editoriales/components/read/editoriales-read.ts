@@ -2,37 +2,58 @@ import { Component } from '@angular/core';
 import { EditorialCount } from '../../models/editorialCount.model';
 import { EditorialService } from '../../services/editorial-service';
 import { MatTableModule } from '@angular/material/table';
-import {MatPaginatorModule} from '@angular/material/paginator';
+import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatSortModule, Sort } from '@angular/material/sort';
+import { icons } from '../../../../shared/constants/iconPaths';
+import { BasePagedComponent } from '../../../../shared/base/basePagedComponent';
+
 @Component({
   selector: 'app-editoriales-read',
-  imports: [MatTableModule,MatPaginatorModule],
+  imports: [
+    MatTableModule,
+    MatPaginatorModule,
+    ReactiveFormsModule,
+    MatButtonModule,
+    MatSortModule,
+  ],
   templateUrl: './editoriales-read.html',
   styleUrl: './editoriales-read.scss',
 })
-export class EditorialesRead {
-  editoriales: EditorialCount[] = [
-    { id: 1, nombre: 'Planeta', cantLibros: 120 },
-    { id: 2, nombre: 'Sudamericana', cantLibros: 85 },
-    { id: 3, nombre: 'Alfaguara', cantLibros: 64 },
-    { id: 4, nombre: 'Anagrama', cantLibros: 47 },
-    { id: 5, nombre: 'Seix Barral', cantLibros: 92 },
-    { id: 6, nombre: 'Siglo XXI', cantLibros: 38 },
-    { id: 7, nombre: 'Paidós', cantLibros: 73 },
-    { id: 8, nombre: 'Ariel', cantLibros: 55 },
-    { id: 9, nombre: 'Eudeba', cantLibros: 29 },
-    { id: 10, nombre: 'Tusquets', cantLibros: 66 },
-    { id: 11, nombre: 'Emecé', cantLibros: 41 },
-    { id: 12, nombre: 'Océano', cantLibros: 34 },
-    { id: 13, nombre: 'Norma', cantLibros: 58 },
-    { id: 14, nombre: 'Salamandra', cantLibros: 77 },
-    { id: 15, nombre: 'Debate', cantLibros: 49 },
-  ];
-  dataSource: EditorialCount[] = [];
-  displayedColumns: string[] = ['id', 'nombre', 'cantLibros'];
+export class EditorialesRead extends BasePagedComponent<EditorialCount> {
+  icons = icons;
+  searchInput = new FormGroup({
+    data: new FormControl('', [Validators.maxLength(15)]),
+  });
 
-  constructor(private editorialService: EditorialService) {}
+  displayedColumns: string[] = ['id', 'nombre', 'cantlibros', 'editar', 'borrar'];
+
+  constructor(private editorialService: EditorialService) {
+    super();
+  }
 
   ngOnInit(): void {
-    this.dataSource = this.editoriales;
+    this.loadData();
+  }
+
+  override onSubmit(): void {
+    const { data } = this.searchInput.getRawValue();
+    super.onSubmit(data!);
+  }
+
+  override loadData(): void {
+    this.isLoading = true;
+    this.editorialService
+      .getByPage(this.pageIndex, this.pageSize, this.sortColumn, this.sortOrder, this.filterValue)
+      .subscribe({
+        next: (res) => {
+          this.dataSource.data = res.data;
+          this.totalRecords = res.total;
+        },
+        error: (err) => console.log(err),
+        complete: () => (this.isLoading = false),
+      });
   }
 }

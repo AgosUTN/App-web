@@ -2,37 +2,35 @@ import { ZodError, ZodObject } from "zod";
 import { Request, Response, NextFunction } from "express";
 
 export function validateInput(
-  schemaReq?: ZodObject<any, any>,
-  schemaBody?: ZodObject<any, any>,
+  schemaParams?: ZodObject<any>,
+  schemaBody?: ZodObject<any>,
+  schemaQuery?: ZodObject<any>,
 ) {
   return function (req: Request, res: Response, next: NextFunction) {
     try {
-      if (schemaReq) {
-        schemaReq.parse(req.params);
+      if (schemaParams) {
+        req.params = schemaParams.parse(req.params);
       }
+
+      if (schemaBody) {
+        req.body = schemaBody.parse(req.body);
+      }
+
+      if (schemaQuery) {
+        req.query = schemaQuery.parse(req.query);
+      }
+
+      next(); // Si no hay error se sigue el flujo.
     } catch (error: any) {
       if (error instanceof ZodError) {
         return res.status(400).json({
-          message: "Request params inválidos: " + error.message,
+          message: error.message,
           code: "VALIDATION_ERROR",
         });
       }
-      next(error); // Pasa el error a handleInternalError
+
+      next(error); // Si no es error de Zod, se lo pasa al HandleInternalError.
     }
-    try {
-      if (schemaBody) {
-        schemaBody.parse(req.body);
-      }
-    } catch (error: any) {
-      if (error instanceof ZodError) {
-        return res.status(400).json({
-          message: "Request body inválido: " + error.message,
-          codigo: "VALIDATION_ERROR",
-        });
-      }
-      next(error);
-    }
-    next(); // Si no hay error en la validación, sigue flujo.
   };
 }
 

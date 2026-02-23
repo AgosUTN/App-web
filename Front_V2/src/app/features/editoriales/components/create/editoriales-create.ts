@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
@@ -22,15 +22,9 @@ export class EditorialesCreate {
   constructor(
     private notification: NotificationService,
     private editorialService: EditorialService,
-    private cdr: ChangeDetectorRef,
   ) {}
 
   onSubmit(): void {
-    if (this.editorialForm.invalid) {
-      this.editorialForm.markAllAsTouched();
-      return;
-    }
-
     const { nombre } = this.editorialForm.getRawValue();
 
     this.loading = true;

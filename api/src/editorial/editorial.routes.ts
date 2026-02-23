@@ -5,6 +5,7 @@ import {
   altaEditorial,
   actualizarEditorial,
   bajaEditorial,
+  buscarEditorialesByPage,
 } from "./editorial.controller.js";
 import { validateInput } from "../middlewares/middleware.validateInput.js";
 import {
@@ -12,31 +13,37 @@ import {
   editorialPatchSchema,
 } from "../schemas/schemas.editorial.js";
 import { schemaParamsId } from "../schemas/schema.paramsId.js";
+import { editorialGetByPageSchema } from "../schemas/getByPage/editorial.schema.js";
 export const editorialRouter = Router();
 
 editorialRouter.get("/", buscarEditoriales);
 editorialRouter.get(
+  "/byPage",
+  validateInput(undefined, undefined, editorialGetByPageSchema),
+  buscarEditorialesByPage,
+);
+editorialRouter.get(
   "/:id",
   validateInput(schemaParamsId, undefined),
-  buscarEditorial
+  buscarEditorial,
 );
 editorialRouter.post(
   "/",
   validateInput(undefined, editorialAltaSchema),
-  altaEditorial
+  altaEditorial,
 );
 editorialRouter.put(
   "/:id",
   validateInput(schemaParamsId, editorialAltaSchema),
-  actualizarEditorial
+  actualizarEditorial,
 );
 editorialRouter.patch(
   "/:id",
   validateInput(schemaParamsId, editorialPatchSchema),
-  actualizarEditorial
+  actualizarEditorial,
 ); // Por el momento no tiene sentido, solo hay 1 campo a modificar.
 editorialRouter.delete(
   "/:id",
   validateInput(schemaParamsId, undefined),
-  bajaEditorial
+  bajaEditorial,
 );

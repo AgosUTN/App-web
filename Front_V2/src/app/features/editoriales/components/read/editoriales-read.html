@@ -1,25 +1,92 @@
 <div class="card">
-  <table mat-table [dataSource]="editoriales">
+  <form class="form" [formGroup]="searchInput" (ngSubmit)="onSubmit()">
+    <div class="form__field">
+      <input
+        class="form__input"
+        id="data"
+        type="text"
+        formControlName="data"
+        placeholder="Nombre editorial"
+        maxlength="15"
+      />
+    </div>
+    <button
+      mat-raised-button
+      class="form__button"
+      type="submit"
+      [disabled]="searchInput.invalid"
+      [class.form__button--disabled]="searchInput.invalid"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        height="24px"
+        viewBox="0 -960 960 960"
+        width="24px"
+        fill="white"
+      >
+        <path [attr.d]="icons.searchPath" />
+      </svg>
+    </button>
+  </form>
+  <table mat-table [dataSource]="dataSource" (matSortChange)="onSortChange($event)" matSort>
     <ng-container matColumnDef="id">
-      <th mat-header-cell *matHeaderCellDef>ID</th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
       <td mat-cell *matCellDef="let editorial">{{ editorial.id }}</td>
     </ng-container>
     <ng-container matColumnDef="nombre">
-      <th mat-header-cell *matHeaderCellDef>Nombre</th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Nombre</th>
       <td mat-cell *matCellDef="let editorial">{{ editorial.nombre }}</td>
     </ng-container>
-    <ng-container matColumnDef="cantLibros">
-      <th mat-header-cell *matHeaderCellDef>Cantidad libros</th>
-      <td mat-cell *matCellDef="let editorial">{{ editorial.cantLibros }}</td>
+    <ng-container matColumnDef="cantlibros">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Cantidad libros</th>
+      <td mat-cell *matCellDef="let editorial">{{ editorial.cantlibros }}</td>
+    </ng-container>
+    <ng-container matColumnDef="editar">
+      <th mat-header-cell *matHeaderCellDef>Editar</th>
+      <td mat-cell *matCellDef="let editorial">
+        <button mat-raised-button>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="24px"
+            viewBox="0 -960 960 960"
+            width="24px"
+            fill="black"
+          >
+            <path [attr.d]="icons.editPath" />
+          </svg>
+        </button>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="borrar">
+      <th mat-header-cell *matHeaderCellDef>Borrar</th>
+      <td mat-cell *matCellDef="let editorial">
+        <button
+          mat-raised-button
+          [disabled]="editorial.cantlibros === 0"
+          [class.form__button--disabled]
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="24px"
+            viewBox="0 -960 960 960"
+            width="24px"
+            fill="black"
+          >
+            <path [attr.d]="icons.deletePath" />
+          </svg>
+        </button>
+      </td>
     </ng-container>
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
   </table>
   <mat-paginator
-    [length]="100"
-    [pageSize]="10"
+    [length]="totalRecords"
+    [pageSize]="pageSize"
     [pageSizeOptions]="[5, 10, 25, 100]"
-    aria-label="Select page"
+    [pageIndex]="pageIndex"
+    aria-label="Seleccionar página"
+    (page)="onPageChange($event)"
   >
   </mat-paginator>
 </div>
