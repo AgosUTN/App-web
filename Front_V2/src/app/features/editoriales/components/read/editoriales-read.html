@@ -1,15 +1,14 @@
 <div class="card">
-  <form class="form" [formGroup]="searchInput" (ngSubmit)="onSubmit()">
-    <div class="form__field">
-      <input
-        class="form__input"
-        id="data"
-        type="text"
-        formControlName="data"
-        placeholder="Nombre editorial"
-        maxlength="15"
-      />
-    </div>
+  <form class="table__searchContainer" [formGroup]="searchInput" (ngSubmit)="onSubmit()">
+    <input
+      class="form__input"
+      id="data"
+      type="text"
+      formControlName="data"
+      placeholder="Nombre editorial"
+      maxlength="15"
+    />
+
     <button
       mat-raised-button
       class="form__button"
@@ -28,7 +27,13 @@
       </svg>
     </button>
   </form>
-  <table mat-table [dataSource]="dataSource" (matSortChange)="onSortChange($event)" matSort>
+  <table
+    mat-table
+    [dataSource]="dataSource"
+    (matSortChange)="onSortChange($event)"
+    matSort
+    class="table"
+  >
     <ng-container matColumnDef="id">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
       <td mat-cell *matCellDef="let editorial">{{ editorial.id }}</td>
@@ -83,7 +88,7 @@
   <mat-paginator
     [length]="totalRecords"
     [pageSize]="pageSize"
-    [pageSizeOptions]="[5, 10, 25, 100]"
+    [pageSizeOptions]="[6, 10, 25, 100]"
     [pageIndex]="pageIndex"
     aria-label="Seleccionar página"
     (page)="onPageChange($event)"

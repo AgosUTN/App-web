@@ -7,7 +7,7 @@ import { MatTableDataSource } from '@angular/material/table';
 
 export abstract class BasePagedComponent<T> {
   pageIndex: number = 0;
-  pageSize: number = 5;
+  pageSize: number = 6;
   sortOrder: string = 'asc';
   sortColumn: string = 'id';
   filterValue: string = '';
@@ -43,6 +43,6 @@ export abstract class BasePagedComponent<T> {
 
   private resetPaginator(): void {
     this.pageIndex = 0;
-    this.pageSize = 5;
+    this.pageSize = 6;
   }
 }

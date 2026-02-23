@@ -14,6 +14,7 @@ export class ErrorPage {
   imageUrl: string = '';
   title: string = '';
   message: string = '';
+  showButton: boolean = true;
 
   constructor(private route: ActivatedRoute) {}
 
@@ -28,6 +29,7 @@ export class ErrorPage {
         this.title = 'Error 500';
         this.message = 'No se ha podido conectar con el servidor';
         this.imageUrl = 'images/500.svg';
+        this.showButton = false;
         break;
 
       case '400':

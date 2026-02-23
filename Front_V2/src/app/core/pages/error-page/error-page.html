@@ -2,7 +2,7 @@
 <ng-container *ngIf="imageLoaded">
   <h3 class="error__title">{{ title }}</h3>
   <p class="error__message">{{ message }}</p>
-  <button mat-raised-button class="error__button" [routerLink]="'/dashboard'">
+  <button mat-raised-button class="error__button" [routerLink]="'/dashboard'" *ngIf="showButton">
     Volver a Dashboard
   </button>
 </ng-container>

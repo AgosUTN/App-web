@@ -16,7 +16,7 @@ export class EditorialesCreate {
   loading: boolean = false;
 
   editorialForm = new FormGroup({
-    nombre: new FormControl('', [Validators.required, Validators.maxLength(15)]),
+    nombre: new FormControl('', [Validators.required, Validators.maxLength(30)]),
   });
 
   constructor(

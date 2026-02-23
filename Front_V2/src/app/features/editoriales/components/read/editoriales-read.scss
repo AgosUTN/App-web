@@ -4,27 +4,38 @@
   width: 100%;
   display: flex;
   justify-content: center;
-  padding-top: 30px;
+  padding-top: 0px;
 }
 
 .card {
-  margin: 0px $side-margin;
+  margin: 20px $side-margin 20px $side-margin;
   padding: 30px;
-  height: 500px;
+  min-height: 500px;
+  height: auto;
   width: 900px;
-  flex-shrink: 1;
   background-color: var(--color-surface);
   box-shadow: 0 3px 6px 0 var(--color-boxShadow);
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
+  row-gap: 15px;
 }
 
-.form {
+.table {
+  width: 100%;
+  table-layout: fixed;
+}
+
+.table td {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.table__searchContainer {
   display: flex;
   margin-right: auto;
-  padding: 5px;
+  padding: 0px;
   column-gap: 10px;
   align-items: center;
 }
