@@ -9,6 +9,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSortModule, Sort } from '@angular/material/sort';
 import { icons } from '../../../../shared/constants/iconPaths';
 import { BasePagedComponent } from '../../../../shared/base/basePagedComponent';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-editoriales-read',
@@ -18,6 +19,7 @@ import { BasePagedComponent } from '../../../../shared/base/basePagedComponent';
     ReactiveFormsModule,
     MatButtonModule,
     MatSortModule,
+    MatTooltipModule,
   ],
   templateUrl: './editoriales-read.html',
   styleUrl: './editoriales-read.scss',
@@ -49,8 +51,23 @@ export class EditorialesRead extends BasePagedComponent<EditorialCount> {
       .getByPage(this.pageIndex, this.pageSize, this.sortColumn, this.sortOrder, this.filterValue)
       .subscribe({
         next: (res) => {
-          this.dataSource.data = res.data;
           this.totalRecords = res.total;
+
+          const data = [...res.data]; // copia
+
+          const emptyRows = this.pageSize - data.length;
+
+          if (emptyRows > 0) {
+            const emptyArray = Array.from({ length: emptyRows }, () => ({
+              id: 0,
+              nombre: 'nombre',
+              cantlibros: 0,
+            }));
+
+            this.dataSource.data = [...data, ...emptyArray];
+          } else {
+            this.dataSource.data = data;
+          }
         },
         error: (err) => console.log(err),
         complete: () => (this.isLoading = false),

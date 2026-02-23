@@ -35,6 +35,7 @@ $transition-time: 0.3s;
   transition:
     width $transition-time ease,
     margin-left $transition-time ease;
+  z-index: 1000;
 }
 
 .mainLayout {
@@ -70,7 +71,7 @@ $transition-time: 0.3s;
     width: $sidenav-expanded-width;
     left: -($sidenav-expanded-width);
     transition: left $transition-time ease;
-    padding-top: 20px;
+    margin-top: $header-height;
   }
   .mainLayout,
   .headerLayout {

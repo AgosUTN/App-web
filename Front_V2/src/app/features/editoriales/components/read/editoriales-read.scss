@@ -25,8 +25,10 @@
   width: 100%;
   table-layout: fixed;
 }
-
-.table td {
+.table__row--empty {
+  visibility: hidden;
+}
+.table__item--ellipsis {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -55,4 +57,22 @@
 .form__input {
   padding: $pading-input;
   font-size: $fs-input;
+}
+
+.mat-column-id {
+  width: 30%;
+}
+.mat-column-nombre {
+  width: 20%;
+}
+.mat-column-cantlibros {
+  width: 20%;
+}
+.mat-column-editar {
+  width: 15%;
+  text-align: center;
+}
+.mat-column-borrar {
+  width: 15%;
+  text-align: center;
 }

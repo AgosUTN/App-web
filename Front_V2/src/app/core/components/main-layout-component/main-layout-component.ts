@@ -55,4 +55,10 @@ export class MainLayoutComponent {
       return '';
     }
   }
+
+  toggleSideNavMobile(): void {
+    if (this.sideNavOpen && this.isMobile) {
+      this.sideNavOpen = !this.sideNavOpen;
+    }
+  }
 }
