@@ -75,3 +75,9 @@ body,
   background-color: var(--color-error) !important;
   color: var(--color-on-primary) !important;
 }
+.mat-mdc-paginator-range-label {
+  flex: 0 0 80px; // ancho fijo real
+  min-width: 80px;
+  max-width: 80px;
+  //text-align: center;
+}

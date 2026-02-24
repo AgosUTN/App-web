@@ -47,7 +47,6 @@ export abstract class BasePagedComponent<T> {
 
   private resetPaginator(): void {
     this.pageIndex = 0;
-    this.pageSize = 6;
   }
 
   protected setLoadingState(): void {
