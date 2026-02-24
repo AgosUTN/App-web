@@ -7,6 +7,7 @@ import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@a
 import { ErrorInterceptor } from './core/interceptors/error.interceptor';
 import { MatPaginatorIntl } from '@angular/material/paginator';
 import { customPaginatorBuilder } from './shared/constants/customPaginator';
+import { CacheInterceptor } from './core/interceptors/cache.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -18,6 +19,11 @@ export const appConfig: ApplicationConfig = {
     {
       provide: HTTP_INTERCEPTORS,
       useClass: ErrorInterceptor,
+      multi: true,
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: CacheInterceptor,
       multi: true,
     },
     { provide: MatPaginatorIntl, useFactory: customPaginatorBuilder },

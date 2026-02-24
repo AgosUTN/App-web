@@ -72,7 +72,11 @@
       <th mat-header-cell *matHeaderCellDef style="text-align: center">Acciones</th>
       <td mat-cell *matCellDef="let editorial">
         <button mat-button class="actions-button">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" class="button__svg">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 -960 960 960"
+            class="actions-button__svg"
+          >
             <path [attr.d]="icons.editPath" />
           </svg>
         </button>
@@ -82,7 +86,11 @@
           [disabled]="editorial.cantlibros === 0"
           [class.actions-button--disabled]="editorial.cantlibros === 0"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" class="button__svg" viewBox="0 -960 960 960">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="actions-button__svg"
+            viewBox="0 -960 960 960"
+          >
             <path [attr.d]="icons.deletePath" />
           </svg>
         </button>

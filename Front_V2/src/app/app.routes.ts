@@ -11,7 +11,11 @@ export const routes: Routes = [
     path: '',
     component: MainLayoutComponent,
     children: [
-      { path: 'dashboard', component: Dashboard, data: { breadcrumb: 'Dashboard' } },
+      {
+        path: 'dashboard',
+        component: Dashboard,
+        data: { breadcrumb: 'Dashboard', crud: 'dashboard' },
+      },
       {
         path: 'editoriales',
         data: {
@@ -22,7 +26,8 @@ export const routes: Routes = [
             path: '',
             component: EditorialesRead,
             data: {
-              breadcrumb: '', // Para evitar que herede el data y breadcrumb del padre. "" es falsy.
+              breadcrumb: '', // Para evitar que  herede el data y breadcrumb del padre. "" es falsy.
+              crud: 'editoriales',
             },
           },
           {
@@ -30,6 +35,7 @@ export const routes: Routes = [
             component: EditorialesCreate,
             data: {
               breadcrumb: 'Alta',
+              crud: 'editoriales',
             },
           },
         ],
