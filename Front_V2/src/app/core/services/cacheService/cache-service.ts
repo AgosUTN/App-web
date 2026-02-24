@@ -25,7 +25,6 @@ export class CacheService {
   setData(key: string, value: any): void {
     this.cache.set(key, value);
   }
-  C;
 
   private clearData(): void {
     this.cache.clear();
