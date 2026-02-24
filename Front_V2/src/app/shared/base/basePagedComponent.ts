@@ -15,7 +15,11 @@ export abstract class BasePagedComponent<T> {
   isLoading: boolean = true;
   dataSource = new MatTableDataSource<T>();
 
-  abstract loadData(): void;
+  // Protected es private pero que también pueden usar las clases hijas.
+
+  protected abstract loadData(): void;
+  protected abstract getEmptyObject(): T; // Devuelve instancia con id 0
+  protected abstract getSkeletonObject(): T; // Devuelve instancia con id -1
 
   onPageChange(event: PageEvent): void {
     this.pageIndex = event.pageIndex;
@@ -44,5 +48,18 @@ export abstract class BasePagedComponent<T> {
   private resetPaginator(): void {
     this.pageIndex = 0;
     this.pageSize = 6;
+  }
+
+  protected setLoadingState(): void {
+    this.isLoading = true;
+    const skeletons = Array.from({ length: this.pageSize }, () => this.getSkeletonObject());
+
+    this.dataSource.data = skeletons;
+  }
+
+  protected fillMissingRows(data: T[]): T[] {
+    const emptyRows = this.pageSize - data.length;
+    if (emptyRows <= 0) return data;
+    return [...data, ...Array.from({ length: emptyRows }, () => this.getEmptyObject())];
   }
 }

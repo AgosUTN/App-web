@@ -36,60 +36,59 @@
   >
     <ng-container matColumnDef="id">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
-      <td mat-cell *matCellDef="let editorial">{{ editorial.id }}</td>
-    </ng-container>
+      <td mat-cell *matCellDef="let editorial">
+        <ng-container *ngIf="!isLoading; else skeleton1">{{ editorial.id }}</ng-container>
+        <ng-template #skeleton1>
+          <div class="skeleton skeleton-id"></div>
+        </ng-template></td
+    ></ng-container>
     <ng-container matColumnDef="nombre">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Nombre</th>
       <td mat-cell *matCellDef="let editorial">
-        <span
-          #textRef
-          class="table__item--ellipsis"
-          [matTooltip]="editorial.nombre"
-          matTooltipPosition="above"
-          >{{ editorial.nombre }}</span
-        >
+        <ng-container *ngIf="!isLoading; else skeleton2">
+          <span
+            #textRef
+            class="table__item--ellipsis"
+            [matTooltip]="editorial.nombre"
+            matTooltipPosition="above"
+            >{{ editorial.nombre }}</span
+          >
+        </ng-container>
+        <ng-template #skeleton2>
+          <div class="skeleton skeleton-nombre"></div>
+        </ng-template>
       </td>
     </ng-container>
     <ng-container matColumnDef="cantlibros">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Cantidad libros</th>
-      <td mat-cell *matCellDef="let editorial">{{ editorial.cantlibros }}</td>
-    </ng-container>
-    <ng-container matColumnDef="editar">
-      <th mat-header-cell *matHeaderCellDef>Editar</th>
       <td mat-cell *matCellDef="let editorial">
-        <button mat-raised-button>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            height="24px"
-            viewBox="0 -960 960 960"
-            width="24px"
-            fill="black"
-          >
+        <ng-container *ngIf="!isLoading; else skeleton3"> {{ editorial.cantlibros }} </ng-container>
+        <ng-template #skeleton3>
+          <div class="skeleton skeleton-cantlibros"></div>
+        </ng-template>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef style="text-align: center">Acciones</th>
+      <td mat-cell *matCellDef="let editorial">
+        <button mat-button class="actions-button">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" class="button__svg">
             <path [attr.d]="icons.editPath" />
           </svg>
         </button>
-      </td>
-    </ng-container>
-    <ng-container matColumnDef="borrar">
-      <th mat-header-cell *matHeaderCellDef>Borrar</th>
-      <td mat-cell *matCellDef="let editorial">
         <button
-          mat-raised-button
+          mat-button
+          class="actions-button"
           [disabled]="editorial.cantlibros === 0"
-          [class.form__button--disabled]
+          [class.actions-button--disabled]="editorial.cantlibros === 0"
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            height="24px"
-            viewBox="0 -960 960 960"
-            width="24px"
-            fill="black"
-          >
+          <svg xmlns="http://www.w3.org/2000/svg" class="button__svg" viewBox="0 -960 960 960">
             <path [attr.d]="icons.deletePath" />
           </svg>
         </button>
       </td>
     </ng-container>
+
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr
       mat-row
@@ -100,7 +99,7 @@
   <mat-paginator
     [length]="totalRecords"
     [pageSize]="pageSize"
-    [pageSizeOptions]="[6, 10, 25, 100]"
+    [pageSizeOptions]="[6, 10, 25]"
     [pageIndex]="pageIndex"
     aria-label="Seleccionar página"
     (page)="onPageChange($event)"

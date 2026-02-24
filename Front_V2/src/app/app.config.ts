@@ -5,6 +5,8 @@ import { routes } from './app.routes';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { ErrorInterceptor } from './core/interceptors/error.interceptor';
+import { MatPaginatorIntl } from '@angular/material/paginator';
+import { customPaginatorBuilder } from './shared/constants/customPaginator';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -18,5 +20,6 @@ export const appConfig: ApplicationConfig = {
       useClass: ErrorInterceptor,
       multi: true,
     },
+    { provide: MatPaginatorIntl, useFactory: customPaginatorBuilder },
   ],
 };

@@ -1,0 +1,18 @@
+.skeleton {
+  border-radius: 4px;
+  background: linear-gradient(90deg, #d0d0d0 25%, #bdbdbd 50%, #d0d0d0 75%);
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.2s infinite linear;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+// Definir clase "skeleton-<nombreColumna>" para definir el alto y ancho del skeleton.
+// Se lo da a un div dentro del MatCell.

@@ -10,6 +10,7 @@ import { MatSortModule, Sort } from '@angular/material/sort';
 import { icons } from '../../../../shared/constants/iconPaths';
 import { BasePagedComponent } from '../../../../shared/base/basePagedComponent';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-editoriales-read',
@@ -20,6 +21,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatButtonModule,
     MatSortModule,
     MatTooltipModule,
+    CommonModule,
   ],
   templateUrl: './editoriales-read.html',
   styleUrl: './editoriales-read.scss',
@@ -30,7 +32,7 @@ export class EditorialesRead extends BasePagedComponent<EditorialCount> {
     data: new FormControl('', [Validators.maxLength(15)]),
   });
 
-  displayedColumns: string[] = ['id', 'nombre', 'cantlibros', 'editar', 'borrar'];
+  displayedColumns: string[] = ['id', 'nombre', 'cantlibros', 'actions'];
 
   constructor(private editorialService: EditorialService) {
     super();
@@ -46,31 +48,32 @@ export class EditorialesRead extends BasePagedComponent<EditorialCount> {
   }
 
   override loadData(): void {
-    this.isLoading = true;
+    this.setLoadingState();
     this.editorialService
       .getByPage(this.pageIndex, this.pageSize, this.sortColumn, this.sortOrder, this.filterValue)
       .subscribe({
         next: (res) => {
           this.totalRecords = res.total;
-
-          const data = [...res.data]; // copia
-
-          const emptyRows = this.pageSize - data.length;
-
-          if (emptyRows > 0) {
-            const emptyArray = Array.from({ length: emptyRows }, () => ({
-              id: 0,
-              nombre: 'nombre',
-              cantlibros: 0,
-            }));
-
-            this.dataSource.data = [...data, ...emptyArray];
-          } else {
-            this.dataSource.data = data;
-          }
+          this.dataSource.data = this.fillMissingRows(res.data);
         },
         error: (err) => console.log(err),
-        complete: () => (this.isLoading = false),
+        complete: () => {
+          this.isLoading = false;
+        },
       });
+  }
+  override getEmptyObject(): EditorialCount {
+    return {
+      id: 0,
+      nombre: 'nombre',
+      cantlibros: 0,
+    };
+  }
+  override getSkeletonObject(): EditorialCount {
+    return {
+      id: -1,
+      nombre: 'nombre',
+      cantlibros: 0,
+    };
   }
 }

@@ -8,9 +8,9 @@ POST http://localhost:3000/api/libros
 Content-Type: application/json
 
 {
-    "titulo": "Libro Teta",
+    "titulo": "Moby dick",
     "descripcion": "Un clásico de la literatura contemporanéa",
-    "isbn": "0-7432-7357-5",
+    "isbn": "0-7645-2641-3",
     "misAutores": [1],      
     "miEditorial": 1,
     "cantEjemplares": 0
