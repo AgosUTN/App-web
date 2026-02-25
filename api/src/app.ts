@@ -14,8 +14,14 @@ import { prestamoRouter } from "./prestamo/prestamo.routes.js";
 import { handleJsonSyntaxError } from "./middlewares/middleware.handleJsonSyntaxError.js";
 import { handleInternalError } from "./middlewares/middleware.handleInternalError.js";
 import { sancionRouter } from "./sancion/sancion.routes.js";
+import { createServer } from "http";
+import { Server } from "socket.io";
 
 const app = express();
+const httpServer = createServer(app);
+export const io = new Server(httpServer, {
+  cors: { origin: "*" },
+});
 
 app.use(cors());
 app.use(express.json());
@@ -45,4 +51,6 @@ app.use((_, res) => {
 
 await syncSchema(); // Sacar en producción.
 
-app.listen(process.env.API_PORT, () => console.log("Running on port 3000"));
+httpServer.listen(process.env.API_PORT, () =>
+  console.log("Running on port 3000"),
+);

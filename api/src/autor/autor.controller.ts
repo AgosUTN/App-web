@@ -1,9 +1,8 @@
 import { Request, Response, NextFunction } from "express";
 import { orm } from "../shared/DB/orm.js";
 import { Autor } from "./autor.entity.js";
-import { errorDominio } from "../shared/DB/errors.js";
+import { errorDominio } from "../shared/errors/errors.js";
 import { NotFoundError } from "@mikro-orm/core";
-import { error } from "console";
 
 const em = orm.em;
 
@@ -24,7 +23,7 @@ async function buscaAutor(req: Request, res: Response, next: NextFunction) {
     const autor = await em.findOneOrFail(
       Autor,
       { id },
-      { populate: ["misLibros"] }
+      { populate: ["misLibros"] },
     );
     return res.status(200).json({ message: "Autor encontrado", data: autor });
   } catch (error: any) {
@@ -48,7 +47,7 @@ async function altaAutor(req: Request, res: Response, next: NextFunction) {
 async function actualizarAutor(
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) {
   try {
     const id = Number.parseInt(req.params.id);

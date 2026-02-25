@@ -8,7 +8,7 @@ import {
 } from "@mikro-orm/core";
 
 import { BaseEntity } from "../shared/DB/baseEntity.entity.js";
-import { errorDominio } from "../shared/DB/errors.js";
+import { errorDominio } from "../shared/errors/errors.js";
 import { Libro } from "../libro/libro.entity.js";
 
 @Entity()

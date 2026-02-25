@@ -7,7 +7,7 @@ POST http://localhost:3000/api/editoriales
 Content-Type: application/json
 
 {
-    "nombre": "Prueba repeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+    "nombre": "saturno"
 
 }
 ### Actualizar editorial PUT
@@ -31,7 +31,7 @@ Content-Type: application/json
 
 
 ### Delete de una editorial por ID
-DELETE  http://localhost:3000/api/editoriales/103
+DELETE  http://localhost:3000/api/editoriales/52
 
 
 ### Get primera página

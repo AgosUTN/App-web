@@ -83,8 +83,8 @@
         <button
           mat-button
           class="actions-button"
-          [disabled]="editorial.cantlibros === 0"
-          [class.actions-button--disabled]="editorial.cantlibros === 0"
+          [disabled]="editorial.cantlibros !== 0"
+          [class.actions-button--disabled]="editorial.cantlibros !== 0"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"

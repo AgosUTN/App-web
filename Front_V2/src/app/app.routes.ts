@@ -5,6 +5,7 @@ import { EditorialesRead } from './features/editoriales/components/read/editoria
 import { ErrorPage } from './core/pages/error-page/error-page';
 import { EmptyLayoutComponent } from './core/components/empty-layout-component/empty-layout-component';
 import { MainLayoutComponent } from './core/components/main-layout-component/main-layout-component';
+import { CRUD_names } from './core/constants/crudNames.config';
 
 export const routes: Routes = [
   {
@@ -27,7 +28,7 @@ export const routes: Routes = [
             component: EditorialesRead,
             data: {
               breadcrumb: '', // Para evitar que  herede el data y breadcrumb del padre. "" es falsy.
-              crud: 'editoriales',
+              crud: CRUD_names.Editorial,
             },
           },
           {
@@ -35,7 +36,7 @@ export const routes: Routes = [
             component: EditorialesCreate,
             data: {
               breadcrumb: 'Alta',
-              crud: 'editoriales',
+              crud: CRUD_names.Editorial,
             },
           },
         ],

@@ -1,13 +1,15 @@
 import { Request, Response, NextFunction } from "express";
 import { orm } from "../shared/DB/orm.js";
 import { Editorial } from "./editorial.entity.js";
-
 import {
   NotFoundError,
   sql,
   UniqueConstraintViolationException,
 } from "@mikro-orm/core";
 import { editorialCount } from "./editorialCount.entity.js";
+import { io } from "../app.js";
+import { SOCKET_EVENTS } from "../shared/constants/socketEvents.config.js";
+import { CRUD_names } from "../shared/constants/crudNames.config.js";
 
 const em = orm.em;
 
@@ -119,6 +121,9 @@ async function bajaEditorial(req: Request, res: Response, next: NextFunction) {
     const id = Number.parseInt(req.params.id);
     const editorial = em.getReference(Editorial, id);
     await em.removeAndFlush(editorial);
+
+    io.emit(SOCKET_EVENTS.CACHE_INVALIDATE, { crud: CRUD_names.Editorial });
+
     return res.status(200).send({ message: "Editorial borrada" });
   } catch (error: any) {
     if (error.code === "ER_ROW_IS_REFERENCED_2") {
