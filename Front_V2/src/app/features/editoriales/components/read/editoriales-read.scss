@@ -1,6 +1,12 @@
 @use '../../../../styles/variables' as *;
 @use '../../../../styles/skeleton' as *;
 
+// Nota: Pedi a la IA que ordene el archivo porque quedó muy desastre por el doble template.
+
+// =====================
+// Base / Shared
+// =====================
+
 :host {
   width: 100%;
 }
@@ -12,16 +18,16 @@
   padding-top: 0px;
 }
 
-.form__newButton {
+.form__addButton {
   margin-left: auto;
-
   display: flex;
   align-items: baseline;
   padding-top: 8px;
+  width: 28px !important;
 }
 
 .card {
-  margin: 20px $side-margin 20px $side-margin;
+  margin: 20px $side-margin;
   padding: 30px;
   min-height: 500px;
   height: auto;
@@ -38,9 +44,11 @@
   width: 100%;
   table-layout: fixed;
 }
+
 .table__row--empty {
   visibility: hidden;
 }
+
 .table__item--ellipsis {
   overflow: hidden;
   text-overflow: ellipsis;
@@ -58,39 +66,48 @@
 
 .form__button {
   background-color: var(--color-primary) !important;
-  color: var(--color-on-primary) !important ;
+  color: var(--color-on-primary) !important;
   font-size: 10px !important;
   padding-top: 8px;
   width: 32px;
+
+  &:hover {
+    opacity: $hover-opacity-button;
+  }
+
+  &--disabled {
+    opacity: $disabled-opacity;
+  }
 }
 
 .actions-button {
   width: 32px;
   padding-top: 8px;
   font-size: 10px !important;
+
+  &--disabled {
+    width: 32px;
+    padding-top: 8px;
+    font-size: 10px !important;
+    background-color: var(--color-background) !important;
+    opacity: 0.5;
+  }
+
+  &__svg {
+    height: 20px;
+    width: 20px;
+    fill: var(--color-on-surface);
+  }
 }
-.actions-button--disabled {
-  width: 32px;
-  padding-top: 8px;
-  font-size: 10px !important;
-  background-color: var(--color-background) !important;
-  opacity: 0.5;
-}
-.actions-button__svg {
-  height: 20px;
-  width: 20px;
-  fill: var(--color-on-surface);
-}
-.form__button:hover {
-  opacity: $hover-opacity-button;
-}
-.form__button--disabled {
-  opacity: $disabled-opacity;
-}
+
 .form__input {
   padding: $pading-input;
   font-size: $fs-input;
 }
+
+// =====================
+// Table columns
+// =====================
 
 .mat-column-id {
   width: 15%;
@@ -106,67 +123,57 @@
   text-align: center;
 }
 
-.skeleton-nombre {
-  height: 16px;
-  width: 80%;
-}
-.skeleton-id {
-  height: 16px;
-  width: 80%;
-}
+// =====================
+// Skeleton
+// =====================
+
+.skeleton-nombre,
+.skeleton-id,
 .skeleton-cantlibros {
   height: 16px;
   width: 80%;
 }
 
+// =====================
+// Paginator
+// =====================
+
 .mat-mdc-paginator-range-label {
   flex: 0 0 120px !important;
 }
 
-/// Mobile
-///
-:host {
-  width: 100%;
-}
+// =====================
+// Mobile
+// =====================
 
 @media (max-width: $mobile-breakpoint) {
   .table__searchContainer {
-    display: flex;
-    margin-right: auto;
-    padding: 0px;
-    column-gap: 10px;
-    align-items: center;
     justify-content: center;
     height: 60px;
     border-bottom: 1px solid rgba(0, 0, 0, 0.12);
-    padding-left: 20px;
-    padding-right: 20px;
+    padding: 0 20px;
   }
 
   .form__button {
-    background-color: var(--color-primary) !important;
-    color: var(--color-on-primary) !important ;
-    font-size: 10px !important;
     padding-top: 9px;
+    min-width: unset !important;
+    height: 32px !important;
+    width: 20px !important;
+    box-shadow: 0 5px 8px 0 var(--color-boxShadow) !important;
 
     svg {
       width: 22px;
       height: 22px;
     }
-
-    min-width: unset !important; // Permite modificar el ancho mínimo de los botones de material.
-    height: 32px !important;
-    width: 20px !important;
-    box-shadow: 0 5px 8px 0 var(--color-boxShadow) !important;
   }
 
   .form__input {
     padding: 8px;
-    font-size: $fs-input;
     border: none !important;
     border-radius: 5px !important;
     box-shadow: 0 1px 3px 0 var(--color-boxShadow);
   }
+
   :host ::ng-deep .mat-mdc-paginator-container {
     height: 120px !important;
     justify-content: center !important;
@@ -180,6 +187,7 @@
     row-gap: 10px;
     min-height: 100%;
   }
+
   .layout-content {
     width: 100%;
     display: flex;
@@ -189,30 +197,23 @@
 
   .layout-footer {
     width: 100%;
-    padding: 30px 0px 0px 0px;
+    padding: 30px 0 0;
     margin-top: auto;
   }
-  .crud-card {
-    flex-grow: 1;
-    flex-shrink: 1;
-    flex-basis: 300px;
-    height: 250px;
 
+  .crud-card {
+    flex: 1 1 300px;
+    height: 250px;
     background-color: var(--color-surface);
     box-shadow: 0 3px 6px 0 var(--color-boxShadow);
     padding: 30px;
-
-    //Layout interno
-
+    margin: 0 40px;
+    border-radius: 20px;
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 1fr 1fr 1fr;
-
-    //
-    font-size: 16px;
   }
 
-  // Grid items
   .card__cantidad {
     grid-row: 3/4;
     grid-column: 1/3;
@@ -220,6 +221,7 @@
     font-size: 16px;
     opacity: 0.6;
   }
+
   .card__nombre {
     grid-row: 2/3;
     grid-column: 1/3;
@@ -230,12 +232,12 @@
     overflow-wrap: break-word;
     word-break: break-word;
   }
+
   .card__id {
     grid-row: 1/2;
     grid-column: 1/2;
     align-self: center;
     font-size: 15px;
-
     opacity: 0.6;
   }
 
@@ -245,25 +247,5 @@
     display: flex;
     justify-content: flex-end;
     align-self: center;
-  }
-
-  // Repetidas
-
-  .actions-button {
-    width: 32px;
-    padding-top: 8px;
-    font-size: 10px !important;
-  }
-  .actions-button--disabled {
-    width: 32px;
-    padding-top: 8px;
-    font-size: 10px !important;
-    background-color: var(--color-background) !important;
-    opacity: 0.5;
-  }
-  .actions-button__svg {
-    height: 20px;
-    width: 20px;
-    fill: var(--color-on-surface);
   }
 }
