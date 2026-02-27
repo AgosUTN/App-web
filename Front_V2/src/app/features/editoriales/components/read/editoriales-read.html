@@ -1,116 +1,229 @@
-<div class="card">
-  <form class="table__searchContainer" [formGroup]="searchInput" (ngSubmit)="onSubmit()">
-    <input
-      class="form__input"
-      id="data"
-      type="text"
-      formControlName="data"
-      placeholder="Nombre editorial"
-      maxlength="15"
-    />
+<ng-container *ngIf="!isMobile; else mobileTemplate">
+  <div class="layout-desktop">
+    <div class="card">
+      <form class="table__searchContainer" [formGroup]="searchInput" (ngSubmit)="onSubmit()">
+        <input
+          class="form__input"
+          id="data"
+          type="text"
+          formControlName="data"
+          placeholder="Nombre editorial"
+          maxlength="15"
+        />
 
-    <button
-      mat-raised-button
-      class="form__button"
-      type="submit"
-      [disabled]="searchInput.invalid"
-      [class.form__button--disabled]="searchInput.invalid"
-    >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        height="24px"
-        viewBox="0 -960 960 960"
-        width="24px"
-        fill="white"
-      >
-        <path [attr.d]="icons.searchPath" />
-      </svg>
-    </button>
-  </form>
-  <table
-    mat-table
-    [dataSource]="dataSource"
-    (matSortChange)="onSortChange($event)"
-    matSort
-    class="table"
-  >
-    <ng-container matColumnDef="id">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
-      <td mat-cell *matCellDef="let editorial">
-        <ng-container *ngIf="!isLoading; else skeleton1">{{ editorial.id }}</ng-container>
-        <ng-template #skeleton1>
-          <div class="skeleton skeleton-id"></div>
-        </ng-template></td
-    ></ng-container>
-    <ng-container matColumnDef="nombre">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Nombre</th>
-      <td mat-cell *matCellDef="let editorial">
-        <ng-container *ngIf="!isLoading; else skeleton2">
-          <span
-            #textRef
-            class="table__item--ellipsis"
-            [matTooltip]="editorial.nombre"
-            matTooltipPosition="above"
-            >{{ editorial.nombre }}</span
-          >
-        </ng-container>
-        <ng-template #skeleton2>
-          <div class="skeleton skeleton-nombre"></div>
-        </ng-template>
-      </td>
-    </ng-container>
-    <ng-container matColumnDef="cantlibros">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Cantidad libros</th>
-      <td mat-cell *matCellDef="let editorial">
-        <ng-container *ngIf="!isLoading; else skeleton3"> {{ editorial.cantlibros }} </ng-container>
-        <ng-template #skeleton3>
-          <div class="skeleton skeleton-cantlibros"></div>
-        </ng-template>
-      </td>
-    </ng-container>
-    <ng-container matColumnDef="actions">
-      <th mat-header-cell *matHeaderCellDef style="text-align: center">Acciones</th>
-      <td mat-cell *matCellDef="let editorial">
-        <button mat-button class="actions-button">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 -960 960 960"
-            class="actions-button__svg"
-          >
-            <path [attr.d]="icons.editPath" />
-          </svg>
-        </button>
         <button
-          mat-button
-          class="actions-button"
-          [disabled]="editorial.cantlibros !== 0"
-          [class.actions-button--disabled]="editorial.cantlibros !== 0"
+          mat-raised-button
+          class="form__button"
+          type="submit"
+          [disabled]="searchInput.invalid"
+          [class.form__button--disabled]="searchInput.invalid"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            class="actions-button__svg"
+            height="24px"
             viewBox="0 -960 960 960"
+            width="24px"
+            fill="white"
           >
-            <path [attr.d]="icons.deletePath" />
+            <path [attr.d]="icons.searchPath" />
           </svg>
         </button>
-      </td>
-    </ng-container>
+        <button
+          mat-raised-button
+          type="button"
+          class="form__newButton"
+          routerLink="/editoriales/alta"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="24px"
+            viewBox="0 -960 960 960"
+            width="24px"
+            fill="black"
+          >
+            <path [attr.d]="icons.addPath" />
+          </svg>
+        </button>
+      </form>
+      <table
+        mat-table
+        [dataSource]="dataSource"
+        (matSortChange)="onSortChange($event)"
+        matSort
+        class="table"
+      >
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
+          <td mat-cell *matCellDef="let editorial">
+            <ng-container *ngIf="!isLoading; else skeleton1">{{ editorial.id }}</ng-container>
+            <ng-template #skeleton1>
+              <div class="skeleton skeleton-id"></div>
+            </ng-template></td
+        ></ng-container>
+        <ng-container matColumnDef="nombre">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Nombre</th>
+          <td mat-cell *matCellDef="let editorial">
+            <ng-container *ngIf="!isLoading; else skeleton2">
+              <span
+                #textRef
+                class="table__item--ellipsis"
+                [matTooltip]="editorial.nombre"
+                matTooltipPosition="above"
+                >{{ editorial.nombre }}</span
+              >
+            </ng-container>
+            <ng-template #skeleton2>
+              <div class="skeleton skeleton-nombre"></div>
+            </ng-template>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="cantlibros">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Cantidad libros</th>
+          <td mat-cell *matCellDef="let editorial">
+            <ng-container *ngIf="!isLoading; else skeleton3">
+              {{ editorial.cantlibros }}
+            </ng-container>
+            <ng-template #skeleton3>
+              <div class="skeleton skeleton-cantlibros"></div>
+            </ng-template>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef style="text-align: center">Acciones</th>
+          <td mat-cell *matCellDef="let editorial">
+            <button mat-button class="actions-button">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 -960 960 960"
+                class="actions-button__svg"
+              >
+                <path [attr.d]="icons.editPath" />
+              </svg>
+            </button>
+            <button
+              mat-button
+              class="actions-button"
+              [disabled]="editorial.cantlibros !== 0"
+              [class.actions-button--disabled]="editorial.cantlibros !== 0"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="actions-button__svg"
+                viewBox="0 -960 960 960"
+              >
+                <path [attr.d]="icons.deletePath" />
+              </svg>
+            </button>
+          </td>
+        </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr
-      mat-row
-      *matRowDef="let row; columns: displayedColumns"
-      [class.table__row--empty]="!row.id"
-    ></tr>
-  </table>
-  <mat-paginator
-    [length]="totalRecords"
-    [pageSize]="pageSize"
-    [pageSizeOptions]="[6, 10, 25]"
-    [pageIndex]="pageIndex"
-    aria-label="Seleccionar página"
-    (page)="onPageChange($event)"
-  >
-  </mat-paginator>
-</div>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr
+          mat-row
+          *matRowDef="let row; columns: displayedColumns"
+          [class.table__row--empty]="!row.id"
+        ></tr>
+      </table>
+      <mat-paginator
+        [length]="totalRecords"
+        [pageSize]="pageSize"
+        [pageSizeOptions]="[6, 10, 25]"
+        [pageIndex]="pageIndex"
+        aria-label="Seleccionar página"
+        (page)="onPageChange($event)"
+      >
+      </mat-paginator>
+    </div>
+  </div>
+</ng-container>
+
+<ng-template #mobileTemplate>
+  <div class="layout-mobile">
+    <div class="layout-header">
+      <form class="table__searchContainer" [formGroup]="searchInput" (ngSubmit)="onSubmit()">
+        <input
+          class="form__input"
+          id="data"
+          type="text"
+          formControlName="data"
+          placeholder="Nombre editorial"
+          maxlength="15"
+        />
+
+        <button
+          mat-raised-button
+          class="form__button"
+          type="submit"
+          [disabled]="searchInput.invalid"
+          [class.form__button--disabled]="searchInput.invalid"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="24px"
+            viewBox="0 -960 960 960"
+            width="24px"
+            fill="white"
+          >
+            <path [attr.d]="icons.searchPath" />
+          </svg>
+        </button>
+        <button
+          mat-raised-button
+          type="button"
+          class="form__newButton"
+          routerLink="/editoriales/alta"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="24px"
+            viewBox="0 -960 960 960"
+            width="24px"
+            fill="black"
+          >
+            <path [attr.d]="icons.addPath" />
+          </svg>
+        </button>
+      </form>
+    </div>
+    <div class="layout-content">
+      <ng-container *ngFor="let editorial of dataSource.data">
+        <div class="crud-card" *ngIf="editorial.id !== -1 && editorial.id !== 0">
+          <span class="card__id">ID #{{ editorial.id }}</span>
+          <div class="card__actions">
+            <button mat-button class="actions-button">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 -960 960 960"
+                class="actions-button__svg"
+              >
+                <path [attr.d]="icons.editPath" />
+              </svg>
+            </button>
+            <button mat-button class="actions-button">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="actions-button__svg"
+                viewBox="0 -960 960 960"
+              >
+                <path [attr.d]="icons.deletePath" />
+              </svg>
+            </button>
+          </div>
+          <span class="card__nombre">Nombre: {{ editorial.nombre }}</span>
+          <span class="card__cantidad">Cantidad libros: {{ editorial.cantlibros }} libros</span>
+        </div>
+      </ng-container>
+    </div>
+    <div class="layout-footer">
+      <mat-paginator
+        [length]="totalRecords"
+        [pageSize]="pageSize"
+        [pageSizeOptions]="[6, 10, 25]"
+        [pageIndex]="pageIndex"
+        aria-label="Seleccionar página"
+        (page)="onPageChange($event)"
+      >
+      </mat-paginator>
+    </div>
+  </div>
+</ng-template>

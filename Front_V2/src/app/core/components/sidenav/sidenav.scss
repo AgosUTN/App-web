@@ -1,3 +1,5 @@
+@use '../../../styles/variables' as *;
+
 .sideMenu {
   background-color: var(--color-primary);
   margin-top: 0;
@@ -78,4 +80,10 @@
 svg {
   flex-shrink: 0; // Evita que el SVG se comprima
   will-change: transform;
+}
+
+@media (max-width: $mobile-breakpoint) {
+  .sideMenu__li--logout {
+    margin-bottom: 50px;
+  }
 }

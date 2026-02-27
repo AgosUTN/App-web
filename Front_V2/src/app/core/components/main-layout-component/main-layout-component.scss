@@ -68,6 +68,7 @@ $transition-time: 0.3s;
 
 @media (max-width: $mobile-breakpoint) {
   .sideNavLayout {
+    height: calc(100vh - $header-height);
     width: $sidenav-expanded-width;
     left: -($sidenav-expanded-width);
     transition: left $transition-time ease;

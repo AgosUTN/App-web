@@ -87,6 +87,7 @@ async function altaEditorial(req: Request, res: Response, next: NextFunction) {
   try {
     const editorial = em.create(Editorial, req.body);
     await em.flush();
+    io.emit(SOCKET_EVENTS.CACHE_INVALIDATE, { crud: CRUD_names.Editorial });
     return res
       .status(201)
       .json({ message: "Editorial creada", data: editorial });

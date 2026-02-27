@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { EditorialCount } from '../../models/editorialCount.model';
 import { EditorialService } from '../../services/editorial-service';
 import { MatTableModule } from '@angular/material/table';
@@ -6,11 +6,14 @@ import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
-import { MatSortModule, Sort } from '@angular/material/sort';
+import { MatSortModule } from '@angular/material/sort';
 import { icons } from '../../../../shared/constants/iconPaths';
 import { BasePagedComponent } from '../../../../shared/base/basePagedComponent';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { CommonModule } from '@angular/common';
+import { ViewportService } from '../../../../core/services/viewportService/viewport-service';
+import { Subscription } from 'rxjs';
+import {  RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-editoriales-read',
@@ -22,6 +25,7 @@ import { CommonModule } from '@angular/common';
     MatSortModule,
     MatTooltipModule,
     CommonModule,
+    RouterLink,
   ],
   templateUrl: './editoriales-read.html',
   styleUrl: './editoriales-read.scss',
@@ -31,15 +35,26 @@ export class EditorialesRead extends BasePagedComponent<EditorialCount> {
   searchInput = new FormGroup({
     data: new FormControl('', [Validators.maxLength(15)]),
   });
-
+  MOBILE_BREAKPOINT = 768;
+  isMobile: boolean = window.innerWidth < this.MOBILE_BREAKPOINT;
   displayedColumns: string[] = ['id', 'nombre', 'cantlibros', 'actions'];
 
-  constructor(private editorialService: EditorialService) {
+  private mobileSubscription: Subscription = new Subscription();
+
+  constructor(
+    private editorialService: EditorialService,
+    private viewportService: ViewportService,
+    private cdr: ChangeDetectorRef
+  ) {
     super();
   }
 
   ngOnInit(): void {
+    this.initTrackers();
     this.loadData();
+  }
+  ngOnDestroy(): void {
+    this.mobileSubscription.unsubscribe();
   }
 
   override onSubmit(): void {
@@ -55,6 +70,9 @@ export class EditorialesRead extends BasePagedComponent<EditorialCount> {
         next: (res) => {
           this.totalRecords = res.total;
           this.dataSource.data = this.fillMissingRows(res.data);
+          if (this.isMobile) {
+            this.cdr.markForCheck(); // Este parche solo se necesita en mobile, porque el array no lo maneja la matTable, lo maneja el ngFor.
+          }
         },
         error: (err) => console.log(err),
         complete: () => {
@@ -62,6 +80,7 @@ export class EditorialesRead extends BasePagedComponent<EditorialCount> {
         },
       });
   }
+
   override getEmptyObject(): EditorialCount {
     return {
       id: 0,
@@ -76,4 +95,12 @@ export class EditorialesRead extends BasePagedComponent<EditorialCount> {
       cantlibros: 0,
     };
   }
+  private initTrackers(): void {
+    this.mobileSubscription = this.viewportService.getMobileTracker().subscribe((state) => {
+      this.isMobile = state;
+      this.cdr.markForCheck();
+    });
+  }
+
+
 }
