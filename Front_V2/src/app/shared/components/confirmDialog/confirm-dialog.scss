@@ -1,0 +1,31 @@
+.dialog__message {
+  font-weight: 400;
+  font-size: 15px;
+}
+
+.dialog__title {
+  font-size: 19px;
+  font-weight: 500;
+  color: var(--color-on-surface);
+}
+
+.dialog__deleteButton {
+  background-color: var(--color-error) !important;
+  color: var(--color-on-primary) !important;
+  margin-left: 50px;
+  &:hover {
+    opacity: 0.9;
+  }
+}
+
+.dialog__cancelButton {
+  background-color: var(--color-secondary);
+  color: var(--color-on-primary);
+  &:hover {
+    opacity: 0.75;
+  }
+}
+
+.actions-wrapper {
+  column-gap: 12px;
+}

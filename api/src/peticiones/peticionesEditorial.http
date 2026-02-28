@@ -12,11 +12,11 @@ Content-Type: application/json
 }
 ### Actualizar editorial PUT
 
-PUT http://localhost:3000/api/editoriales/1
+PUT http://localhost:3000/api/editoriales/49
 Content-Type: application/json
 
 {
-    "nombre": "PruebaPUT"
+    "nombre": "PruebaPUT2"
 
 }
 ### Actualizar editorial PATCH
@@ -31,7 +31,7 @@ Content-Type: application/json
 
 
 ### Delete de una editorial por ID
-DELETE  http://localhost:3000/api/editoriales/52
+DELETE  http://localhost:3000/api/editoriales/50
 
 
 ### Get primera página

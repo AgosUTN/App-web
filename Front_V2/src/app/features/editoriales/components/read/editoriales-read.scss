@@ -103,6 +103,9 @@
 .form__input {
   padding: $pading-input;
   font-size: $fs-input;
+  &:focus {
+    outline: 1px solid var(--color-secondary);
+  }
 }
 
 // =====================
@@ -121,6 +124,15 @@
 .mat-column-acciones {
   width: 20%;
   text-align: center;
+}
+.actions-header {
+  text-align: center;
+}
+.actions-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0px;
 }
 
 // =====================
@@ -202,7 +214,7 @@
   }
 
   .crud-card {
-    flex: 1 1 300px;
+    flex: 1 1 500px;
     height: 250px;
     background-color: var(--color-surface);
     box-shadow: 0 3px 6px 0 var(--color-boxShadow);

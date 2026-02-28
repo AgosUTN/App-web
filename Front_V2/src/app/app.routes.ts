@@ -6,6 +6,7 @@ import { ErrorPage } from './core/pages/error-page/error-page';
 import { EmptyLayoutComponent } from './core/components/empty-layout-component/empty-layout-component';
 import { MainLayoutComponent } from './core/components/main-layout-component/main-layout-component';
 import { CRUD_names } from './core/constants/crudNames.config';
+import { EditorialesUpdate } from './features/editoriales/components/update/editorial-update';
 
 export const routes: Routes = [
   {
@@ -36,6 +37,14 @@ export const routes: Routes = [
             component: EditorialesCreate,
             data: {
               breadcrumb: 'Alta',
+              crud: CRUD_names.Editorial,
+            },
+          },
+          {
+            path: 'editar/:id',
+            component: EditorialesUpdate,
+            data: {
+              breadcrumb: 'Editar',
               crud: CRUD_names.Editorial,
             },
           },

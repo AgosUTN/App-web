@@ -5,10 +5,11 @@ import { map, Observable } from 'rxjs';
 import { Editorial } from '../models/editorial.model';
 import { EditorialCount } from '../models/editorialCount.model';
 import {
-  ApiResponseGet,
   ApiResponseGetByPage,
+  apiResponseGetById,
   PagedResult,
 } from '../../../shared/models/apiResponseGet.model';
+import { apiResponseUpdate } from '../../../shared/models/apiResponseUpdate';
 
 @Injectable({
   providedIn: 'root',
@@ -21,6 +22,11 @@ export class EditorialService {
   post(data: string): Observable<Editorial> {
     const editorial = { nombre: data };
     return this.http.post<Editorial>(this.baseurl, editorial);
+  }
+  getById(id: number): Observable<Editorial> {
+    return this.http
+      .get<apiResponseGetById<Editorial>>(`${this.baseurl}/${id}`)
+      .pipe(map((response) => response.data));
   }
 
   getByPage(
@@ -50,4 +56,12 @@ export class EditorialService {
       );
   }
   // GET /api/editoriales/byPage?pageIndex=3&pageSize=10& ...
+
+  update(id: number, nombre: string): Observable<apiResponseUpdate> {
+    return this.http.patch<apiResponseUpdate>(`${this.baseurl}/${id}`, { nombre: nombre });
+  }
+
+  delete(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.baseurl}/${id}`);
+  }
 }

@@ -111,8 +111,18 @@ async function actualizarEditorial(
     const editorial = em.getReference(Editorial, id);
     em.assign(editorial, req.body);
     await em.flush();
+
+    io.emit(SOCKET_EVENTS.CACHE_INVALIDATE, { crud: CRUD_names.Editorial });
+    // Podiía ser "incorrecto" porque se permite no actualizar nada y limpiar la cache igual.
+    //  Pero por como se maneja el intentar editar una editorial inexistente en el front, me parece aceptable.
+
     return res.status(200).json({ message: "Editorial actualizada" });
   } catch (error: any) {
+    if (error instanceof UniqueConstraintViolationException) {
+      return res.status(409).json({
+        message: "El nombre de la editorial ya existe",
+      });
+    }
     next(error);
   }
 }

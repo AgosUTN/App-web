@@ -15,3 +15,8 @@ export interface PagedResult<T> {
 }
 
 // Es necesario el PagedResult porque el componente solo debe recibir lo que va a usar.
+
+export interface apiResponseGetById<T> {
+  message: string;
+  data: T;
+}

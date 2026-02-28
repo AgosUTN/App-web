@@ -13,7 +13,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { CommonModule } from '@angular/common';
 import { ViewportService } from '../../../../core/services/viewportService/viewport-service';
 import { Subscription } from 'rxjs';
-import {  RouterLink } from '@angular/router';
+import { RouterLink } from '@angular/router';
+import { ConfirmationService } from '../../../../shared/services/confirmationService/confirmation-service';
 
 @Component({
   selector: 'app-editoriales-read',
@@ -44,7 +45,8 @@ export class EditorialesRead extends BasePagedComponent<EditorialCount> {
   constructor(
     private editorialService: EditorialService,
     private viewportService: ViewportService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private confirmService: ConfirmationService,
   ) {
     super();
   }
@@ -101,6 +103,19 @@ export class EditorialesRead extends BasePagedComponent<EditorialCount> {
       this.cdr.markForCheck();
     });
   }
+  deleteEditorial(editorial: EditorialCount): void {
+    this.confirmService
+      .confirm(
+        'Eliminar editorial',
+        `¿Seguro que deseas eliminar la editorial "${editorial.nombre}"?`,
+      )
+      .subscribe((confirmed) => {
+        if (!confirmed) return;
 
-
+        this.editorialService.delete(editorial.id).subscribe({
+          next: () => this.loadData(),
+          error: (err) => console.error(err),
+        });
+      });
+  }
 }
