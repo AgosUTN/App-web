@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component } from '@angular/core';
-import { EditorialCount } from '../../models/editorialCount.model';
+import { EditorialRead } from '../../models/editorialRead.model';
 import { EditorialService } from '../../services/editorial-service';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
@@ -31,13 +31,13 @@ import { ConfirmationService } from '../../../../shared/services/confirmationSer
   templateUrl: './editoriales-read.html',
   styleUrl: './editoriales-read.scss',
 })
-export class EditorialesRead extends BasePagedComponent<EditorialCount> {
+export class EditorialesRead extends BasePagedComponent<EditorialRead> {
   icons = icons;
   searchInput = new FormGroup({
     data: new FormControl('', [Validators.maxLength(15)]),
   });
-  MOBILE_BREAKPOINT = 768;
-  isMobile: boolean = window.innerWidth < this.MOBILE_BREAKPOINT;
+
+  isMobile: boolean = false;
   displayedColumns: string[] = ['id', 'nombre', 'cantlibros', 'actions'];
 
   private mobileSubscription: Subscription = new Subscription();
@@ -83,14 +83,14 @@ export class EditorialesRead extends BasePagedComponent<EditorialCount> {
       });
   }
 
-  override getEmptyObject(): EditorialCount {
+  override getEmptyObject(): EditorialRead {
     return {
       id: 0,
       nombre: 'nombre',
       cantlibros: 0,
     };
   }
-  override getSkeletonObject(): EditorialCount {
+  override getSkeletonObject(): EditorialRead {
     return {
       id: -1,
       nombre: 'nombre',
@@ -103,7 +103,7 @@ export class EditorialesRead extends BasePagedComponent<EditorialCount> {
       this.cdr.markForCheck();
     });
   }
-  deleteEditorial(editorial: EditorialCount): void {
+  deleteEditorial(editorial: EditorialRead): void {
     this.confirmService
       .confirm(
         'Eliminar editorial',
@@ -112,7 +112,7 @@ export class EditorialesRead extends BasePagedComponent<EditorialCount> {
       .subscribe((confirmed) => {
         if (!confirmed) return;
 
-        this.editorialService.delete(editorial.id).subscribe({
+        this.editorialService.delete(editorial.id!).subscribe({
           next: () => this.loadData(),
           error: (err) => console.error(err),
         });

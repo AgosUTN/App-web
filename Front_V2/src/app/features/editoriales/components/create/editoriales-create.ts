@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { NotificationService } from '../../../../shared/services/notificationService/notification-service';
 import { EditorialService } from '../../services/editorial-service';
+import { Editorial } from '../../models/editorial.model';
 
 @Component({
   selector: 'app-editoriales-create',
@@ -25,11 +26,11 @@ export class EditorialesCreate {
   ) {}
 
   onSubmit(): void {
-    const { nombre } = this.editorialForm.getRawValue();
+    const editorialCreate = this.getCreateDTO();
 
     this.loading = true;
 
-    this.editorialService.post(nombre!).subscribe({
+    this.editorialService.post(editorialCreate).subscribe({
       next: () => {
         this.notification.success('Editorial creada correctamente');
         this.editorialForm.reset();
@@ -42,5 +43,10 @@ export class EditorialesCreate {
         }
       },
     });
+  }
+
+  private getCreateDTO(): Omit<Editorial, 'id'> {
+    const { nombre } = this.editorialForm.getRawValue();
+    return { nombre: nombre! };
   }
 }

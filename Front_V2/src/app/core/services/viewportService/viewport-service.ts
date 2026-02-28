@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { fromEvent, Observable, Subject, Subscription } from 'rxjs';
+import { BehaviorSubject, fromEvent, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -8,7 +8,7 @@ export class ViewportService {
   readonly MOBILE_BREAKPOINT: number = 768;
 
   private isMobile: boolean = window.innerWidth < this.MOBILE_BREAKPOINT;
-  private mobileSubject = new Subject<boolean>();
+  private mobileSubject = new BehaviorSubject<boolean>(this.isMobile);
 
   constructor() {
     fromEvent(window, 'resize').subscribe(() => {

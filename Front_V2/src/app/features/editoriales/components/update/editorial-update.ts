@@ -5,6 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { NotificationService } from '../../../../shared/services/notificationService/notification-service';
 import { EditorialService } from '../../services/editorial-service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Editorial } from '../../models/editorial.model';
 
 @Component({
   selector: 'app-editoriales-update',
@@ -46,10 +47,10 @@ export class EditorialesUpdate {
   }
 
   onSubmit(): void {
-    const { nombre } = this.editorialForm.getRawValue();
-    console.log(nombre);
+    const editorialUpdate = this.getUpdateDTO();
+
     this.loading = true;
-    this.editorialService.update(this.id, nombre!).subscribe({
+    this.editorialService.update(this.id, editorialUpdate).subscribe({
       next: () => {
         this.notification.success('Editorial actualizada correctamente');
         this.loading = false;
@@ -62,4 +63,9 @@ export class EditorialesUpdate {
       },
     });
   }
+
+  private getUpdateDTO(): Partial<Editorial> {
+    const { nombre } = this.editorialForm.getRawValue();
+    return { nombre: nombre! };
+  } // Nota: No es la mejor práctica dejar que el componente sepa que esta mandando un Partial.
 }

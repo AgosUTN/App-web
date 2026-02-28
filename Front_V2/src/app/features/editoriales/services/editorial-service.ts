@@ -3,31 +3,20 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../../../enviroments/enviroment';
 import { map, Observable } from 'rxjs';
 import { Editorial } from '../models/editorial.model';
-import { EditorialCount } from '../models/editorialCount.model';
-import {
-  ApiResponseGetByPage,
-  apiResponseGetById,
-  PagedResult,
-} from '../../../shared/models/apiResponseGet.model';
-import { apiResponseUpdate } from '../../../shared/models/apiResponseUpdate';
+import { EditorialRead } from '../models/editorialRead.model';
+import { ApiResponseGetByPage, PagedResult } from '../../../shared/models/apiResponseGet.model';
+
+import { BaseCrudService } from '../../../shared/base/baseCrudService';
 
 @Injectable({
   providedIn: 'root',
 })
-export class EditorialService {
-  constructor(private http: HttpClient) {}
-
-  readonly baseurl = `${environment.apiUrl}/api/editoriales`;
-
-  post(data: string): Observable<Editorial> {
-    const editorial = { nombre: data };
-    return this.http.post<Editorial>(this.baseurl, editorial);
+export class EditorialService extends BaseCrudService<Editorial> {
+  constructor(http: HttpClient) {
+    super(http);
   }
-  getById(id: number): Observable<Editorial> {
-    return this.http
-      .get<apiResponseGetById<Editorial>>(`${this.baseurl}/${id}`)
-      .pipe(map((response) => response.data));
-  }
+
+  protected override readonly baseUrl = `${environment.apiUrl}/api/editoriales`;
 
   getByPage(
     pageIndex: number,
@@ -35,7 +24,7 @@ export class EditorialService {
     sortColumn: string,
     sortOrder: string,
     filterValue: string,
-  ): Observable<PagedResult<EditorialCount[]>> {
+  ): Observable<PagedResult<EditorialRead[]>> {
     const params = new HttpParams()
       .set('pageIndex', pageIndex)
       .set('pageSize', pageSize)
@@ -44,24 +33,17 @@ export class EditorialService {
       .set('filterValue', filterValue);
 
     return this.http
-      .get<ApiResponseGetByPage<EditorialCount[]>>(this.baseurl + '/byPage', { params: params })
+      .get<ApiResponseGetByPage<EditorialRead[]>>(this.baseUrl + '/byPage', { params: params })
       .pipe(
         map(
           (res) =>
-            <PagedResult<EditorialCount[]>>{
+            <PagedResult<EditorialRead[]>>{
               data: res.data,
               total: res.total,
             },
         ),
       );
   }
+
   // GET /api/editoriales/byPage?pageIndex=3&pageSize=10& ...
-
-  update(id: number, nombre: string): Observable<apiResponseUpdate> {
-    return this.http.patch<apiResponseUpdate>(`${this.baseurl}/${id}`, { nombre: nombre });
-  }
-
-  delete(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.baseurl}/${id}`);
-  }
 }
