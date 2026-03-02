@@ -1,0 +1,70 @@
+<div class="card">
+  <form [formGroup]="libroForm" class="form" (ngSubmit)="onSubmit()">
+    <div class="form__field form__field--titulo">
+      <label>Título *</label>
+      <input type="text" formControlName="titulo" maxlength="100" />
+      <small
+        class="error"
+        *ngIf="libroForm.get('titulo')?.hasError('duplicated') && libroForm.get('titulo')?.touched"
+        >Título duplicado</small
+      >
+    </div>
+    <div class="form__field form__field--isbn" maxlength="17">
+      <label>ISBN *</label>
+      <input type="text" formControlName="isbn" />
+      <small
+        class="error"
+        *ngIf="libroForm.get('isbn')?.hasError('duplicated') && libroForm.get('isbn')?.touched"
+        >ISBN duplicado</small
+      >
+      <small
+        class="error"
+        *ngIf="libroForm.get('isbn')?.hasError('invalidIsbn') && libroForm.get('isbn')?.touched"
+        >ISBN inválido</small
+      >
+    </div>
+    <div class="form__field form__field--ejemplares">
+      <label>Cantidad de ejemplares</label>
+      <input type="text" formControlName="cantejemplares" (input)="sanitize($event)" />
+    </div>
+
+    <div class="form__field form__field--editorial">
+      <label>Editorial *</label>
+      <div class="wrapper">
+        <input type="text" formControlName="editorial" readonly />
+        <button type="button" (click)="selectEditorial()">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+            <path [attr.d]="icons.searchPath" />
+          </svg>
+        </button>
+      </div>
+    </div>
+    <div class="form__field form__field--autor">
+      <label>Autor *</label>
+      <div class="wrapper">
+        <input type="text" formControlName="autor" />
+        <button type="button">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+            <path [attr.d]="icons.searchPath" />
+          </svg>
+        </button>
+      </div>
+    </div>
+    <div class="form__field form__field--descripcion">
+      <label>Descripción *</label>
+      <textarea type="text" formControlName="descripcion" maxlength="500"></textarea>
+    </div>
+    <div class="form__actions">
+      <button
+        mat-raised-button
+        class="form__button"
+        type="submit"
+        [disabled]="libroForm.invalid || !idEditorial || this.isLoading"
+        [class.form__button--disabled]="libroForm.invalid || !idEditorial || this.isLoading"
+        o
+      >
+        Crear Libro
+      </button>
+    </div>
+  </form>
+</div>

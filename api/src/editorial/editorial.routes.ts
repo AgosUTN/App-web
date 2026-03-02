@@ -1,11 +1,10 @@
 import { Router } from "express";
 import {
-  buscarEditoriales,
-  buscarEditorial,
   altaEditorial,
   actualizarEditorial,
   bajaEditorial,
   buscarEditorialesByPage,
+  buscarEditorial,
 } from "./editorial.controller.js";
 import { validateInput } from "../middlewares/middleware.validateInput.js";
 import {
@@ -16,7 +15,6 @@ import { schemaParamsId } from "../schemas/schema.paramsId.js";
 import { editorialGetByPageSchema } from "../schemas/getByPage/editorial.schema.js";
 export const editorialRouter = Router();
 
-editorialRouter.get("/", buscarEditoriales);
 editorialRouter.get(
   "/byPage",
   validateInput(undefined, undefined, editorialGetByPageSchema),
@@ -27,21 +25,18 @@ editorialRouter.get(
   validateInput(schemaParamsId, undefined),
   buscarEditorial,
 );
+
 editorialRouter.post(
   "/",
   validateInput(undefined, editorialAltaSchema),
   altaEditorial,
 );
-editorialRouter.put(
-  "/:id",
-  validateInput(schemaParamsId, editorialAltaSchema),
-  actualizarEditorial,
-);
+
 editorialRouter.patch(
   "/:id",
   validateInput(schemaParamsId, editorialPatchSchema),
   actualizarEditorial,
-); // Por el momento no tiene sentido, solo hay 1 campo a modificar.
+);
 editorialRouter.delete(
   "/:id",
   validateInput(schemaParamsId, undefined),

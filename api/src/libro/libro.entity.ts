@@ -25,8 +25,8 @@ export class Libro extends BaseEntity {
   @Property({ unique: true })
   isbn!: string;
 
-  @Property() //Contemplar hidden
-  codigoEjemplarActual = 0;
+  @Property() //Evaluar condiciones de carrera.
+  ultimoCodigoEjemplar = 0; // Debería llamarse ultimoCodigoEjemplar
 
   @ManyToMany(() => Autor, (autor) => autor.misLibros, { owner: true })
   misAutores = new Collection<Autor>(this);
@@ -39,10 +39,14 @@ export class Libro extends BaseEntity {
 
   // Metodos
 
-  getCodigoEjemplarActual(): number {
-    this.codigoEjemplarActual++;
-    return this.codigoEjemplarActual;
+  getUltimoCodigoEjemplar(): number {
+    return this.ultimoCodigoEjemplar;
   }
+
+  increaseUltimoCodigoEjemplar(): void {
+    this.ultimoCodigoEjemplar++;
+  }
+
   fuistePrestado(): boolean {
     let i = 0;
     let rta = false;

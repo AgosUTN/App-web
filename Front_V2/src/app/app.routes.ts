@@ -7,6 +7,7 @@ import { EmptyLayoutComponent } from './core/components/empty-layout-component/e
 import { MainLayoutComponent } from './core/components/main-layout-component/main-layout-component';
 import { CRUD_names } from './core/constants/crudNames.config';
 import { EditorialesUpdate } from './features/editoriales/components/update/editorial-update';
+import { LibrosCreate } from './features/libros/components/create/libros-create';
 
 export const routes: Routes = [
   {
@@ -47,6 +48,17 @@ export const routes: Routes = [
               breadcrumb: 'Editar',
               crud: CRUD_names.Editorial,
             },
+          },
+        ],
+      },
+      {
+        path: 'libros',
+        data: { breadcrumb: 'Libros' },
+        children: [
+          {
+            path: 'alta',
+            component: LibrosCreate,
+            data: { breadcrumb: 'Alta', crud: CRUD_names.Libro },
           },
         ],
       },

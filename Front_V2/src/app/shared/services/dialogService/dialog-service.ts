@@ -2,11 +2,13 @@ import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 import { ConfirmDialog } from '../../components/confirmDialog/confirm-dialog';
+import { EditorialReadDialog } from '../../../features/editoriales/components/readDialog/editorial-read-dialog';
+import { EditorialTableDTO } from '../../../features/editoriales/models/editorialTable.dto';
 
 @Injectable({
   providedIn: 'root',
 })
-export class ConfirmationService {
+export class DialogService {
   constructor(private dialog: MatDialog) {}
 
   confirm(
@@ -26,6 +28,15 @@ export class ConfirmationService {
         position: {
           top: '50px',
         },
+      })
+      .afterClosed();
+  }
+  selectEditorial(): Observable<EditorialTableDTO | undefined> {
+    return this.dialog
+      .open(EditorialReadDialog, {
+        width: '900px',
+        height: '600px',
+        disableClose: false,
       })
       .afterClosed();
   }

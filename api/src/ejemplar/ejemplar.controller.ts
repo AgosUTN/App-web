@@ -9,7 +9,7 @@ const em = orm.em;
 async function buscarEjemplares(
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) {
   try {
     const id = Number.parseInt(req.params.id);
@@ -51,20 +51,22 @@ async function buscarEjemplar(req: Request, res: Response, next: NextFunction) {
 async function altaEjemplarManual(
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) {
   try {
     const id = Number.parseInt(req.params.id);
     const libro = await em.findOneOrFail(Libro, id);
 
-    const idEjemplar = libro.getCodigoEjemplarActual();
+    const idEjemplar = libro.getUltimoCodigoEjemplar() + 1;
 
     const ejemplar = em.create(Ejemplar, {
       id: idEjemplar,
       miLibro: libro,
       fechaIncorporacion: req.body.fechaIncorporacion,
     });
-    await em.flush();
+
+    libro.increaseUltimoCodigoEjemplar();
+
     return res.status(201).json({ message: "Ejemplar creado", data: ejemplar });
   } catch (error: any) {
     if (error instanceof NotFoundError) {
@@ -78,7 +80,7 @@ async function altaEjemplarManual(
 async function actualizarEjemplar(
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) {
   try {
     const idLibro = Number.parseInt(req.params.id);
@@ -100,7 +102,7 @@ async function bajaEjemplar(req: Request, res: Response, next: NextFunction) {
     const ejemplar = await em.findOneOrFail(
       Ejemplar,
       [idEjemplarRecibida, idLibro],
-      { populate: ["misLp"] }
+      { populate: ["misLp"] },
     );
     //Validacion puede moverse a beforeDelete. (En ese caso, dejar un getReference aca)
     if (ejemplar.fuistePrestado()) {
@@ -138,7 +140,7 @@ async function bajaEjemplares(req: Request, res: Response, next: NextFunction) {
 async function validarEjemplarPendiente(
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) {
   try {
     const idLibro = Number.parseInt(req.params.id);

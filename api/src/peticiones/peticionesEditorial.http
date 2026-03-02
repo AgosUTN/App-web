@@ -1,5 +1,5 @@
 ### Obtener todos los editoriales
-GET http://localhost:3000/api/editoriales/
+GET http://localhost:3000/api/editoriales/62
 
 ### Subir editorial
 
@@ -7,16 +7,16 @@ POST http://localhost:3000/api/editoriales
 Content-Type: application/json
 
 {
-    "nombre": "saturno"
+    "nombre": "Post"
 
 }
 ### Actualizar editorial PUT
 
-PUT http://localhost:3000/api/editoriales/49
+PATCH http://localhost:3000/api/editoriales/62
 Content-Type: application/json
 
 {
-    "nombre": "PruebaPUT2"
+    "nombre": "PruebaPUT5"
 
 }
 ### Actualizar editorial PATCH

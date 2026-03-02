@@ -5,7 +5,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { NotificationService } from '../../../../shared/services/notificationService/notification-service';
 import { EditorialService } from '../../services/editorial-service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Editorial } from '../../models/editorial.model';
+
+import { EditorialUpdateDTO } from '../../models/editorialUpdate.dto';
 
 @Component({
   selector: 'app-editoriales-update',
@@ -64,7 +65,7 @@ export class EditorialesUpdate {
     });
   }
 
-  private getUpdateDTO(): Partial<Editorial> {
+  private getUpdateDTO(): EditorialUpdateDTO {
     const { nombre } = this.editorialForm.getRawValue();
     return { nombre: nombre! };
   } // Nota: No es la mejor práctica dejar que el componente sepa que esta mandando un Partial.

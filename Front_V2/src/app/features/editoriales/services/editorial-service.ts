@@ -2,48 +2,29 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../../../enviroments/enviroment';
 import { map, Observable } from 'rxjs';
-import { Editorial } from '../models/editorial.model';
-import { EditorialRead } from '../models/editorialRead.model';
+
 import { ApiResponseGetByPage, PagedResult } from '../../../shared/models/apiResponseGet.model';
 
 import { BaseCrudService } from '../../../shared/base/baseCrudService';
+import { EditorialCreateDTO } from '../models/editorialCreate.dto';
+import { EditorialReadDTO } from '../models/editorialRead.dto';
+import { EditorialUpdateDTO } from '../models/editorialUpdate.dto';
+import { EditorialTableDTO } from '../models/editorialTable.dto';
 
 @Injectable({
   providedIn: 'root',
 })
-export class EditorialService extends BaseCrudService<Editorial> {
+export class EditorialService extends BaseCrudService<
+  EditorialCreateDTO,
+  EditorialReadDTO,
+  EditorialUpdateDTO,
+  EditorialTableDTO
+> {
   constructor(http: HttpClient) {
     super(http);
   }
 
   protected override readonly baseUrl = `${environment.apiUrl}/api/editoriales`;
-
-  getByPage(
-    pageIndex: number,
-    pageSize: number,
-    sortColumn: string,
-    sortOrder: string,
-    filterValue: string,
-  ): Observable<PagedResult<EditorialRead[]>> {
-    const params = new HttpParams()
-      .set('pageIndex', pageIndex)
-      .set('pageSize', pageSize)
-      .set('sortColumn', sortColumn)
-      .set('sortOrder', sortOrder)
-      .set('filterValue', filterValue);
-
-    return this.http
-      .get<ApiResponseGetByPage<EditorialRead[]>>(this.baseUrl + '/byPage', { params: params })
-      .pipe(
-        map(
-          (res) =>
-            <PagedResult<EditorialRead[]>>{
-              data: res.data,
-              total: res.total,
-            },
-        ),
-      );
-  }
 
   // GET /api/editoriales/byPage?pageIndex=3&pageSize=10& ...
 }

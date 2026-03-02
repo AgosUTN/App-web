@@ -6,35 +6,21 @@ import {
   NotFoundError,
   UniqueConstraintViolationException,
 } from "@mikro-orm/core";
-import errorMap from "zod/locales/en.js";
-
-export function sanitizeResponseLibro(libro: Libro) {
-  //Sacar el export luego, es para testeo.
-  return {
-    id: libro.id,
-    titulo: libro.titulo,
-    descripcion: libro.descripcion,
-    isbn: libro.isbn,
-    misAutores: libro.misAutores.map((autor) => autor.id),
-    miEditorial: libro.miEditorial.id,
-    misEjemplares: libro.misEjemplares.map((ejemplar) => ({
-      idEjemplar: ejemplar.id,
-    })),
-  };
-}
+import { LibroMapper } from "./libro.mapper.js";
 
 const em = orm.em;
 
 async function buscaLibros(req: Request, res: Response, next: NextFunction) {
   try {
-    const autores = await em.find(
+    const libros = await em.find(
       Libro,
       {},
-      { populate: ["misAutores", "miEditorial", "misEjemplares"] }
+      { populate: ["misAutores", "miEditorial", "misEjemplares"] },
     );
+    const librosDTO = LibroMapper.toTableDTOList(libros);
     return res
       .status(200)
-      .json({ message: "Libros encontrados: ", data: autores });
+      .json({ message: "Libros encontrados: ", data: librosDTO });
   } catch (error: any) {
     next(error);
   }
@@ -46,7 +32,7 @@ async function buscaLibro(req: Request, res: Response, next: NextFunction) {
     const libro = await em.findOneOrFail(
       Libro,
       { id },
-      { populate: ["misAutores", "miEditorial", "misEjemplares"] }
+      { populate: ["misAutores", "miEditorial", "misEjemplares"] },
     );
     return res.status(200).json({ message: "Libro encontrado", data: libro });
   } catch (error: any) {
@@ -63,47 +49,43 @@ async function altaLibro(req: Request, res: Response, next: NextFunction) {
     const libro = em.create(Libro, libroData);
 
     for (let i = 0; i < cantEjemplares; i++) {
-      const idEjemplar = libro.getCodigoEjemplarActual();
       em.create(Ejemplar, {
-        id: idEjemplar,
+        id: i + 1,
         miLibro: libro,
       });
     }
 
     await em.flush();
 
-    const libroFiltrado = sanitizeResponseLibro(libro);
-    // Evita que devuelva toda la informacion del ejemplar en el response,osea, evita que devuelva el libro del ejemplar (Debido a que estan completamente cargados en memoria).
-
-    return res
-      .status(201)
-      .json({ message: "Libro creado", data: libroFiltrado });
+    return res.status(201).json({ message: "Libro creado", data: libro });
   } catch (error: any) {
     if (error.code === "ER_NO_REFERENCED_ROW_2") {
       if (error.message.includes("libro_mis_autores_autor_id_foreign")) {
-        return res
-          .status(400)
-          .json({ message: "Se ingreso el id de algún autor que no existe" });
+        return res.status(400).json({
+          message: "Se ingreso el id de algún autor que no existe",
+          code: "INVALID_ID_REFERENCE",
+        });
       }
       if (error.message.includes("libro_mi_editorial_id_foreign")) {
-        return res
-          .status(400)
-          .json({ message: "El id de editorial ingresado no existe" });
+        return res.status(400).json({
+          message: "El id de editorial ingresado no existe",
+          code: "INVALID_ID_REFERENCE",
+        });
       }
     }
     if (error instanceof UniqueConstraintViolationException) {
       if (error.message.includes("libro.libro_isbn_unique")) {
         return res.status(409).json({
           message: "El ISBN del Libro ya existe",
+          code: "ISBN_DUPLICATE",
         });
       }
       if (error.message.includes("libro.libro_titulo_unique")) {
         return res.status(409).json({
           message: "El Titulo del Libro ya existe",
+          code: "TITULO_DUPLICATE",
         });
       }
-      // Si el Titulo y el ISBN estan repetidos, va a requerir un doble envio en el front, molestando a la usabilidad.
-      // Para AD: Hacer una consulta previa del ISBN.
     }
     next(error);
   }
@@ -111,30 +93,16 @@ async function altaLibro(req: Request, res: Response, next: NextFunction) {
 async function actualizarLibro(
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) {
   try {
     const id = Number.parseInt(req.params.id);
     const libroActualizar = em.getReference(Libro, id);
 
-    //  throw new Error("ASDASDSAD"); USAR EN LA DEFENSA
-
     em.assign(libroActualizar, req.body);
     await em.flush();
     return res.status(200).json({ message: "Libro actualizado" });
   } catch (error: any) {
-    if (error.code === "ER_NO_REFERENCED_ROW_2") {
-      if (error.message.includes("libro_mis_autores_autor_id_foreign")) {
-        return res
-          .status(400)
-          .json({ message: "Se ingreso el id de algún autor que no existe" });
-      }
-      if (error.message.includes("libro_mi_editorial_id_foreign")) {
-        return res
-          .status(400)
-          .json({ message: "El id de editorial ingresado no existe" });
-      }
-    }
     next(error);
   }
 }

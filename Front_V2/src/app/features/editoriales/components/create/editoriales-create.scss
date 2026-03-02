@@ -33,9 +33,7 @@
 }
 
 .form__button {
-  background-color: var(
-    --color-primary
-  ) !important; // Por algún motivo raro de especificidad, el usar la propiedad font size me obliga a usar important acá.
+  background-color: var(--color-primary) !important;
   color: var(--color-on-primary) !important ;
   font-size: $fs-button;
 }

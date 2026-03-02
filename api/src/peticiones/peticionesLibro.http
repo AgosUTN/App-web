@@ -11,15 +11,15 @@ Content-Type: application/json
     "titulo": "Moby dick",
     "descripcion": "Un clásico de la literatura contemporanéa",
     "isbn": "0-7645-2641-3",
-    "misAutores": [1],      
+    "misAutores": [3],      
     "miEditorial": 1,
-    "cantEjemplares": 0
+    "cantEjemplares": 2
 
 }
 
 ### Delete de un libro por ID
 
-DELETE  http://localhost:3000/api/libros/-123
+DELETE  http://localhost:3000/api/libros/2
 
 
 

@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { NotificationService } from '../../../../shared/services/notificationService/notification-service';
 import { EditorialService } from '../../services/editorial-service';
-import { Editorial } from '../../models/editorial.model';
+import { EditorialCreateDTO } from '../../models/editorialCreate.dto';
 
 @Component({
   selector: 'app-editoriales-create',
@@ -45,7 +45,7 @@ export class EditorialesCreate {
     });
   }
 
-  private getCreateDTO(): Omit<Editorial, 'id'> {
+  private getCreateDTO(): EditorialCreateDTO {
     const { nombre } = this.editorialForm.getRawValue();
     return { nombre: nombre! };
   }

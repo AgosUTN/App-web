@@ -12,7 +12,7 @@ export class ViewportService {
 
   constructor() {
     fromEvent(window, 'resize').subscribe(() => {
-      this.onResize(); // Al usar esto y no hostlistener (que solo lo pueden usar componentes), habrá que forzar el change detections en los componentes.
+      this.onResize(); // Al usar esto y no hostlistener (que solo lo pueden usar componentes), habrá que forzar el change detection en los componentes.
     });
   }
   private onResize(): void {

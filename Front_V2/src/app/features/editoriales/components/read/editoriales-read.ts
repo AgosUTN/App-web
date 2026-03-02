@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component } from '@angular/core';
-import { EditorialRead } from '../../models/editorialRead.model';
+
 import { EditorialService } from '../../services/editorial-service';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
@@ -14,7 +14,8 @@ import { CommonModule } from '@angular/common';
 import { ViewportService } from '../../../../core/services/viewportService/viewport-service';
 import { Subscription } from 'rxjs';
 import { RouterLink } from '@angular/router';
-import { ConfirmationService } from '../../../../shared/services/confirmationService/confirmation-service';
+import { DialogService } from '../../../../shared/services/dialogService/dialog-service';
+import { EditorialTableDTO } from '../../models/editorialTable.dto';
 
 @Component({
   selector: 'app-editoriales-read',
@@ -31,7 +32,7 @@ import { ConfirmationService } from '../../../../shared/services/confirmationSer
   templateUrl: './editoriales-read.html',
   styleUrl: './editoriales-read.scss',
 })
-export class EditorialesRead extends BasePagedComponent<EditorialRead> {
+export class EditorialesRead extends BasePagedComponent<EditorialTableDTO> {
   icons = icons;
   searchInput = new FormGroup({
     data: new FormControl('', [Validators.maxLength(15)]),
@@ -46,7 +47,7 @@ export class EditorialesRead extends BasePagedComponent<EditorialRead> {
     private editorialService: EditorialService,
     private viewportService: ViewportService,
     private cdr: ChangeDetectorRef,
-    private confirmService: ConfirmationService,
+    private dialogService: DialogService,
   ) {
     super();
   }
@@ -83,14 +84,14 @@ export class EditorialesRead extends BasePagedComponent<EditorialRead> {
       });
   }
 
-  override getEmptyObject(): EditorialRead {
+  override getEmptyObject(): EditorialTableDTO {
     return {
       id: 0,
       nombre: 'nombre',
       cantlibros: 0,
     };
   }
-  override getSkeletonObject(): EditorialRead {
+  override getSkeletonObject(): EditorialTableDTO {
     return {
       id: -1,
       nombre: 'nombre',
@@ -103,8 +104,8 @@ export class EditorialesRead extends BasePagedComponent<EditorialRead> {
       this.cdr.markForCheck();
     });
   }
-  deleteEditorial(editorial: EditorialRead): void {
-    this.confirmService
+  deleteEditorial(editorial: EditorialTableDTO): void {
+    this.dialogService
       .confirm(
         'Eliminar editorial',
         `¿Seguro que deseas eliminar la editorial "${editorial.nombre}"?`,
