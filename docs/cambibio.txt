@@ -1,0 +1,1 @@
+- Ahora se puede borrar un libro por más que tenga ejemplares. Solo no se puede si fue prestado. Validación en memoria. 

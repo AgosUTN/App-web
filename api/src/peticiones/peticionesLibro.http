@@ -8,10 +8,10 @@ POST http://localhost:3000/api/libros
 Content-Type: application/json
 
 {
-    "titulo": "Moby dick",
+    "titulo": "Don quijote",
     "descripcion": "Un clásico de la literatura contemporanéa",
-    "isbn": "0-7645-2641-3",
-    "misAutores": [3],      
+    "isbn": "0-545-01022-5",
+    "miAutor": 1,      
     "miEditorial": 1,
     "cantEjemplares": 2
 
@@ -45,3 +45,6 @@ Content-Type: application/json
     "titulo": "Libro PATCHEEE"
 
 }
+
+### Get primera página
+GET  http://localhost:3000/api/libros/byPage?pageIndex=0&pageSize=5&sortColumn=id&sortOrder=asc&filterValue=

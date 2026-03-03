@@ -1,0 +1,154 @@
+<ng-container>
+  <div class="layout-desktop">
+    <div class="card">
+      <form class="table__searchContainer" [formGroup]="searchInput" (ngSubmit)="onSubmit()">
+        <input
+          class="form__input"
+          id="data"
+          type="text"
+          formControlName="data"
+          placeholder="Nombre libro"
+          maxlength="15"
+        />
+
+        <button
+          mat-raised-button
+          class="form__button"
+          type="submit"
+          [disabled]="searchInput.invalid"
+          [class.form__button--disabled]="searchInput.invalid"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="24px"
+            viewBox="0 -960 960 960"
+            width="24px"
+            fill="white"
+          >
+            <path [attr.d]="icons.searchPath" />
+          </svg>
+        </button>
+        <button mat-raised-button type="button" class="form__addButton" routerLink="/libros/alta">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="24px"
+            viewBox="0 -960 960 960"
+            width="24px"
+            fill="black"
+          >
+            <path [attr.d]="icons.addPath" />
+          </svg>
+        </button>
+      </form>
+      <table
+        mat-table
+        [dataSource]="dataSource"
+        (matSortChange)="onSortChange($event)"
+        matSort
+        class="table"
+      >
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
+          <td mat-cell *matCellDef="let libro">
+            <ng-container *ngIf="!isLoading; else skeleton1">{{ libro.id }}</ng-container>
+            <ng-template #skeleton1>
+              <div class="skeleton"></div>
+            </ng-template></td
+        ></ng-container>
+        <ng-container matColumnDef="titulo">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Título</th>
+          <td mat-cell *matCellDef="let libro">
+            <ng-container *ngIf="!isLoading; else skeleton2">
+              <span
+                #textRef
+                class="table__item--ellipsis"
+                [matTooltip]="libro.titulo"
+                matTooltipPosition="above"
+                >{{ libro.titulo }}</span
+              >
+            </ng-container>
+            <ng-template #skeleton2>
+              <div class="skeleton"></div>
+            </ng-template>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="autor">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Autor</th>
+          <td mat-cell *matCellDef="let libro">
+            <ng-container *ngIf="!isLoading; else skeleton3">
+              {{ libro.autor }}
+            </ng-container>
+            <ng-template #skeleton3>
+              <div class="skeleton"></div>
+            </ng-template>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="cantprestamos">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Cantidad prestamos</th>
+          <td mat-cell *matCellDef="let libro">
+            <ng-container *ngIf="!isLoading; else skeleton4">
+              {{ libro.cantprestamos }}
+            </ng-container>
+            <ng-template #skeleton4>
+              <div class="skeleton"></div>
+            </ng-template>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="actions">
+          <th class="actions-header" mat-header-cell *matHeaderCellDef>Acciones</th>
+          <td mat-cell *matCellDef="let libro">
+            <div class="actions-container">
+              <button
+                mat-button
+                type="button"
+                class="actions-button"
+                [routerLink]="['/libros/editar', libro.id]"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 -960 960 960"
+                  class="actions-button__svg"
+                >
+                  <path [attr.d]="icons.editPath" />
+                </svg>
+              </button>
+              <button
+                mat-button
+                class="actions-button"
+                [disabled]="libro.cantprestamos !== 0"
+                [class.actions-button--disabled]="libro.cantprestamos !== 0"
+                (click)="deleteLibro(libro)"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="actions-button__svg"
+                  viewBox="0 -960 960 960"
+                >
+                  <path [attr.d]="icons.deletePath" />
+                </svg>
+              </button>
+            </div>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr
+          mat-row
+          *matRowDef="let row; columns: displayedColumns"
+          [class.table__row--empty]="!row.id"
+        ></tr>
+      </table>
+      <mat-paginator
+        [length]="totalRecords"
+        [pageSize]="pageSize"
+        [pageSizeOptions]="[6, 10, 25]"
+        [pageIndex]="pageIndex"
+        aria-label="Seleccionar página"
+        (page)="onPageChange($event)"
+      >
+      </mat-paginator>
+    </div>
+  </div>
+</ng-container>
+<ng-template #mobile> </ng-template>

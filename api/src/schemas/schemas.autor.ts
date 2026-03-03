@@ -2,15 +2,13 @@ import { z } from "zod";
 
 const autorAltaSchema = z
   .object({
-    nombre: z.string(),
-    apellido: z.string(),
+    nombrecompleto: z.string(),
   })
   .strict();
 
 const autorPatchSchema = z
   .object({
-    nombre: z.string().optional(),
-    apellido: z.string().optional(),
+    nombrecompleto: z.string().max(100).optional(),
   })
   .strict();
 

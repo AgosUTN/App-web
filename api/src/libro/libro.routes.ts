@@ -1,10 +1,10 @@
 import { Router } from "express";
 import {
-  buscaLibros,
   buscaLibro,
   altaLibro,
   actualizarLibro,
   bajaLibro,
+  buscarLibrosByPage,
 } from "./libro.controller.js";
 import { ejemplarRouter } from "../ejemplar/ejemplar.routes.js";
 import { validateInput } from "../middlewares/middleware.validateInput.js";
@@ -14,21 +14,26 @@ import {
   libroPatchSchema,
   libroPutSchema,
 } from "../schemas/schemas.libro.js";
+import { libroGetByPageSchema } from "../schemas/getByPage/libro.schema.js";
 
 export const libroRouter = Router();
 
-libroRouter.get("/", buscaLibros);
+libroRouter.get(
+  "/byPage",
+  validateInput(undefined, undefined, libroGetByPageSchema),
+  buscarLibrosByPage,
+);
 libroRouter.get("/:id", validateInput(schemaParamsId, undefined), buscaLibro);
 libroRouter.post("/", validateInput(undefined, libroAltaSchema), altaLibro);
 libroRouter.put(
   "/:id",
   validateInput(schemaParamsId, libroPutSchema),
-  actualizarLibro
+  actualizarLibro,
 );
 libroRouter.patch(
   "/:id",
   validateInput(schemaParamsId, libroPatchSchema),
-  actualizarLibro
+  actualizarLibro,
 );
 libroRouter.delete("/:id", validateInput(schemaParamsId, undefined), bajaLibro);
 

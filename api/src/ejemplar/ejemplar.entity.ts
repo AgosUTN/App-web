@@ -17,7 +17,7 @@ export class Ejemplar {
   @PrimaryKey()
   id!: number; // Tiene que llegar un ID si o si al insert en la DB. No hereda de la BaseEntity por ser "obligatorio".
 
-  @ManyToOne(() => Libro, { primary: true })
+  @ManyToOne(() => Libro, { primary: true, deleteRule: "cascade" })
   miLibro!: Rel<Libro>;
 
   [PrimaryKeyProp]?: ["id", "miLibro"]; // Indica a TS que esta es la CP.

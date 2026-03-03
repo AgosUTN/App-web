@@ -8,6 +8,8 @@ import { MainLayoutComponent } from './core/components/main-layout-component/mai
 import { CRUD_names } from './core/constants/crudNames.config';
 import { EditorialesUpdate } from './features/editoriales/components/update/editorial-update';
 import { LibrosCreate } from './features/libros/components/create/libros-create';
+import { LibrosRead } from './features/libros/components/read/libros-read';
+import { Breadcrumb } from './core/components/breadcrumb/breadcrumb';
 
 export const routes: Routes = [
   {
@@ -55,6 +57,14 @@ export const routes: Routes = [
         path: 'libros',
         data: { breadcrumb: 'Libros' },
         children: [
+          {
+            path: '',
+            component: LibrosRead,
+            data: {
+              breadcrumb: '',
+              crud: CRUD_names.Libro,
+            },
+          },
           {
             path: 'alta',
             component: LibrosCreate,

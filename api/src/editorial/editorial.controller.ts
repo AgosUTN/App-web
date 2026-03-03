@@ -57,11 +57,9 @@ async function buscarEditorialesByPage(
       { limit: pageSize, offset: offset, orderBy: { [sortColumn]: sortOrder } },
     );
 
-    const editorialesDTO = EditorialMapper.toTableDTOList(editoriales);
-
     return res.status(200).json({
       message: "Las editoriales encontradas son:",
-      data: editorialesDTO,
+      data: editoriales,
       total: totalCount,
     });
   } catch (error: any) {
@@ -83,6 +81,7 @@ async function altaEditorial(req: Request, res: Response, next: NextFunction) {
     if (error instanceof UniqueConstraintViolationException) {
       return res.status(409).json({
         message: "El nombre de la editorial ya existe",
+        code: "NOMBRE_DUPLICATED",
       });
     }
     next(error);
@@ -109,6 +108,7 @@ async function actualizarEditorial(
     if (error instanceof UniqueConstraintViolationException) {
       return res.status(409).json({
         message: "El nombre de la editorial ya existe",
+        code: "NOMBRE_DUPLICATED",
       });
     }
     next(error);

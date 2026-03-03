@@ -26,12 +26,12 @@ export class Libro extends BaseEntity {
   isbn!: string;
 
   @Property() //Evaluar condiciones de carrera.
-  ultimoCodigoEjemplar = 0; // Debería llamarse ultimoCodigoEjemplar
+  ultimoCodigoEjemplar = 0;
 
-  @ManyToMany(() => Autor, (autor) => autor.misLibros, { owner: true })
-  misAutores = new Collection<Autor>(this);
+  @ManyToOne(() => Autor, { nullable: false }) // Nota: No voy a usar el error de Mysql. Zod valida que no venga vacío.
+  miAutor!: Rel<Autor>;
 
-  @ManyToOne(() => Editorial)
+  @ManyToOne(() => Editorial, { nullable: false })
   miEditorial!: Rel<Editorial>;
 
   @OneToMany(() => Ejemplar, (ejemplar) => ejemplar.miLibro, {})

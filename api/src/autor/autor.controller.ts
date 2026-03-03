@@ -1,8 +1,11 @@
 import { Request, Response, NextFunction } from "express";
 import { orm } from "../shared/DB/orm.js";
 import { Autor } from "./autor.entity.js";
-import { errorDominio } from "../shared/errors/errors.js";
-import { NotFoundError } from "@mikro-orm/core";
+
+import {
+  NotFoundError,
+  UniqueConstraintViolationException,
+} from "@mikro-orm/core";
 
 const em = orm.em;
 
@@ -40,6 +43,12 @@ async function altaAutor(req: Request, res: Response, next: NextFunction) {
     await em.flush();
     return res.status(201).json({ message: "Autor creado", data: autor });
   } catch (error: any) {
+    if (error instanceof UniqueConstraintViolationException) {
+      return res.status(409).json({
+        message: "El nombre del autor ya existe",
+        code: "NOMBRE_DUPLICATED",
+      });
+    }
     next(error);
   }
 }
@@ -67,8 +76,10 @@ async function bajaAutor(req: Request, res: Response, next: NextFunction) {
     await em.removeAndFlush(autor);
     return res.status(200).send({ message: "Autor borrado" });
   } catch (error: any) {
-    if (error instanceof errorDominio) {
-      return res.status(409).json({ message: error.message });
+    if (error.code === "ER_ROW_IS_REFERENCED_2") {
+      return res.status(409).json({
+        message: "No se puede eliminar un autor que posea libros",
+      });
     }
     next(error);
   }

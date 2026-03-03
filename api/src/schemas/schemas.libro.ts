@@ -7,7 +7,7 @@ const libroAltaSchema = z
     titulo: z.string().max(100),
     descripcion: z.string().max(500),
     isbn: z.string().refine((isbn) => isISBN(isbn)), // ISBN 10 y 13.
-    misAutores: z.array(z.number().int().gt(0)),
+    miAutor: z.number().int().gt(0),
     miEditorial: z.number().int().gt(0),
     cantEjemplares: z.number().int().gt(-1).optional(),
   })
@@ -18,7 +18,7 @@ const libroPutSchema = z
     titulo: z.string(),
     descripcion: z.string(),
     isbn: z.string().refine((isbn) => isISBN(isbn)),
-    misAutores: z.array(z.number().int().gt(0)),
+    miAutor: z.number().int().gt(0),
     miEditorial: z.number().int().gt(0),
   })
   .strict();
@@ -31,7 +31,7 @@ const libroPatchSchema = z
       .string()
       .refine((isbn) => isISBN(isbn))
       .optional(), // ISBN 10 y 13.
-    misAutores: z.array(z.number().int().gt(0)).optional(),
+    miAutor: z.number().int().gt(0).optional(),
     miEditorial: z.number().int().gt(0).optional(),
   })
   .strict();

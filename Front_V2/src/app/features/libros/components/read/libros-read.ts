@@ -1,25 +1,23 @@
 import { ChangeDetectorRef, Component } from '@angular/core';
-
-import { EditorialService } from '../../services/editorial-service';
+import { BasePagedComponent } from '../../../../shared/base/basePagedComponent';
+import { LibroTableDTO } from '../../models/libroTable.dto';
 import { MatTableModule } from '@angular/material/table';
-import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ReactiveFormsModule } from '@angular/forms';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSortModule } from '@angular/material/sort';
-import { icons } from '../../../../shared/constants/iconPaths';
-import { BasePagedComponent } from '../../../../shared/base/basePagedComponent';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { CommonModule } from '@angular/common';
-import { ViewportService } from '../../../../core/services/viewportService/viewport-service';
-import { Subscription } from 'rxjs';
 import { RouterLink } from '@angular/router';
-import { DialogService } from '../../../../shared/services/dialogService/dialog-service';
-import { EditorialTableDTO } from '../../models/editorialTable.dto';
+import { icons } from '../../../../shared/constants/iconPaths';
+import { Subscription } from 'rxjs';
+import { LibroService } from '../../services/libro-service';
 import { NotificationService } from '../../../../shared/services/notificationService/notification-service';
+import { DialogService } from '../../../../shared/services/dialogService/dialog-service';
+import { ViewportService } from '../../../../core/services/viewportService/viewport-service';
 
 @Component({
-  selector: 'app-editoriales-read',
+  selector: 'app-libros-read',
   imports: [
     MatTableModule,
     MatPaginatorModule,
@@ -30,26 +28,26 @@ import { NotificationService } from '../../../../shared/services/notificationSer
     CommonModule,
     RouterLink,
   ],
-  templateUrl: './editoriales-read.html',
-  styleUrl: './editoriales-read.scss',
+  templateUrl: './libros-read.html',
+  styleUrl: './libros-read.scss',
 })
-export class EditorialesRead extends BasePagedComponent<EditorialTableDTO> {
+export class LibrosRead extends BasePagedComponent<LibroTableDTO> {
   icons = icons;
   searchInput = new FormGroup({
     data: new FormControl('', [Validators.maxLength(15)]),
   });
 
   isMobile: boolean = false;
-  displayedColumns: string[] = ['id', 'nombre', 'cantlibros', 'actions'];
+  displayedColumns: string[] = ['id', 'titulo', 'autor', 'cantprestamos', 'actions'];
 
   private mobileSubscription: Subscription = new Subscription();
 
   constructor(
-    private editorialService: EditorialService,
     private viewportService: ViewportService,
     private cdr: ChangeDetectorRef,
     private dialogService: DialogService,
     private notificationService: NotificationService,
+    private libroService: LibroService,
   ) {
     super();
   }
@@ -69,14 +67,14 @@ export class EditorialesRead extends BasePagedComponent<EditorialTableDTO> {
 
   override loadData(): void {
     this.setLoadingState();
-    this.editorialService
+    this.libroService
       .getByPage(this.pageIndex, this.pageSize, this.sortColumn, this.sortOrder, this.filterValue)
       .subscribe({
         next: (res) => {
           this.totalRecords = res.total;
           this.dataSource.data = this.fillMissingRows(res.data);
           if (this.isMobile) {
-            this.cdr.markForCheck(); // Este parche solo se necesita en mobile, porque el array no lo maneja la matTable, lo maneja el ngFor.
+            this.cdr.markForCheck();
           }
         },
         error: (err) => console.log(err),
@@ -85,40 +83,48 @@ export class EditorialesRead extends BasePagedComponent<EditorialTableDTO> {
         },
       });
   }
-
-  override getEmptyObject(): EditorialTableDTO {
+  override getEmptyObject(): LibroTableDTO {
     return {
       id: 0,
-      nombre: 'nombre',
-      cantlibros: 0,
+      titulo: 'nombre',
+      autor: 'autor',
+      cantprestamos: 0,
     };
   }
-  override getSkeletonObject(): EditorialTableDTO {
+  override getSkeletonObject(): LibroTableDTO {
     return {
       id: -1,
-      nombre: 'nombre',
-      cantlibros: 0,
+      titulo: 'nombre',
+      autor: 'autor',
+      cantprestamos: 0,
     };
   }
+
+  deleteLibro(libro: LibroTableDTO): void {
+    this.dialogService
+      .confirm(
+        'Eliminar libro',
+        `¿Seguro que deseas eliminar el libro "${libro.titulo}" y todos sus ejemplares?`,
+      )
+      .subscribe((confirmed) => {
+        if (!confirmed) return;
+
+        this.libroService.delete(libro.id!).subscribe({
+          next: () => {
+            this.loadData();
+          },
+
+          error: (err) => {
+            console.log(err);
+          }, //PEndiente el error
+        });
+      });
+  }
+
   private initTrackers(): void {
     this.mobileSubscription = this.viewportService.getMobileTracker().subscribe((state) => {
       this.isMobile = state;
       this.cdr.markForCheck();
     });
-  }
-  deleteEditorial(editorial: EditorialTableDTO): void {
-    this.dialogService
-      .confirm(
-        'Eliminar editorial',
-        `¿Seguro que deseas eliminar la editorial "${editorial.nombre}"?`,
-      )
-      .subscribe((confirmed) => {
-        if (!confirmed) return;
-
-        this.editorialService.delete(editorial.id!).subscribe({
-          next: () => this.loadData(),
-          error: () => this.notificationService.error('La editorial posee libros'), // Error no alcanzable en flujo normal.
-        });
-      });
   }
 }

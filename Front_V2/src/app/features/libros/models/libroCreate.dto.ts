@@ -3,6 +3,6 @@ export interface LibroCreateDTO {
   descripcion: string;
   isbn: string;
   miEditorial: number;
-  misAutores: number[];
+  miAutor: number;
   cantEjemplares?: number;
 }

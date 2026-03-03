@@ -9,14 +9,13 @@ import { LineaPrestamo } from "../lineaPrestamo/lineaPrestamo.entity.js";
 import { Sancion } from "../sancion/sancion.entity.js";
 import { addDays, differenceInDays, startOfDay } from "date-fns";
 import { PoliticaSancion } from "../politicaSancion/politicaSancion.entity.js";
-import { error } from "console";
 
 const em = orm.em;
 
 async function retirarLibrosPaso1R(
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) {
   // Se recibe idSocio
   try {
@@ -63,7 +62,7 @@ async function retirarLibrosPaso1R(
 async function retirarLibrosPaso2R(
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) {
   try {
     //Se recibe idLibro, idEjemplar, idSocio paso 1(no lo ingresa el usuario).
@@ -72,13 +71,8 @@ async function retirarLibrosPaso2R(
       Ejemplar,
       [req.body.idEjemplar, req.body.idLibro],
       {
-        populate: [
-          "miLibro",
-          "misLp",
-          "miLibro.miEditorial",
-          "miLibro.misAutores",
-        ],
-      }
+        populate: ["miLibro", "misLp"],
+      },
     );
     const libro = ejemplar.getLibro();
 
@@ -125,7 +119,7 @@ interface EjemplarRequest {
 async function retirarLibrosPaso3R(
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) {
   try {
     //Se recibe array de CP de ejemplar, e idSocio.
@@ -138,15 +132,15 @@ async function retirarLibrosPaso3R(
     }
     const ejemplaresUnicos = Array.from(
       new Map(
-        ejemplares.map((ejemplar) => [ejemplar.miLibro, ejemplar])
-      ).values()
+        ejemplares.map((ejemplar) => [ejemplar.miLibro, ejemplar]),
+      ).values(),
     );
     const ejemplaresEncontrados = await em.find(
       Ejemplar,
       {
         $or: ejemplaresUnicos,
       },
-      { populate: ["miLibro", "misLp"] }
+      { populate: ["miLibro", "misLp"] },
     ); // miLibro necesario para validacion extra. De lo contrario no.
 
     // -------  Validaciones "extra" fuera del contexto del CU de negocio (Cualquier validación fallida es un bad request)
@@ -234,7 +228,7 @@ async function devolverLibro(req: Request, res: Response, next: NextFunction) {
     const ejemplar = await em.findOneOrFail(
       Ejemplar,
       [req.body.idEjemplar, req.body.idLibro],
-      { populate: ["misLp.miPrestamo.misLpPrestamo"] }
+      { populate: ["misLp.miPrestamo.misLpPrestamo"] },
     );
 
     const libro = ejemplar.getLibro();
@@ -255,7 +249,7 @@ async function devolverLibro(req: Request, res: Response, next: NextFunction) {
       let diasSancion = 0;
       const diasAtraso = differenceInDays(
         hoy,
-        lpPendiente.getFechaDevolucionTeorica()
+        lpPendiente.getFechaDevolucionTeorica(),
       );
 
       const politicaSancion = await em
@@ -270,7 +264,7 @@ async function devolverLibro(req: Request, res: Response, next: NextFunction) {
       if (!politicaSancion) {
         const politicaBiblioteca = await em.findOneOrFail(
           PoliticaBiblioteca,
-          1
+          1,
         );
         diasSancion = politicaBiblioteca.getDiasSancionMaxima();
       }
@@ -337,7 +331,7 @@ async function devolverLibro(req: Request, res: Response, next: NextFunction) {
 async function buscarPrestamos(
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) {
   // Nota: Si se envia un valor de parámetro inexistente, devuelve un 200 con el array vacío.
   try {
@@ -346,7 +340,7 @@ async function buscarPrestamos(
     const prestamos = await em.find(
       Prestamo,
       estadoPrestamo ? { estadoPrestamo } : {},
-      { populate: ["misLpPrestamo.miEjemplar.miLibro"] }
+      { populate: ["misLpPrestamo.miEjemplar.miLibro"] },
     );
     res
       .status(200)
@@ -358,7 +352,7 @@ async function buscarPrestamos(
 async function buscarPrestamosSocio(
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) {
   try {
     //No se valida el socio apropósito
@@ -384,13 +378,13 @@ async function buscarPrestamosSocio(
 async function buscarEjemplaresPendientesSocio(
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) {
   try {
     const idSocio = Number.parseInt(req.params.id);
     const socio = await em.findOneOrFail(Socio, idSocio, {
       populate: [
-        "misPrestamos.misLpPrestamo.miEjemplar.miLibro.misAutores",
+        "misPrestamos.misLpPrestamo.miEjemplar.miLibro.miAutor",
         "misPrestamos.misLpPrestamo.miEjemplar.miLibro.miEditorial",
       ],
     });
@@ -445,7 +439,7 @@ async function devolverLibroD(req: Request, res: Response, next: NextFunction) {
     const prestamo = await em.findOneOrFail(
       Prestamo,
       { id: idPrestamo },
-      { populate: ["misLpPrestamo"] }
+      { populate: ["misLpPrestamo"] },
     );
 
     const hoy = new Date();
@@ -458,7 +452,7 @@ async function devolverLibroD(req: Request, res: Response, next: NextFunction) {
       let diasSancion = 0;
       const diasAtraso = differenceInDays(
         hoy,
-        lpPendiente.getFechaDevolucionTeorica()
+        lpPendiente.getFechaDevolucionTeorica(),
       );
 
       const politicaSancion = await em
@@ -473,7 +467,7 @@ async function devolverLibroD(req: Request, res: Response, next: NextFunction) {
       if (!politicaSancion) {
         const politicaBiblioteca = await em.findOneOrFail(
           PoliticaBiblioteca,
-          1
+          1,
         );
         diasSancion = politicaBiblioteca.getDiasSancionMaxima();
       }

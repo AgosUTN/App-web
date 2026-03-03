@@ -16,7 +16,6 @@ export class NotificationService {
   error(message: string) {
     this.toastr.error(message, 'Error', {
       timeOut: 5000,
-      progressBar: true,
     });
   }
 }

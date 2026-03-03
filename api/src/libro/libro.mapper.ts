@@ -1,21 +1,5 @@
 import { Libro } from "./libro.entity";
 
-export class LibroMapper {
-  static toTableDTO(libro: Libro) {
-    return {
-      id: libro.id,
-      titulo: libro.titulo,
-      editorial: {
-        id: libro.miEditorial.id,
-        nombre: libro.miEditorial.nombre,
-      },
-      autor: {
-        id: libro.misAutores[0].id,
-        nombre: libro.misAutores[0].nombre,
-      },
-    };
-  }
-  static toTableDTOList(libros: Libro[]) {
-    return libros.map((libro) => this.toTableDTO(libro));
-  }
-}
+export class LibroMapper {}
+// El mapper usa métodos de clase ya que no necesita que se le inyecte nada y
+//  por ende no hay necesidad de que el controlador reciba una instancia.

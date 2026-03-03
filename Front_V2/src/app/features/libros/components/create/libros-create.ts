@@ -83,7 +83,7 @@ export class LibrosCreate {
       descripcion: libro.descripcion!,
       isbn: libro.isbn!,
       miEditorial: this.idEditorial!,
-      misAutores: [this.idAutor],
+      miAutor: this.idAutor,
       cantEjemplares: Number(libro.cantejemplares!),
     };
   }
