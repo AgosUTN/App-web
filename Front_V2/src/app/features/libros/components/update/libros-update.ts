@@ -1,60 +1,79 @@
 import { ChangeDetectorRef, Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { isbnValidator } from '../../../../shared/validators/isbn.validator';
+
 import { MatButtonModule } from '@angular/material/button';
-import { icons } from '../../../../shared/constants/iconPaths';
+
+import { CommonModule } from '@angular/common';
+
+import { LibrosCreate } from '../create/libros-create';
+import { ActivatedRoute, Router } from '@angular/router';
 import { DialogService } from '../../../../shared/services/dialogService/dialog-service';
-import { LibroCreateDTO } from '../../models/libroCreate.dto';
 import { LibroService } from '../../services/libro-service';
 import { NotificationService } from '../../../../shared/services/notificationService/notification-service';
-import { CommonModule } from '@angular/common';
+import { isbnValidator } from '../../../../shared/validators/isbn.validator';
 import { HttpErrorResponse } from '@angular/common/http';
+import { LibroUpdateDTO } from '../../models/libroUpdate.dto';
 @Component({
-  selector: 'app-libros-create',
+  selector: 'app-libros-update',
   imports: [ReactiveFormsModule, MatButtonModule, CommonModule],
-  templateUrl: './libros-create.html',
-  styleUrl: './libros-create.scss',
+  templateUrl: '../create/libros-create.html',
+  styleUrl: '../create/libros-create.scss',
 })
-export class LibrosCreate {
-  icons = icons;
-  libroForm = new FormGroup({
+export class LibrosUpdate extends LibrosCreate {
+  override submitLabel: string = 'Guardar cambios';
+  override successMessage: string = 'Libro actualizado correctamente';
+  override libroForm = new FormGroup({
     titulo: new FormControl('', [Validators.required, Validators.maxLength(100)]),
     isbn: new FormControl('', [Validators.required, isbnValidator()]),
-    cantejemplares: new FormControl('', [Validators.min(0)]),
+    cantejemplares: new FormControl<string | null>({ value: null, disabled: true }),
     editorial: new FormControl<string | null>({ value: null, disabled: true }),
     autor: new FormControl<string | null>({ value: null, disabled: true }),
     descripcion: new FormControl('', [Validators.required, Validators.maxLength(500)]),
   });
-  isLoading: boolean = false;
-  submitLabel: string = 'Crear Libro';
-  successMessage: string = 'Libro creado correctamente';
-  idEditorial: number | null = null;
-  idAutor: number = 1; // CAMBIAR CUANDO SE TERMINE CRUD AUTOR.
+  id: number = 0;
 
   constructor(
-    protected dialogService: DialogService,
-    protected libroService: LibroService,
-    protected notificationService: NotificationService,
-    protected cdr: ChangeDetectorRef,
-  ) {}
+    private route: ActivatedRoute,
+    private router: Router,
+    protected override dialogService: DialogService,
+    protected override cdr: ChangeDetectorRef,
+    protected override libroService: LibroService,
+    protected override notificationService: NotificationService,
+  ) {
+    super(dialogService, libroService, notificationService, cdr);
+  }
 
-  selectEditorial(): void {
-    this.dialogService.selectEditorial().subscribe((editorial) => {
-      if (editorial) {
-        this.libroForm.patchValue({ editorial: editorial.nombre });
-        this.idEditorial = editorial.id;
-        this.cdr.detectChanges(); //Necesario porque la actualización de idEditorial sucede por fuera de reactive forms.
-      }
+  ngOnInit(): void {
+    this.id = Number(this.route.snapshot.paramMap.get('id'));
+    this.libroService.getById(this.id).subscribe({
+      next: (libro) => {
+        this.libroForm.patchValue({
+          titulo: libro.titulo,
+          isbn: libro.isbn,
+          descripcion: libro.descripcion,
+          editorial: libro.editorial.nombre,
+          autor: libro.autor.nombreCompleto,
+          cantejemplares: libro.cantejemplares,
+        });
+        this.idEditorial = libro.editorial.id;
+        this.idAutor = libro.autor.id;
+        this.cdr.markForCheck();
+      },
+      error: (err) => {
+        if (err.status === 404) {
+          this.router.navigate(['/error/404']);
+        }
+      },
     });
   }
-  onSubmit(): void {
+  override onSubmit(): void {
     this.isLoading = true;
-    const libro = this.getCreateDTO();
-    this.libroService.post(libro).subscribe({
+    const libro = this.getUpdateDTO();
+    this.libroService.update(this.id, libro).subscribe({
       next: () => {
         this.isLoading = false;
         this.notificationService.success(this.successMessage);
-        this.libroForm.reset();
+        this.cdr.detectChanges();
       },
       error: (error: HttpErrorResponse) => {
         this.isLoading = false;
@@ -73,11 +92,7 @@ export class LibrosCreate {
       },
     });
   }
-  sanitize(event: Event) {
-    const input = event.target as HTMLInputElement;
-    input.value = input.value.replace(/[^0-9]/g, '');
-  }
-  protected getCreateDTO(): LibroCreateDTO {
+  private getUpdateDTO(): LibroUpdateDTO {
     const libro = this.libroForm.getRawValue();
     return {
       titulo: libro.titulo!,
@@ -85,7 +100,6 @@ export class LibrosCreate {
       isbn: libro.isbn!,
       miEditorial: this.idEditorial!,
       miAutor: this.idAutor,
-      cantEjemplares: Number(libro.cantejemplares!),
     };
   }
 }

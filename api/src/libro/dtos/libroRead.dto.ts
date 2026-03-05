@@ -3,7 +3,7 @@ export interface LibroReadDTO {
   titulo: string;
   isbn: string;
   descripcion: string;
-  cantejemplares: string;
+  cantejemplares: number;
   editorial: {
     id: number;
     nombre: string;
@@ -14,5 +14,3 @@ export interface LibroReadDTO {
     nombreCompleto: string;
   };
 }
-// Este DTO es para el libro que se muestra en la pantalla de Editar.
-// El de Detail es para el modal, y el table para la tabla.

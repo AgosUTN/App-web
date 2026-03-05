@@ -13,7 +13,7 @@ html {
         primary: mat.$blue-palette,
         secondary: mat.$cyan-palette,
       ),
-      typography: Poppins,
+      typography: Inter,
       density: 0,
     ),
     $overrides: (background: #eef5f9)
@@ -60,6 +60,18 @@ body {
   --color-secondary: #43ced7;
 
   --color-disabled: #f3f3f3;
+
+  /* Nuevos tokens que complementan la paleta */
+  --color-primary-light: #e8f3ff; /* fondo suave para badges/highlights primarios */
+  --color-primary-hover: #0e6fd4; /* primary más oscuro para hover */
+  --color-surface-raised: #ffffff; /* superficie elevada (cards dentro del dialog) */
+  --color-outline-subtle: #e4e2e6; /* separadores sutiles */
+  --color-on-surface-muted: #8a8a8f; /* texto secundario / labels */
+  --color-success-light: #e8faf2; /* fondo badge disponible */
+  --color-error-light: #fff0f3; /* fondo badge deteriorado / error */
+  --color-warning: #f59e0b; /* estado prestado */
+  --color-warning-light: #fffbeb; /* fondo badge prestado */
+  --color-info-light: #e8f8fa; /* fondo badge mantenimiento (usa secondary) */
 }
 
 body,
@@ -86,4 +98,9 @@ body,
   min-width: 80px;
   max-width: 80px;
   //text-align: center;
+}
+
+.custom-backdrop {
+  backdrop-filter: blur(4px);
+  background: rgba(27, 27, 31, 0.5) !important;
 }

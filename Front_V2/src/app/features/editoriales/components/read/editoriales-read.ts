@@ -39,7 +39,6 @@ export class EditorialesRead extends BasePagedComponent<EditorialTableDTO> {
     data: new FormControl('', [Validators.maxLength(15)]),
   });
 
-  isMobile: boolean = false;
   displayedColumns: string[] = ['id', 'nombre', 'cantlibros', 'actions'];
 
   private mobileSubscription: Subscription = new Subscription();

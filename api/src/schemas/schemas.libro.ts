@@ -13,16 +13,6 @@ const libroAltaSchema = z
   })
   .strict();
 
-const libroPutSchema = z
-  .object({
-    titulo: z.string(),
-    descripcion: z.string(),
-    isbn: z.string().refine((isbn) => isISBN(isbn)),
-    miAutor: z.number().int().gt(0),
-    miEditorial: z.number().int().gt(0),
-  })
-  .strict();
-
 const libroPatchSchema = z
   .object({
     titulo: z.string().optional(),
@@ -36,4 +26,4 @@ const libroPatchSchema = z
   })
   .strict();
 
-export { libroAltaSchema, libroPatchSchema, libroPutSchema };
+export { libroAltaSchema, libroPatchSchema };

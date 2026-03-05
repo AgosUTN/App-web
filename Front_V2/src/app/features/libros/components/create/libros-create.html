@@ -61,9 +61,8 @@
         type="submit"
         [disabled]="libroForm.invalid || !idEditorial || this.isLoading"
         [class.form__button--disabled]="libroForm.invalid || !idEditorial || this.isLoading"
-        o
       >
-        Crear Libro
+        {{ submitLabel }}
       </button>
     </div>
   </form>

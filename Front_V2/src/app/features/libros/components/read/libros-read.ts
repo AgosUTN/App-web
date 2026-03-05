@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component } from '@angular/core';
+import { ChangeDetectorRef, Component, HostListener } from '@angular/core';
 import { BasePagedComponent } from '../../../../shared/base/basePagedComponent';
 import { LibroTableDTO } from '../../models/libroTable.dto';
 import { MatTableModule } from '@angular/material/table';
@@ -37,8 +37,7 @@ export class LibrosRead extends BasePagedComponent<LibroTableDTO> {
     data: new FormControl('', [Validators.maxLength(15)]),
   });
 
-  isMobile: boolean = false;
-  displayedColumns: string[] = ['id', 'titulo', 'autor', 'cantprestamos', 'actions'];
+  displayedColumns: string[] = ['id', 'titulo', 'autor', 'editorial', 'cantprestamos', 'actions'];
 
   private mobileSubscription: Subscription = new Subscription();
 
@@ -88,6 +87,7 @@ export class LibrosRead extends BasePagedComponent<LibroTableDTO> {
       id: 0,
       titulo: 'nombre',
       autor: 'autor',
+      editorial: 'editorial',
       cantprestamos: 0,
     };
   }
@@ -96,6 +96,7 @@ export class LibrosRead extends BasePagedComponent<LibroTableDTO> {
       id: -1,
       titulo: 'nombre',
       autor: 'autor',
+      editorial: 'editorial',
       cantprestamos: 0,
     };
   }
@@ -114,11 +115,21 @@ export class LibrosRead extends BasePagedComponent<LibroTableDTO> {
             this.loadData();
           },
 
-          error: (err) => {
-            console.log(err);
-          }, //PEndiente el error
+          error: () => {
+            this.notificationService.error('No se puede eliminar un libro que haya sido prestado'); // Error no accesible en flujo normal
+          },
         });
       });
+  }
+  openDetailDialog(id: number): void {
+    this.libroService.getLibroDetail(id).subscribe({
+      next: (libro) => {
+        this.dialogService.openLibroDetail(libro);
+      },
+      error: () => {
+        this.notificationService.error('Libro no encontrado');
+      },
+    });
   }
 
   private initTrackers(): void {

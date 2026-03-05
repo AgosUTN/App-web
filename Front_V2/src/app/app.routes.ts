@@ -10,6 +10,7 @@ import { EditorialesUpdate } from './features/editoriales/components/update/edit
 import { LibrosCreate } from './features/libros/components/create/libros-create';
 import { LibrosRead } from './features/libros/components/read/libros-read';
 import { Breadcrumb } from './core/components/breadcrumb/breadcrumb';
+import { LibrosUpdate } from './features/libros/components/update/libros-update';
 
 export const routes: Routes = [
   {
@@ -69,6 +70,11 @@ export const routes: Routes = [
             path: 'alta',
             component: LibrosCreate,
             data: { breadcrumb: 'Alta', crud: CRUD_names.Libro },
+          },
+          {
+            path: 'editar/:id',
+            component: LibrosUpdate,
+            data: { breadcrumb: 'Editar', crud: CRUD_names.Libro },
           },
         ],
       },

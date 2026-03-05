@@ -25,14 +25,14 @@ DELETE  http://localhost:3000/api/libros/2
 
 
 ### Actualizar autor con PUT
-PUT http://localhost:3000/api/libros/16
+PUT http://localhost:3000/api/libros/1
 Content-Type: application/json
 
 {
-    "titulo": "Libro para borrar PUT",
-    "descripcion": "Un clásico de la literatura contemporanéa",
+    "titulo":"Moby Dick",
+    "descripcion": "Un clásico de la literatura contemporanéa. Aclamado por la crítica internacional",
     "isbn": "0-7645-2641-3",
-    "misAutores": [1],
+    "miAutor": 1,
     "miEditorial": 1
 
 }

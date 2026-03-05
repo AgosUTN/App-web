@@ -11,6 +11,7 @@ import {
 } from "@mikro-orm/core";
 import { Libro } from "../libro/libro.entity.js";
 import { LineaPrestamo } from "../lineaPrestamo/lineaPrestamo.entity.js";
+import { EstadoEjemplar } from "./estadoEjemplar.type.js";
 
 @Entity()
 export class Ejemplar {
@@ -24,6 +25,9 @@ export class Ejemplar {
 
   @Property({ type: DateTimeType })
   fechaIncorporacion? = new Date();
+
+  @Property()
+  bajaLogica? = false;
 
   @OneToMany(() => LineaPrestamo, (lp) => lp.miEjemplar, { hidden: true })
   misLp = new Collection<LineaPrestamo>(this);
@@ -54,5 +58,13 @@ export class Ejemplar {
   }
   fuistePrestado(): boolean {
     return this.misLp.length > 0;
+  }
+  getEstado(): EstadoEjemplar {
+    if (this.bajaLogica) {
+      return "ELIMINADO";
+    }
+    if (this.estasPendiente()) {
+      return "PRESTADO";
+    } else return "DISPONIBLE";
   }
 }

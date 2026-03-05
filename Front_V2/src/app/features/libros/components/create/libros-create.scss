@@ -35,6 +35,7 @@
     &:disabled {
       background-color: var(--color-disabled);
       border: $disabled-border;
+      height: 33px;
     }
   }
   textarea {

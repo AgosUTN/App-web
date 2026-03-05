@@ -6,6 +6,8 @@ import { MatTableDataSource } from '@angular/material/table';
 // métodos necesarios para usar table + paginator + matsort con server side pagination.
 
 export abstract class BasePagedComponent<T> {
+  isMobile: boolean = false;
+  //
   pageIndex: number = 0;
   pageSize: number = 6;
   sortOrder: string = 'asc';
@@ -52,8 +54,10 @@ export abstract class BasePagedComponent<T> {
   protected setLoadingState(): void {
     this.isLoading = true;
     const skeletons = Array.from({ length: this.pageSize }, () => this.getSkeletonObject());
-
-    this.dataSource.data = skeletons;
+    if (!this.isMobile) {
+      // En mobile no uso skeletons.
+      this.dataSource.data = skeletons;
+    }
   }
 
   protected fillMissingRows(data: T[]): T[] {

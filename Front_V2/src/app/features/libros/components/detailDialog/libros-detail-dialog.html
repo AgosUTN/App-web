@@ -1,0 +1,99 @@
+<div class="dialog">
+  <div class="dialog-header">
+    <div class="badge">Libro</div>
+    <h2 id="dialog-title">{{ libro.titulo }}</h2>
+
+    <span class="isbn">ISBN: {{ libro.isbn }}</span>
+
+    <button class="dialog-close" (click)="closeDialog()">
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2.5"
+        stroke-linecap="round"
+      >
+        <path [attr.d]="icons.exitPath" />
+      </svg>
+    </button>
+  </div>
+
+  <div class="dialog-body">
+    <div>
+      <p class="section-label">Descripción</p>
+      <div class="descripcion-block">
+        {{ libro.descripcion }}
+      </div>
+    </div>
+
+    <div class="ejemplares-section">
+      <div class="ejemplares-header">
+        <p class="section-label" style="margin-bottom: 0">Ejemplares</p>
+        <button class="btn-nuevo">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path [attr.d]="icons.newPath" />
+          </svg>
+          Nuevo ejemplar
+        </button>
+      </div>
+
+      <table class="ejemplares-table">
+        <thead>
+          <tr>
+            <th style="width: 60px">#</th>
+            <th>Estado</th>
+            <th>Acción</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <ng-container *ngIf="libro.ejemplares.length > 0; else emptyState">
+            <tr *ngFor="let ejemplar of libro.ejemplares">
+              <td class="id-cell">{{ ejemplar.idEjemplar }}</td>
+              <td>
+                <span [ngClass]="getStateStyle(ejemplar.estado)" class="estado-badge">{{
+                  ejemplar.estado
+                }}</span>
+              </td>
+              <td>
+                <button class="btn-eliminar" [disabled]="ejemplar.estado != 'DISPONIBLE'">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path [attr.d]="icons.altDeletePath" />
+                  </svg>
+                  Eliminar
+                </button>
+              </td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+
+      <ng-template #emptyState>
+        <div class="empty-state">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M12 6v6m0 4h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" stroke-linecap="round" />
+          </svg>
+          No hay ejemplares registrados para este libro.
+        </div>
+      </ng-template>
+    </div>
+  </div>
+
+  <div class="dialog-footer">
+    <button class="btn-cerrar" (click)="closeDialog()">Cerrar</button>
+  </div>
+</div>

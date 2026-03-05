@@ -56,7 +56,35 @@ async function buscaLibro(req: Request, res: Response, next: NextFunction) {
       { id },
       { populate: ["miAutor", "miEditorial", "misEjemplares"] },
     );
-    return res.status(200).json({ message: "Libro encontrado", data: libro });
+    const cantejemplares = libro.misEjemplares.length;
+    const libroDTO = LibroMapper.toReadDTO(libro, cantejemplares);
+    return res
+      .status(200)
+      .json({ message: "Libro encontrado", data: libroDTO });
+  } catch (error: any) {
+    if (error instanceof NotFoundError) {
+      return res.status(404).json({ message: "Libro inexistente" });
+    }
+    next(error);
+  }
+}
+async function buscaLibroDetail(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
+  try {
+    const id = Number.parseInt(req.params.id);
+    const libro = await em.findOneOrFail(
+      Libro,
+      { id },
+      { populate: ["misEjemplares.misLp","miEditorial"] },
+    );
+    const libroDTO = LibroMapper.toDetailDTO(libro);
+
+    return res
+      .status(200)
+      .json({ message: "Libro encontrado", data: libroDTO });
   } catch (error: any) {
     if (error instanceof NotFoundError) {
       return res.status(404).json({ message: "Libro inexistente" });
@@ -75,6 +103,7 @@ async function altaLibro(req: Request, res: Response, next: NextFunction) {
         id: i + 1,
         miLibro: libro,
       });
+      libro.increaseUltimoCodigoEjemplar();
     }
 
     await em.flush();
@@ -156,6 +185,7 @@ async function bajaLibro(req: Request, res: Response, next: NextFunction) {
 
 export {
   buscaLibro,
+  buscaLibroDetail,
   altaLibro,
   actualizarLibro,
   bajaLibro,
