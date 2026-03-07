@@ -1,4 +1,4 @@
-export type EstadoEjemplar = 'PRESTADO' | 'ELIMINADO' | 'DISPONIBLE' | 'NUEVO';
+import { EstadoEjemplar } from "../estadoEjemplar.type";
 
 export interface EjemplarTableDTO {
   idLibro: number;

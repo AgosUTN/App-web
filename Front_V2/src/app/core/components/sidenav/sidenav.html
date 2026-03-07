@@ -5,7 +5,7 @@
     [class.sideMenu__li--active]="isActive(item.route)"
     [class.sideMenu__li--logout]="last"
   >
-    <a [routerLink]="item.route">
+    <a [routerLink]="item.route" (click)="closeSideNavMobile()">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         height="24px"

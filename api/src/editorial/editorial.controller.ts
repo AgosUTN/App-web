@@ -21,9 +21,10 @@ async function buscarEditorial(
   try {
     const id = Number.parseInt(req.params.id);
     const editorial = await em.findOneOrFail(Editorial, { id });
+    const editorialDTO = EditorialMapper.toReadDTO(editorial);
     return res
       .status(200)
-      .json({ message: "Editorial encontrada", data: editorial });
+      .json({ message: "Editorial encontrada", data: editorialDTO });
   } catch (error: any) {
     if (error instanceof NotFoundError) {
       return res.status(404).json({ message: "Editorial inexistente" });
@@ -56,7 +57,7 @@ async function buscarEditorialesByPage(
       filter,
       { limit: pageSize, offset: offset, orderBy: { [sortColumn]: sortOrder } },
     );
-
+    // No se usa mapper ya que la entidad virtual ya está limpia.
     return res.status(200).json({
       message: "Las editoriales encontradas son:",
       data: editoriales,
@@ -73,10 +74,10 @@ async function altaEditorial(req: Request, res: Response, next: NextFunction) {
     await em.flush();
 
     io.emit(SOCKET_EVENTS.CACHE_INVALIDATE, { crud: CRUD_names.Editorial });
-
+    const editorialDTO = EditorialMapper.toReadDTO(editorial);
     return res
       .status(201)
-      .json({ message: "Editorial creada", data: editorial });
+      .json({ message: "Editorial creada", data: editorialDTO });
   } catch (error: any) {
     if (error instanceof UniqueConstraintViolationException) {
       return res.status(409).json({

@@ -6,7 +6,7 @@ import { addDays, isBefore } from "date-fns";
 @Entity()
 export class Sancion extends BaseEntity {
   @Property({ type: DateType })
-  fechaSancion = new Date(); // Si pones ? despues typescript hincha las bolas en los métodos. Como parche lo pongo en el alta.
+  fechaSancion = new Date(); // Si pones ? despues typescript da error en los métodos. Como parche lo pongo en el alta.
 
   @Property()
   diasSancion!: number;

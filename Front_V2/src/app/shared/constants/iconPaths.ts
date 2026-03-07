@@ -11,4 +11,5 @@ export const icons = {
   exitPath: 'M18 6L6 18M6 6l12 12',
   newPath: 'M12 5v14M5 12h14',
   altDeletePath: 'M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6',
+  infoPath: 'M12 6v6m0 4h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z',
 } as const;

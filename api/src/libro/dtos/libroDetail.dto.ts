@@ -1,6 +1,7 @@
 import { EstadoEjemplar } from "../../ejemplar/estadoEjemplar.type";
 
 export interface LibroDetailDTO {
+  id: number;
   titulo: string;
   descripcion: string;
   isbn: string;

@@ -15,7 +15,9 @@ export class CacheInterceptor implements HttpInterceptor {
   constructor(private cacheService: CacheService) {}
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    if (req.method !== 'GET') {
+    const isPaginated = req.params.has('pageIndex') && req.params.has('pageSize'); // Evita cachear get ones.
+    console.log(isPaginated);
+    if (req.method !== 'GET' || !isPaginated) {
       return next.handle(req);
     }
     const cachedResponse = this.cacheService.getData(req.urlWithParams);

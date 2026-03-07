@@ -10,16 +10,16 @@ Content-Type: application/json
 {
     "titulo": "Don quijote",
     "descripcion": "Un clásico de la literatura contemporanéa",
-    "isbn": "0-545-01022-5",
+    "isbn": "978-950-563-656-3",
     "miAutor": 1,      
     "miEditorial": 1,
-    "cantEjemplares": 2
+    "cantEjemplares": 0
 
 }
 
 ### Delete de un libro por ID
 
-DELETE  http://localhost:3000/api/libros/2
+DELETE  http://localhost:3000/api/libros/14
 
 
 

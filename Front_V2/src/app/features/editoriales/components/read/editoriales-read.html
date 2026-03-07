@@ -97,6 +97,7 @@
                 type="button"
                 class="actions-button"
                 [routerLink]="['/editoriales/editar', editorial.id]"
+                [disabled]="isLoading"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -109,7 +110,7 @@
               <button
                 mat-button
                 class="actions-button"
-                [disabled]="editorial.cantlibros !== 0"
+                [disabled]="editorial.cantlibros !== 0 || isLoading"
                 [class.actions-button--disabled]="editorial.cantlibros !== 0"
                 (click)="deleteEditorial(editorial)"
               >
@@ -196,34 +197,60 @@
     <div class="layout-content">
       <ng-container *ngFor="let editorial of dataSource.data">
         <div class="crud-card" *ngIf="editorial.id !== 0">
-          <span class="card__id">ID #{{ editorial.id }}</span>
-          <div class="card__actions">
-            <button
-              mat-button
-              type="button"
-              class="actions-button"
-              [routerLink]="['/editoriales/editar', editorial.id]"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 -960 960 960"
-                class="actions-button__svg"
-              >
-                <path [attr.d]="icons.editPath" />
-              </svg>
-            </button>
-            <button mat-button class="actions-button" (click)="deleteEditorial(editorial)">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="actions-button__svg"
-                viewBox="0 -960 960 960"
-              >
-                <path [attr.d]="icons.deletePath" />
-              </svg>
-            </button>
+          <div class="card__header-strip"></div>
+
+          <div class="card__body">
+            <div class="card__top-row">
+              <span class="card__id">ID #{{ editorial.id }}</span>
+              <div class="card__actions">
+                <button
+                  mat-button
+                  type="button"
+                  class="actions-button"
+                  [routerLink]="['/editoriales/editar', editorial.id]"
+                  [disabled]="isLoading"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 -960 960 960"
+                    class="actions-button__svg"
+                  >
+                    <path [attr.d]="icons.editPath" />
+                  </svg>
+                </button>
+                <button
+                  mat-button
+                  class="actions-button"
+                  (click)="deleteEditorial(editorial)"
+                  [disabled]="editorial.cantlibros !== 0 || isLoading"
+                  [class.actions-button--disabled]="editorial.cantlibros !== 0"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="actions-button__svg"
+                    viewBox="0 -960 960 960"
+                  >
+                    <path [attr.d]="icons.deletePath" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <span class="card__nombre">{{ editorial.nombre }}</span>
           </div>
-          <span class="card__nombre">Nombre: {{ editorial.nombre }}</span>
-          <span class="card__cantidad">Cantidad libros: {{ editorial.cantlibros }} libros</span>
+          <div class="card__footer">
+            <span class="card__cantidad-label">Libros totales</span>
+            <span
+              class="card__prestamos-badge"
+              [class.card__prestamos-badge--active]="editorial.cantlibros > 0"
+              [class.card__prestamos-badge--zero]="editorial.cantlibros === 0"
+            >
+              {{
+                editorial.cantlibros > 0
+                  ? editorial.cantlibros + ' Libro' + (editorial.cantlibros > 1 ? 's' : '')
+                  : 'Sin libros'
+              }}
+            </span>
+          </div>
         </div>
       </ng-container>
     </div>

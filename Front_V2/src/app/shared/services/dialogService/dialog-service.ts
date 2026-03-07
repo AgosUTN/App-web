@@ -40,6 +40,8 @@ export class DialogService {
         height: '600px',
         disableClose: false,
         backdropClass: 'custom-backdrop',
+
+        maxHeight: '95vh',
       })
       .afterClosed();
   }
@@ -51,6 +53,7 @@ export class DialogService {
         disableClose: false,
         backdropClass: 'custom-backdrop',
         data: libro,
+        maxHeight: '95vh',
       })
       .afterClosed();
   }

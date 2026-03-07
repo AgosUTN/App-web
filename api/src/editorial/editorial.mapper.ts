@@ -1,3 +1,11 @@
-export class EditorialMapper {}
+import { EditorialReadDTO } from "./dtos/editorialRead.dto";
+import { Editorial } from "./editorial.entity";
 
-// Esta entidad no necesita mapper por el momento.
+export class EditorialMapper {
+  static toReadDTO(editorial: Editorial): EditorialReadDTO {
+    return {
+      id: editorial.id!,
+      nombre: editorial.nombre,
+    };
+  }
+}

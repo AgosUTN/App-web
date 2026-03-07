@@ -6,6 +6,6 @@ export const libroGetByPageSchema = z
     pageSize: z.coerce.number().int().min(1),
     sortOrder: z.enum(["asc", "desc"]),
     sortColumn: z.enum(["titulo", "cantprestamos", "id", "autor"]),
-    filterValue: z.string().max(15),
+    filterValue: z.string().max(100),
   })
   .strict();

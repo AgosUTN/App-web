@@ -29,7 +29,7 @@ async function buscarLibrosByPage(
 
     let filter = {};
     if (filterValue) {
-      filter = { nombre: { $like: `%${filterValue}%` } };
+      filter = { titulo: { $like: `%${filterValue}%` } };
     }
 
     const [libros, totalCount] = await em.findAndCount(LibroTable, filter, {
@@ -56,8 +56,8 @@ async function buscaLibro(req: Request, res: Response, next: NextFunction) {
       { id },
       { populate: ["miAutor", "miEditorial", "misEjemplares"] },
     );
-    const cantejemplares = libro.misEjemplares.length;
-    const libroDTO = LibroMapper.toReadDTO(libro, cantejemplares);
+
+    const libroDTO = LibroMapper.toReadDTO(libro);
     return res
       .status(200)
       .json({ message: "Libro encontrado", data: libroDTO });
@@ -78,7 +78,7 @@ async function buscaLibroDetail(
     const libro = await em.findOneOrFail(
       Libro,
       { id },
-      { populate: ["misEjemplares.misLp","miEditorial"] },
+      { populate: ["misEjemplares.misLp", "miEditorial"] },
     );
     const libroDTO = LibroMapper.toDetailDTO(libro);
 
@@ -107,8 +107,11 @@ async function altaLibro(req: Request, res: Response, next: NextFunction) {
     }
 
     await em.flush();
+    io.emit(SOCKET_EVENTS.CACHE_INVALIDATE, { crud: CRUD_names.Libro });
 
-    return res.status(201).json({ message: "Libro creado", data: libro });
+    const libroDTO = LibroMapper.toWriteDTO(libro);
+
+    return res.status(201).json({ message: "Libro creado", data: libroDTO });
   } catch (error: any) {
     if (error.code === "ER_NO_REFERENCED_ROW_2") {
       if (error.message.includes("libro_mis_autores_autor_id_foreign")) {
@@ -152,6 +155,7 @@ async function actualizarLibro(
 
     em.assign(libroActualizar, req.body);
     await em.flush();
+    io.emit(SOCKET_EVENTS.CACHE_INVALIDATE, { crud: CRUD_names.Libro });
     return res.status(200).json({ message: "Libro actualizado" });
   } catch (error: any) {
     next(error);

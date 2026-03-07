@@ -1,5 +1,5 @@
 ### Obtener todos los ejemplares de un libro
-GET http://localhost:3000/api/libros/11/ejemplares/
+GET http://localhost:3000/api/libros/14/ejemplares/
 
 ### Validar ejemplar pendiente
 GET http://localhost:3000/api/libros/1/ejemplares/1/pendiente
@@ -40,7 +40,7 @@ Content-Type: application/json
 
 ### Delete de un ejemplar por ID
 
-DELETE  http://localhost:3000/api/libros/5/ejemplares/1
+DELETE  http://localhost:3000/api/libros/15/ejemplares/1
 
 
 ### Delete de todos los ejemplares de un libro

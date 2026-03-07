@@ -1,5 +1,10 @@
 <div class="sideNavLayout" [ngClass]="getSideNavClass()">
-  <app-sidenav [menuItems]="menuItems" [sideNavOpen]="sideNavOpen"></app-sidenav>
+  <app-sidenav
+    [menuItems]="menuItems"
+    [sideNavOpen]="sideNavOpen"
+    [isMobile]="isMobile"
+    (itemClicked)="toggleSideNav()"
+  ></app-sidenav>
 </div>
 <div class="headerLayout" [class.headerLayout--colapsed]="!sideNavOpen && !isMobile">
   <app-toolbar (menuClick)="toggleSideNav()"></app-toolbar>
@@ -11,3 +16,8 @@
 >
   <router-outlet></router-outlet>
 </div>
+<div
+  class="backdrop"
+  [class.backdrop--active]="sideNavOpen && isMobile"
+  (click)="toggleSideNavMobile()"
+></div>

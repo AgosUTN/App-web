@@ -48,6 +48,9 @@ export class Ejemplar {
     }
     return rta;
   }
+  setBajaLogica(): void {
+    this.bajaLogica = true;
+  }
   getLpPendiente(): LineaPrestamo {
     const lpPendiente = this.misLp.find((lp) => lp.estasPendiente());
     if (!lpPendiente) {
@@ -65,6 +68,9 @@ export class Ejemplar {
     }
     if (this.estasPendiente()) {
       return "PRESTADO";
-    } else return "DISPONIBLE";
+    }
+    if (this.fuistePrestado()) {
+      return "DISPONIBLE";
+    } else return "NUEVO";
   }
 }

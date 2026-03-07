@@ -11,6 +11,8 @@ import { LibrosCreate } from './features/libros/components/create/libros-create'
 import { LibrosRead } from './features/libros/components/read/libros-read';
 import { Breadcrumb } from './core/components/breadcrumb/breadcrumb';
 import { LibrosUpdate } from './features/libros/components/update/libros-update';
+import { PrestamosRead } from './features/prestamos/read/prestamos-read';
+import { PrestamosCreate } from './features/prestamos/create/prestamos-create';
 
 export const routes: Routes = [
   {
@@ -78,6 +80,23 @@ export const routes: Routes = [
           },
         ],
       },
+      {
+        path: 'prestamos',
+        data: { breadcrumb: 'Préstamos' },
+        children: [
+          {
+            path: '',
+            component: PrestamosRead,
+            data: { breadcrumb: '', crud: CRUD_names.Prestamo },
+          },
+          {
+            path: 'alta',
+            component: PrestamosCreate,
+            data: { breadcrumb: 'Crear', crud: CRUD_names.Prestamo },
+          },
+        ],
+      },
+
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
     ],
   },

@@ -1,1 +1,1 @@
-export type EstadoEjemplar = "PRESTADO" | "ELIMINADO" | "DISPONIBLE";
+export type EstadoEjemplar = "PRESTADO" | "ELIMINADO" | "DISPONIBLE" | "NUEVO";

@@ -29,7 +29,7 @@
     <div class="ejemplares-section">
       <div class="ejemplares-header">
         <p class="section-label" style="margin-bottom: 0">Ejemplares</p>
-        <button class="btn-nuevo">
+        <button class="btn-nuevo" (click)="createEjemplar(libro.id)" [disabled]="isLoading">
           <svg
             viewBox="0 0 24 24"
             fill="none"
@@ -54,8 +54,8 @@
         </thead>
 
         <tbody>
-          <ng-container *ngIf="libro.ejemplares.length > 0; else emptyState">
-            <tr *ngFor="let ejemplar of libro.ejemplares">
+          <ng-container *ngIf="ejemplares.length > 0; else emptyState">
+            <tr *ngFor="let ejemplar of ejemplares">
               <td class="id-cell">{{ ejemplar.idEjemplar }}</td>
               <td>
                 <span [ngClass]="getStateStyle(ejemplar.estado)" class="estado-badge">{{
@@ -63,7 +63,11 @@
                 }}</span>
               </td>
               <td>
-                <button class="btn-eliminar" [disabled]="ejemplar.estado != 'DISPONIBLE'">
+                <button
+                  class="btn-eliminar"
+                  [disabled]="ejemplar.estado == 'ELIMINADO' || ejemplar.estado == 'PRESTADO'"
+                  (click)="deleteEjemplar(ejemplar)"
+                >
                   <svg
                     viewBox="0 0 24 24"
                     fill="none"
@@ -79,17 +83,18 @@
               </td>
             </tr>
           </ng-container>
+          <ng-template #emptyState>
+            <td colspan="3">
+              <div class="empty-state">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path [attr.d]="icons.infoPath" stroke-linecap="round" />
+                </svg>
+                No hay ejemplares registrados para este libro.
+              </div>
+            </td>
+          </ng-template>
         </tbody>
       </table>
-
-      <ng-template #emptyState>
-        <div class="empty-state">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-            <path d="M12 6v6m0 4h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" stroke-linecap="round" />
-          </svg>
-          No hay ejemplares registrados para este libro.
-        </div>
-      </ng-template>
     </div>
   </div>
 

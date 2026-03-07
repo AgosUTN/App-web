@@ -6,6 +6,6 @@ export const editorialGetByPageSchema = z
     pageSize: z.coerce.number().int().min(1),
     sortOrder: z.enum(["asc", "desc"]),
     sortColumn: z.enum(["nombre", "cantlibros", "id"]),
-    filterValue: z.string().max(15), // Puede estar vacio, pero mínimo  viene el query param con value "", por eso no es opcional.
+    filterValue: z.string().max(30), // Puede estar vacio, pero mínimo  viene el query param con value "", por eso no es opcional.
   })
   .strict();

@@ -1,16 +1,24 @@
+@use '../../../../styles/variables' as *;
 .dialog {
   background: var(--color-surface);
   border-radius: 16px;
   width: 100%;
   height: 100%;
   max-width: 560px;
-
   display: flex;
   flex-direction: column;
   overflow: hidden;
   box-shadow:
     0 4px 6px rgba(0, 0, 0, 0.05),
     0 12px 32px var(--color-boxShadow);
+}
+.mat-mdc-dialog-surface
+  .mdc-dialog__surface
+  .mat-mdc-dialog-inner-container
+  .mdc-dialog__container
+  .mat-mdc-dialog-container
+  .mat-mdc-dialog-panel {
+  margin: 10px $side-margin 10px $side-margin !important;
 }
 
 .dialog-header {
@@ -144,6 +152,10 @@
   &:active {
     transform: scale(0.97);
   }
+  &:disabled {
+    cursor: default;
+    opacity: $disabled-opacity;
+  }
 }
 
 .btn-nuevo svg {
@@ -243,7 +255,14 @@
 .estado-eliminado::before {
   background: var(--color-error);
 }
-
+.estado-nuevo {
+  background: var(--color-info-light);
+  color: #1a8a91;
+  border: 1px solid #9de8ed;
+}
+.estado-nuevo::before {
+  background: var(--color-secondary);
+}
 .btn-eliminar {
   display: inline-flex;
   align-items: center;
