@@ -80,6 +80,11 @@ $transition-time: 0.3s;
   }
   .mainLayout {
     margin-left: 0;
+    margin-top: $header-height;
+    overflow: auto;
+    height: calc(
+      100dvh - $header-height
+    ); // IMPORTANTE DVH. VH cuenta también la barra de navegación que desaparece con scroll.
   }
   .sideNavLayout--open {
     left: 0;
@@ -94,8 +99,10 @@ $transition-time: 0.3s;
     z-index: 100;
     top: 0;
     transition: all 0.3s;
+    pointer-events: none; // Permite que se pueda interactuar con inputs y botones por más que este div este por encima.
   }
   .backdrop--active {
     opacity: 0.7;
+    pointer-events: all;
   }
 }

@@ -1,0 +1,89 @@
+<div class="step2-container" [formGroup]="step2Form">
+  <div class="form-container">
+    <div class="card" *ngIf="!validationErrorPendiente">
+      <div class="form__field">
+        <label class="form__label"> Identificador del libro</label>
+
+        <input
+          class="form__input"
+          id="idLibro"
+          type="text"
+          formControlName="idLibro"
+          (input)="sanitize($event)"
+        />
+      </div>
+      <div class="form__field">
+        <label class="form__label"> Identificador del ejemplar</label>
+
+        <input
+          class="form__input"
+          id="idEjemplar"
+          type="text"
+          formControlName="idEjemplar"
+          (input)="sanitize($event)"
+        />
+      </div>
+      <button
+        mat-raised-button
+        class="form__button form__button--mobile"
+        type="button"
+        [disabled]="!step2Form.valid"
+      >
+        Agregar ejemplar
+      </button>
+    </div>
+    <div class="card card--error" *ngIf="validationErrorPendiente">
+      <p>El socio #581 ya tiene un ejemplar pendiente del libro "Don quijote de la mancha"</p>
+      <button mat-raised-button class="button--cancel form__button--mobile">
+        Ingresar otro ejemplar
+      </button>
+    </div>
+  </div>
+  <div class="cart-container">
+    <div class="cart-header">
+      <div class="badge">Socio</div>
+      <h2 class="cart-nombre">Juan Pérez</h2>
+      <span class="cart-sub">
+        Puede retirar
+        <span [class.limit-reached]="ejemplares.length >= disponibles">
+          {{ ejemplares.length }}/{{ disponibles }}
+        </span>
+        libros
+      </span>
+    </div>
+
+    <div class="cart-body">
+      <p class="section-label">Ejemplares seleccionados</p>
+
+      <ng-container *ngIf="ejemplares.length > 0; else emptyCart">
+        <div class="ejemplar-row" *ngFor="let ej of ejemplares">
+          <div class="ejemplar-info">
+            <span class="ejemplar-titulo">{{ ej.titulo }}</span>
+            <span class="id-cell">#{{ ej.idEjemplar }}</span>
+          </div>
+          <button class="btn-eliminar" (click)="eliminarEjemplar(ej)">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path [attr.d]="icons.altDeletePath" />
+            </svg>
+          </button>
+        </div>
+      </ng-container>
+
+      <ng-template #emptyCart>
+        <div class="empty-state">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path [attr.d]="icons.infoPath" stroke-linecap="round" />
+          </svg>
+          Aún no agregaste ningún ejemplar.
+        </div>
+      </ng-template>
+    </div>
+  </div>
+</div>

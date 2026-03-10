@@ -59,7 +59,7 @@ async function retirarLibrosPaso1R(
   // Valida socio y devuelve cantidad disponibles para sacar en prestámo.
 }
 
-async function retirarLibrosPaso2R(
+async function retirarLibrosPaso2R( // Se repite por cada ejemplar
   req: Request,
   res: Response,
   next: NextFunction,

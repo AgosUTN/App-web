@@ -1,1 +1,75 @@
-<p>prestamos-create works!</p>
+<mat-stepper [orientation]="isMobile ? 'vertical' : 'horizontal'" linear #stepper class="stepper">
+  <mat-step [completed]="socioValid" [editable]="false" label="Validar socio">
+    <form class="step1form" [formGroup]="step1Form">
+      <div class="step1-container">
+        <div class="card " *ngIf="!validationError">
+          <div class="form__field">
+            <label class="form__label" for="nombre"> Ingrese el ID del socio </label>
+
+            <input
+              class="form__input"
+              id="idSocio"
+              type="text"
+              formControlName="idSocio"
+              placeholder="Identificador del socio"
+              (input)="sanitize($event)"
+            />
+          </div>
+          <button
+            mat-raised-button
+            class="form__button form__button--mobile"
+            type="button"
+            [disabled]="!step1Form.valid"
+            (click)="verifySocio()"
+          >
+            Validar socio
+          </button>
+        </div>
+        <div class="card card--error" *ngIf="validationError">
+          <p>El socio #581 está sancionado por atraso y no puede retirar libros hasta el XX/YY.</p>
+          <button mat-raised-button class="button--cancel form__button--mobile">
+            Cancelar préstamo
+          </button>
+        </div>
+      </div>
+      <div class="button-wrapper"></div>
+    </form>
+  </mat-step>
+
+  <mat-step [stepControl]="step2Form" label="Seleccionar ejemplares">
+    <form [formGroup]="step2Form">
+      <app-step2-component [step2Form]="step2Form"></app-step2-component>
+
+      <div class="button-wrapper">
+        <button mat-raised-button matStepperNext class="confirm-button form__button--mobile">
+          Confirmar selección
+        </button>
+      </div>
+    </form>
+  </mat-step>
+
+  <mat-step label="Confirmar préstamo">
+    <div class="step3-container">
+      <div class="card card--mobile">
+        <p>
+          El préstamo constará de 4 libros y tiene como fecha de devolución máxima de los 4 el día
+          17/10/2026, 30 días de corrido a partir de hoy. El socio Jorge garcía tendrá N libros
+          disponibles para sacar en préstamo.
+        </p>
+        <button
+          mat-raised-button
+          class="form__button form__button--mobile"
+          type="button"
+          (click)="confirmLoan()"
+        >
+          Confirmar préstamo
+        </button>
+      </div>
+    </div>
+    <div class="button-wrapper"></div>
+  </mat-step>
+
+  <ng-template matStepperIcon="edit" let-index="index">
+    {{ index + 1 }}
+  </ng-template>
+</mat-stepper>

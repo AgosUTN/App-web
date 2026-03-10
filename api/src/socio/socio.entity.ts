@@ -16,7 +16,7 @@ export class Socio extends BaseEntity {
   domicilio!: string;
   @Property()
   telefono!: string;
-  @Property() // Analizar si deberia ser hidden
+  @Property()
   estadoSocio?: string = "Habilitado";
 
   @OneToMany(() => Prestamo, (prestamo) => prestamo.miSocioPrestamo)
