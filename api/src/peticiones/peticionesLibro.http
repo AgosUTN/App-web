@@ -8,12 +8,12 @@ POST http://localhost:3000/api/libros
 Content-Type: application/json
 
 {
-    "titulo": "Don quijote",
+    "titulo": "Un mundo feliz",
     "descripcion": "Un clásico de la literatura contemporanéa",
-    "isbn": "978-950-563-656-3",
+    "isbn": "0-545-01022-5",
     "miAutor": 1,      
     "miEditorial": 1,
-    "cantEjemplares": 0
+    "cantEjemplares": 2
 
 }
 

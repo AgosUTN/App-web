@@ -24,11 +24,10 @@ p {
 
 .card {
   margin: 0px $side-margin;
-  flex-shrink: 1;
+  flex: 1;
   border-radius: 10px;
   padding: 43px 30px 30px 30px;
   height: 350px;
-  width: 600px;
 
   background-color: var(--color-surface);
   box-shadow: 0 3px 6px 0 var(--color-boxShadow);
@@ -252,17 +251,18 @@ p {
     flex: 1 1;
     margin-left: auto;
     margin-right: auto;
+    width: 100%;
   }
   .cart-container {
     flex: 1 1;
+    width: 100%;
   }
   .card {
     margin: 0px $side-margin;
-    flex-shrink: 1;
+    flex: 1 1;
     border-radius: 10px;
     padding: 43px 30px 30px 30px;
-    height: 350px;
-    width: auto;
+    height: 330px;
 
     background-color: var(--color-surface);
     box-shadow: 0 3px 6px 0 var(--color-boxShadow);

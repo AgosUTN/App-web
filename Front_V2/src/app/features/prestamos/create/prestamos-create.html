@@ -1,8 +1,14 @@
-<mat-stepper [orientation]="isMobile ? 'vertical' : 'horizontal'" linear #stepper class="stepper">
+<mat-stepper
+  [orientation]="isMobile ? 'vertical' : 'horizontal'"
+  linear
+  #stepper
+  class="stepper"
+  (selectionChange)="onStepChange($event)"
+>
   <mat-step [completed]="socioValid" [editable]="false" label="Validar socio">
     <form class="step1form" [formGroup]="step1Form">
       <div class="step1-container">
-        <div class="card " *ngIf="!validationError">
+        <div class="card" *ngIf="!validationErrorSocio">
           <div class="form__field">
             <label class="form__label" for="nombre"> Ingrese el ID del socio </label>
 
@@ -19,15 +25,20 @@
             mat-raised-button
             class="form__button form__button--mobile"
             type="button"
-            [disabled]="!step1Form.valid"
+            [disabled]="!step1Form.valid || isLoading"
             (click)="verifySocio()"
           >
             Validar socio
           </button>
         </div>
-        <div class="card card--error" *ngIf="validationError">
-          <p>El socio #581 está sancionado por atraso y no puede retirar libros hasta el XX/YY.</p>
-          <button mat-raised-button class="button--cancel form__button--mobile">
+        <div class="card card--error" *ngIf="validationErrorSocio">
+          <p>{{ socioErrorMessage }}</p>
+          <button
+            mat-raised-button
+            type="button"
+            class="button--cancel form__button--mobile"
+            routerLink="/prestamos"
+          >
             Cancelar préstamo
           </button>
         </div>
@@ -36,37 +47,62 @@
     </form>
   </mat-step>
 
-  <mat-step [stepControl]="step2Form" label="Seleccionar ejemplares">
+  <mat-step [completed]="selectionConfirmed" label="Seleccionar ejemplares">
     <form [formGroup]="step2Form">
-      <app-step2-component [step2Form]="step2Form"></app-step2-component>
-
-      <div class="button-wrapper">
-        <button mat-raised-button matStepperNext class="confirm-button form__button--mobile">
-          Confirmar selección
-        </button>
-      </div>
+      <ng-template matStepContent>
+        <!--Evita que se renderice el componente hasta llegar al paso 2-->
+        <app-step2-component
+          [step2Form]="step2Form"
+          [socio]="socio"
+          [maxCantEjemplares]="maxCantEjemplares"
+          (ejemplarAdded)="ejemplares = $event"
+        ></app-step2-component>
+        <div class="button-wrapper">
+          <button
+            mat-raised-button
+            class="confirm-button form__button--mobile"
+            [disabled]="ejemplares.length === 0"
+            (click)="confirmSelection()"
+          >
+            Confirmar selección
+          </button>
+        </div>
+      </ng-template>
     </form>
   </mat-step>
 
   <mat-step label="Confirmar préstamo">
-    <div class="step3-container">
-      <div class="card card--mobile">
-        <p>
-          El préstamo constará de 4 libros y tiene como fecha de devolución máxima de los 4 el día
-          17/10/2026, 30 días de corrido a partir de hoy. El socio Jorge garcía tendrá N libros
-          disponibles para sacar en préstamo.
-        </p>
-        <button
-          mat-raised-button
-          class="form__button form__button--mobile"
-          type="button"
-          (click)="confirmLoan()"
-        >
-          Confirmar préstamo
-        </button>
+    <ng-template matStepContent>
+      <div class="step3-container">
+        <div class="card card--mobile card--confirmLoan">
+          <p>
+            El préstamo constará de {{ ejemplares.length }}
+            {{
+              ejemplares.length === 1
+                ? 'libro y tiene como fecha de devolución máxima el día'
+                : 'libros  y tienen como fecha de devolución máxima el día'
+            }}
+
+            {{ fechaDevolucion | date: 'dd/MM/yyyy' }}, {{ diasPrestamo }}
+            {{ diasPrestamo === 1 ? 'día' : 'días' }} de corrido a partir de hoy. El socio
+            {{ socio.nombre }} {{ socio.apellido }} tendrá {{ socioLibrosRestantes }}
+            {{ socioLibrosRestantes === 1 ? 'libro restante' : 'libros restantes' }} para sacar en
+            préstamo.
+          </p>
+          <button
+            mat-raised-button
+            class="form__button form__button--mobile"
+            type="button"
+            (click)="confirmLoan()"
+          >
+            Confirmar préstamo
+          </button>
+        </div>
       </div>
-    </div>
-    <div class="button-wrapper"></div>
+      <div class="button-wrapper">
+        <button matButton matStepperPrevious class="button-volver">Volver</button>
+      </div>
+    </ng-template>
   </mat-step>
 
   <ng-template matStepperIcon="edit" let-index="index">

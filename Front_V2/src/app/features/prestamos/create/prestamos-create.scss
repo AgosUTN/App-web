@@ -9,12 +9,13 @@ p {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 100%;
+
+  padding: 15px 40px;
 }
 
 :host ::ng-deep .mat-stepper-horizontal {
-  flex: 1 1;
-  margin: 15px 40px;
+  flex: 1;
+  min-width: 0;
   border-radius: 12px !important;
   box-shadow: 0 2px 8px var(--color-boxShadow) !important;
   background-color: var(--color-surface) !important;
@@ -153,14 +154,23 @@ p {
   padding-top: 45px;
 }
 
+.button-volver {
+  margin-right: auto;
+}
+
 @media (max-width: $mobile-breakpoint) {
   :host {
     justify-content: flex-start;
     align-items: stretch;
+    padding: 0px 0px;
+  }
+  :host ::ng-deep .mat-stepper-vertical {
+    padding: 15px 15px;
+    width: 100% !important;
   }
 
   .card--mobile {
-    height: auto;
+    height: 270px;
     padding: 30px;
   }
 
@@ -187,5 +197,8 @@ p {
     justify-content: center;
     align-items: flex-start;
     padding-top: 45px;
+  }
+  .card--confirmLoan {
+    row-gap: 10px;
   }
 }

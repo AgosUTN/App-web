@@ -1,10 +1,7 @@
 import { Router } from "express";
 
 import {
-  retirarLibrosPaso1R,
-  retirarLibrosPaso2R,
   retirarLibrosPaso3R,
-  devolverLibro,
   buscarPrestamos,
   buscarPrestamosSocio,
   buscarEjemplaresPendientesSocio,
@@ -18,8 +15,7 @@ import {
 export const prestamoRouter = Router({ mergeParams: true });
 
 // Rutas viejas/ Acopladas.
-prestamoRouter.get("/retirarLibrosPaso1R", retirarLibrosPaso1R);
-prestamoRouter.get("/retirarLibrosPaso2R", retirarLibrosPaso2R);
+
 prestamoRouter.post("/retirarLibrosPaso3R", retirarLibrosPaso3R);
 
 // prestamoRouter.patch("/devolverLibro", devolverLibro);  DEPRECADO.

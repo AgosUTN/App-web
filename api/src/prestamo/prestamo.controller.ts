@@ -12,105 +12,6 @@ import { PoliticaSancion } from "../politicaSancion/politicaSancion.entity.js";
 
 const em = orm.em;
 
-async function retirarLibrosPaso1R(
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) {
-  // Se recibe idSocio
-  try {
-    const socio = await em.findOneOrFail(Socio, req.body.idSocio, {
-      populate: ["misSanciones", "misPrestamos"], // Falta .misLpPrestamo
-    });
-
-    if (socio.estasInhabilitado()) {
-      const noDevueltos = socio.getNoDevueltos();
-      return res.status(409).json({
-        message: "Socio inhabilitado (no devolvio un prestámo)",
-        ejemplares: noDevueltos,
-      });
-    }
-    if (socio.estasSancionado()) {
-      const diasSancionado = socio.getDiasSancion();
-      return res.status(409).json({
-        message: "Socio sancionado",
-        diasSancionRestantes: diasSancionado,
-      });
-    }
-    const politicaBiblioteca = await em.findOneOrFail(PoliticaBiblioteca, 1);
-    const disponibles =
-      politicaBiblioteca.getCantPendientesMaximo() - socio.getCantPendientes();
-
-    return res.status(200).json({
-      message: "El socio esta habilitado",
-      disponibles: disponibles,
-    });
-  } catch (error: any) {
-    if (error.message.includes("PoliticaBiblioteca")) {
-      return res
-        .status(500)
-        .json({ message: "Politica biblioteca inaccesible" });
-    }
-    if (error instanceof NotFoundError) {
-      return res.status(404).json({ message: "Socio no encontrado" });
-    }
-    next(error);
-  }
-  // Valida socio y devuelve cantidad disponibles para sacar en prestámo.
-}
-
-async function retirarLibrosPaso2R( // Se repite por cada ejemplar
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) {
-  try {
-    //Se recibe idLibro, idEjemplar, idSocio paso 1(no lo ingresa el usuario).
-
-    const ejemplar = await em.findOneOrFail(
-      Ejemplar,
-      [req.body.idEjemplar, req.body.idLibro],
-      {
-        populate: ["miLibro", "misLp"],
-      },
-    );
-    const libro = ejemplar.getLibro();
-
-    if (ejemplar.estasPendiente()) {
-      //No sucede en filtros normales. El libro se saca de una estanteria.
-      return res
-        .status(409)
-        .json({ message: "El ejemplar no esta disponible para ser prestado." });
-    }
-
-    const socio = await em.findOneOrFail(Socio, req.body.idSocio, {
-      populate: ["misPrestamos.misLpPrestamo.miEjemplar.miLibro"],
-    });
-
-    if (socio.tenesPendiente(libro)) {
-      res
-        .status(409)
-        .json({ message: "El socio tiene pendiente un ejemplar de ese libro" });
-    }
-
-    return res.status(200).json({
-      data: { ejemplar: ejemplar },
-    });
-  } catch (error: any) {
-    if (error.message.includes("Socio")) {
-      return res.status(400).json({ message: "Socio inexistente" }); // Desde aca no hay forma de validar que sea el mismo del paso 1. Pendiente en AD.
-    }
-    if (error instanceof NotFoundError) {
-      return res
-        .status(404)
-        .json({ message: "Ejemplar o libro no encontrado" });
-    }
-
-    next(error);
-  }
-  //Retorna ejemplar para mostrar datos del libro.
-}
-
 interface EjemplarRequest {
   id: number;
   miLibro: number;
@@ -399,8 +300,6 @@ async function buscarEjemplaresPendientesSocio(
 }
 
 export {
-  retirarLibrosPaso1R,
-  retirarLibrosPaso2R,
   retirarLibrosPaso3R,
   devolverLibro,
   buscarPrestamos,

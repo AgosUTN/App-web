@@ -5,6 +5,7 @@ import {
   buscarSocios,
   bajaSocio,
   actualizarSocio,
+  validarSocio,
 } from "./socio.controller.js";
 import { validateInput } from "../middlewares/middleware.validateInput.js";
 import { schemaParamsId } from "../schemas/schema.paramsId.js";
@@ -14,17 +15,18 @@ import { prestamoRouter } from "../prestamo/prestamo.routes.js";
 export const socioRouter = Router();
 
 socioRouter.get("/", buscarSocios);
-socioRouter.get("/:id", validateInput(schemaParamsId, undefined), buscarSocio);
-socioRouter.post("/", validateInput(undefined, socioAltaSchema), altaSocio);
-socioRouter.put(
-  "/:id",
-  validateInput(schemaParamsId, socioAltaSchema),
-  actualizarSocio
+socioRouter.get(
+  "/:id/validate",
+  validateInput(schemaParamsId, undefined),
+  validarSocio,
 );
+socioRouter.get("/:id", validateInput(schemaParamsId, undefined), buscarSocio);
+
+socioRouter.post("/", validateInput(undefined, socioAltaSchema), altaSocio);
 socioRouter.patch(
   "/:id",
   validateInput(schemaParamsId, socioPatchSchema),
-  actualizarSocio
+  actualizarSocio,
 );
 socioRouter.delete("/:id", validateInput(schemaParamsId, undefined), bajaSocio);
 
@@ -32,13 +34,13 @@ socioRouter.delete("/:id", validateInput(schemaParamsId, undefined), bajaSocio);
 socioRouter.use(
   "/:id/sanciones",
   validateInput(schemaParamsId, undefined),
-  sancionRouter
-); // IMPORTANTE EL USE, NO GET.
+  sancionRouter,
+);
 
 // Anidación con préstamos
 
 socioRouter.use(
   "/:id/prestamos",
   validateInput(schemaParamsId, undefined),
-  prestamoRouter
+  prestamoRouter,
 );

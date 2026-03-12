@@ -4,4 +4,10 @@ const ejemplarAltaSchema = z //  No body.
   .object({})
   .strict();
 
-export { ejemplarAltaSchema };
+const ejemplarQuerySchema = z
+  .object({
+    idSocio: z.coerce.number().int().min(0),
+  })
+  .strict();
+
+export { ejemplarAltaSchema, ejemplarQuerySchema };
