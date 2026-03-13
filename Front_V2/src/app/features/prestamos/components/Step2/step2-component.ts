@@ -1,14 +1,14 @@
 import { ChangeDetectorRef, Component, EventEmitter, Input, Output } from '@angular/core';
-import { FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
-import { icons } from '../../../shared/constants/iconPaths';
-import { EjemplarService } from '../../libros/services/ejemplar-service';
-import { EjemplarCartDTO } from '../../libros/models/ejemplarCart.dto';
-import { NotificationService } from '../../../shared/services/notificationService/notification-service';
+import { icons } from '../../../../shared/constants/iconPaths';
+import { EjemplarService } from '../../../libros/services/ejemplar-service';
+import { EjemplarCartDTO } from '../../../libros/models/ejemplarCart.dto';
+import { NotificationService } from '../../../../shared/services/notificationService/notification-service';
 import { HttpErrorResponse } from '@angular/common/http';
-import { SocioService } from '../../socios/services/socio-service';
-import { SocioReadDTO } from '../../socios/models/socioRead.dto';
+
+import { SocioReadDTO } from '../../../socios/models/socioRead.dto';
 import { finalize } from 'rxjs';
 
 @Component({
@@ -20,10 +20,14 @@ import { finalize } from 'rxjs';
 export class Step2Component {
   icons = icons;
 
-  @Input() step2Form!: FormGroup;
   @Input() socio!: SocioReadDTO;
   @Input() maxCantEjemplares: number = 0;
   @Output() ejemplarAdded = new EventEmitter<EjemplarCartDTO[]>();
+
+  step2Form = new FormGroup({
+    idLibro: new FormControl('', [Validators.required]),
+    idEjemplar: new FormControl('', [Validators.required]),
+  });
 
   isLoading = false;
 
@@ -42,7 +46,7 @@ export class Step2Component {
     this.isLoading = true;
     const { idLibro, idEjemplar } = this.step2Form.getRawValue();
     this.ejemplarService
-      .verifyEjemplar(idEjemplar, idLibro, this.socio.id.toString())
+      .verifyEjemplar(idEjemplar!, idLibro!, this.socio.id.toString())
       .pipe(
         finalize(() => {
           this.isLoading = false;

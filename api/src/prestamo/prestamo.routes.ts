@@ -1,22 +1,25 @@
 import { Router } from "express";
 
 import {
-  retirarLibrosPaso3R,
   buscarPrestamos,
   buscarPrestamosSocio,
   buscarEjemplaresPendientesSocio,
   devolverLibroD,
+  altaPrestamo,
 } from "./prestamo.controller.js";
 import { validateInput } from "../middlewares/middleware.validateInput.js";
 import {
   devolverLibroParams,
   devolverLibroRequest,
 } from "../schemas/schemas.casosDeUso.js";
+import { prestamoAltaSchema } from "../schemas/schemas.prestamo.js";
 export const prestamoRouter = Router({ mergeParams: true });
 
-// Rutas viejas/ Acopladas.
-
-prestamoRouter.post("/retirarLibrosPaso3R", retirarLibrosPaso3R);
+prestamoRouter.post(
+  "/",
+  validateInput(undefined, prestamoAltaSchema),
+  altaPrestamo,
+);
 
 // prestamoRouter.patch("/devolverLibro", devolverLibro);  DEPRECADO.
 

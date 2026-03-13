@@ -9,80 +9,89 @@ import { LineaPrestamo } from "../lineaPrestamo/lineaPrestamo.entity.js";
 import { Sancion } from "../sancion/sancion.entity.js";
 import { addDays, differenceInDays, startOfDay } from "date-fns";
 import { PoliticaSancion } from "../politicaSancion/politicaSancion.entity.js";
+import { PrestamoCreateDTO } from "./dtos/prestamoWrite.dto.js";
+import { EjemplarPrestamoDTO } from "../ejemplar/dtos/ejemplarPrestamo.dto.js";
+import { PrestamoMapper } from "./prestamo.mapper.js";
 
 const em = orm.em;
 
-interface EjemplarRequest {
-  id: number;
-  miLibro: number;
-}
-
-async function retirarLibrosPaso3R(
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) {
+async function altaPrestamo(req: Request, res: Response, next: NextFunction) {
   try {
-    //Se recibe array de CP de ejemplar, e idSocio.
+    //La mayoría de las validaciones ya se habían hecho en los endpoints de los dos pasos anteriores, se repiten por seguridad.
+    //Salvo la validación de ejemplares repetidos y la de exceso de ejemplares que solo se hicieron en el front.
 
-    const ejemplares: EjemplarRequest[] = req.body.ejemplares;
-    console.log(ejemplares);
-    if (ejemplares.length < 0) {
-      // Revisar con Zodd.
-      return res.status(400).json({ message: "No se recibió ninguna LP" });
-    }
-    const ejemplaresUnicos = Array.from(
-      new Map(
-        ejemplares.map((ejemplar) => [ejemplar.miLibro, ejemplar]),
-      ).values(),
-    );
-    const ejemplaresEncontrados = await em.find(
-      Ejemplar,
-      {
-        $or: ejemplaresUnicos,
-      },
-      { populate: ["miLibro", "misLp"] },
-    ); // miLibro necesario para validacion extra. De lo contrario no.
+    const ejemplares: EjemplarPrestamoDTO[] = req.body.ejemplares;
+    const idSocio = req.body.idSocio;
 
-    // -------  Validaciones "extra" fuera del contexto del CU de negocio (Cualquier validación fallida es un bad request)
-
-    if (ejemplares.length != ejemplaresEncontrados.length) {
+    const libros = ejemplares.map((e) => e.idLibro);
+    const librosUnicos = new Set(libros);
+    if (librosUnicos.size !== libros.length) {
       return res.status(400).json({
-        message:
-          "Se recibió algún ejemplar inexistente o dos o más ejemplares del mismo libro",
+        message: "No se pueden retirar dos ejemplares del mismo libro",
+        code: "DUPLICATED_LIBRO",
       });
     }
-    const socio = await em.findOneOrFail(Socio, req.body.idSocio, {
-      populate: ["misPrestamos.misLpPrestamo.miEjemplar.miLibro"],
-    }); // Esto se necesita para el camino normal también.
+    /* query con or
+    const condiciones = ejemplares.map((e) => ({
+      id: e.idEjemplar,
+      miLibro: e.idLibro,
+    }));
+    const ejemplaresEncontrados = await em.find(
+      Ejemplar,
+      { bajaLogica: false, $or: condiciones },
+      { populate: ["miLibro", "misLp"] },
+    );
+    */
+    const tuples = ejemplares
+      .map((e) => `(${e.idEjemplar}, ${e.idLibro})`)
+      .join(",");
 
+    const ejemplaresEncontrados = await em
+      .createQueryBuilder(Ejemplar, "e")
+      .select("*")
+      .leftJoinAndSelect("e.miLibro", "l")
+      .leftJoinAndSelect("e.misLp", "lp")
+      .where(`(e.id, e.mi_libro_id) IN (${tuples})`)
+      .andWhere({ bajaLogica: false })
+      .getResultList();
+    if (ejemplares.length != ejemplaresEncontrados.length) {
+      return res.status(400).json({
+        message: "Uno de los ejemplares no existe",
+        code: "EJEMPLAR_NOT_FOUND",
+      });
+    }
+
+    const socio = await em.findOneOrFail(Socio, idSocio, {
+      populate: ["misPrestamos.misLpPrestamo.miEjemplar.miLibro"],
+    });
     for (const ejemplar of ejemplaresEncontrados) {
       if (socio.tenesPendiente(ejemplar.getLibro())) {
         return res.status(400).json({
           message: "El socio tiene pendiente un ejemplar de ese libro",
+          code: "ALREADY_BORROWED_BY_SOCIO",
         });
       }
     }
     for (const ejemplar of ejemplaresEncontrados) {
       if (ejemplar.estasPendiente()) {
-        //No sucede en filtros normales. El libro se saca de una estanteria.
         return res.status(400).json({
           message:
             "Existe un ejemplar que no esta disponible para ser prestado.",
+          code: "BORROWED_EJEMPLAR",
         });
       }
     }
+
     const politicaBiblioteca = await em.findOneOrFail(PoliticaBiblioteca, 1);
     const disponibles =
       politicaBiblioteca.getCantPendientesMaximo() - socio.getCantPendientes();
-    if (ejemplaresUnicos.length > disponibles) {
+    if (ejemplaresEncontrados.length > disponibles) {
       return res.status(400).json({
         message:
           "Se recibieron más ejemplares de los que el socio puede retirar",
+        code: "EXCEDED_EJEMPLARES",
       });
     }
-
-    //-------- Fin validaciones extra ---------
 
     const prestamo = em.create(Prestamo, {
       miSocioPrestamo: socio,
@@ -102,10 +111,11 @@ async function retirarLibrosPaso3R(
     }
     await em.flush();
 
+    const prestamoWriteDTO = PrestamoMapper.toWriteDTO(prestamo);
+
     return res.status(201).json({
-      data: {
-        prestamoNuevo: prestamo,
-      },
+      message: "Prestámo creado",
+      data: prestamoWriteDTO,
     });
   } catch (error: any) {
     if (error.message.includes("PoliticaBiblioteca")) {
@@ -120,11 +130,7 @@ async function retirarLibrosPaso3R(
   }
 }
 
-// CU Devolver libro (Se repite por cada libro)
-
 async function devolverLibro(req: Request, res: Response, next: NextFunction) {
-  // Se recibe idSocio, idEjemplar e idLibro.
-
   try {
     const ejemplar = await em.findOneOrFail(
       Ejemplar,
@@ -300,7 +306,7 @@ async function buscarEjemplaresPendientesSocio(
 }
 
 export {
-  retirarLibrosPaso3R,
+  altaPrestamo,
   devolverLibro,
   buscarPrestamos,
   buscarPrestamosSocio,

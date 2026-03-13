@@ -2,18 +2,20 @@ import { ChangeDetectorRef, Component, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatStepper, MatStepperModule } from '@angular/material/stepper';
-import { ViewportService } from '../../../core/services/viewportService/viewport-service';
+import { ViewportService } from '../../../../core/services/viewportService/viewport-service';
 import { Subscription, switchMap } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { Step2Component } from '../Step2/step2-component';
 import { Router, RouterLink } from '@angular/router';
-import { NotificationService } from '../../../shared/services/notificationService/notification-service';
-import { SocioService } from '../../socios/services/socio-service';
+import { NotificationService } from '../../../../shared/services/notificationService/notification-service';
+import { SocioService } from '../../../socios/services/socio-service';
 import { HttpErrorResponse } from '@angular/common/http';
-import { EjemplarCartDTO } from '../../libros/models/ejemplarCart.dto';
-import { SocioReadDTO } from '../../socios/models/socioRead.dto';
-import { PoliticaBibliotecaService } from '../../politicaBiblioteca/services/politica-biblioteca-service';
+import { EjemplarCartDTO } from '../../../libros/models/ejemplarCart.dto';
+import { SocioReadDTO } from '../../../socios/models/socioRead.dto';
+import { PoliticaBibliotecaService } from '../../../politicaBiblioteca/services/politica-biblioteca-service';
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
+import { PrestamoService } from '../../services/prestamo-service';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-prestamos-create',
@@ -24,6 +26,7 @@ import { StepperSelectionEvent } from '@angular/cdk/stepper';
     CommonModule,
     Step2Component,
     RouterLink,
+    MatProgressSpinnerModule,
   ],
   templateUrl: './prestamos-create.html',
   styleUrl: './prestamos-create.scss',
@@ -33,10 +36,6 @@ export class PrestamosCreate {
 
   step1Form = new FormGroup({
     idSocio: new FormControl('', [Validators.required]),
-  });
-  step2Form = new FormGroup({
-    idLibro: new FormControl('', []),
-    idEjemplar: new FormControl('', []),
   });
 
   isMobile: boolean = false;
@@ -71,6 +70,7 @@ export class PrestamosCreate {
     private cdr: ChangeDetectorRef,
     private socioService: SocioService,
     private pbService: PoliticaBibliotecaService,
+    private prestamoService: PrestamoService,
   ) {}
 
   ngOnInit(): void {
@@ -135,8 +135,18 @@ export class PrestamosCreate {
   }
 
   confirmLoan(): void {
-    this.router.navigate(['/prestamos']);
-    this.notificationService.success('Préstamo creado');
+    this.isLoading = true;
+    this.prestamoService.post(this.idSocio, this.ejemplares).subscribe({
+      next: () => {
+        this.isLoading = false;
+        this.router.navigate(['/prestamos']);
+        this.notificationService.success('Préstamo creado');
+      },
+      error: (err) => {
+        this.isLoading = false;
+        this.notificationService.error('Error al crear el préstamo'); //Todos los errores ya fueron manejados.
+      },
+    });
   }
   onStepChange(event: StepperSelectionEvent) {
     if (event.selectedIndex === 2) {

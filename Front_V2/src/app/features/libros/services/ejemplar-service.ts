@@ -30,8 +30,8 @@ export class EjemplarService {
   }
 
   verifyEjemplar(
-    idEjemplar: number,
-    idLibro: number,
+    idEjemplar: string,
+    idLibro: string,
     idSocio: string,
   ): Observable<EjemplarCartDTO> {
     const params = new HttpParams().set('idSocio', idSocio);

@@ -8,7 +8,7 @@
   <mat-step [completed]="socioValid" [editable]="false" label="Validar socio">
     <form class="step1form" [formGroup]="step1Form">
       <div class="step1-container">
-        <div class="card" *ngIf="!validationErrorSocio">
+        <div class="card" *ngIf="!validationErrorSocio && !isLoading">
           <div class="form__field">
             <label class="form__label" for="nombre"> Ingrese el ID del socio </label>
 
@@ -31,7 +31,7 @@
             Validar socio
           </button>
         </div>
-        <div class="card card--error" *ngIf="validationErrorSocio">
+        <div class="card card--error" *ngIf="validationErrorSocio! && !isLoading">
           <p>{{ socioErrorMessage }}</p>
           <button
             mat-raised-button
@@ -42,17 +42,19 @@
             Cancelar préstamo
           </button>
         </div>
+        <div *ngIf="isLoading" class="spinner-container">
+          <mat-spinner></mat-spinner>
+        </div>
       </div>
       <div class="button-wrapper"></div>
     </form>
   </mat-step>
 
   <mat-step [completed]="selectionConfirmed" label="Seleccionar ejemplares">
-    <form [formGroup]="step2Form">
+    <form>
       <ng-template matStepContent>
         <!--Evita que se renderice el componente hasta llegar al paso 2-->
         <app-step2-component
-          [step2Form]="step2Form"
           [socio]="socio"
           [maxCantEjemplares]="maxCantEjemplares"
           (ejemplarAdded)="ejemplares = $event"
@@ -74,7 +76,7 @@
   <mat-step label="Confirmar préstamo">
     <ng-template matStepContent>
       <div class="step3-container">
-        <div class="card card--mobile card--confirmLoan">
+        <div class="card card--mobile card--confirmLoan" *ngIf="!isLoading">
           <p>
             El préstamo constará de {{ ejemplares.length }}
             {{
@@ -94,9 +96,13 @@
             class="form__button form__button--mobile"
             type="button"
             (click)="confirmLoan()"
+            [disabled]="isLoading"
           >
             Confirmar préstamo
           </button>
+        </div>
+        <div *ngIf="isLoading" class="spinner-container">
+          <mat-spinner></mat-spinner>
         </div>
       </div>
       <div class="button-wrapper">

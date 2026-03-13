@@ -8,8 +8,8 @@ POST http://localhost:3000/api/socios
 Content-Type: application/json
 
 {
-    "nombre": "Manuel",
-    "apellido": "Belgrano",
+    "nombre": "Jorge Luis",
+    "apellido": "Montini",
     "email": "agosLopez@gmail.com",
     "domicilio":"Las heras",
     "telefono": "9991387"

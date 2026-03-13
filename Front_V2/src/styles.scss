@@ -61,7 +61,6 @@ body {
 
   --color-disabled: #f3f3f3;
 
-  /* Nuevos tokens que complementan la paleta */
   --color-primary-light: #e8f3ff; /* fondo suave para badges/highlights primarios */
   --color-primary-hover: #0e6fd4; /* primary más oscuro para hover */
   --color-surface-raised: #ffffff; /* superficie elevada (cards dentro del dialog) */
@@ -72,6 +71,12 @@ body {
   --color-warning: #f59e0b; /* estado prestado */
   --color-warning-light: #fffbeb; /* fondo badge prestado */
   --color-info-light: #e8f8fa; /* fondo badge mantenimiento (usa secondary) */
+
+  @include mat.progress-spinner-overrides(
+    (
+      active-indicator-color: var(--color-primary),
+    )
+  );
 }
 
 body,

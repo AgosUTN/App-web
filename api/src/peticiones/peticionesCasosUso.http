@@ -23,15 +23,15 @@ Content-Type: application/json
 
 ### Retirar libros paso 3 refactor. 
 
-POST http://localhost:3000/api/prestamos/retirarLibrosPaso3R
+POST http://localhost:3000/api/prestamos
 Content-Type: application/json
 
 {
-    "idSocio": 3,
+    "idSocio": 2,
     "ejemplares":[
       {
-        "id": 37,
-        "miLibro":15
+        "idEjemplar": 40,
+        "idLibro":15
       }
     ]
 

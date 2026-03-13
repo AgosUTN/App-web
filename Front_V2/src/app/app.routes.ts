@@ -9,10 +9,10 @@ import { CRUD_names } from './core/constants/crudNames.config';
 import { EditorialesUpdate } from './features/editoriales/components/update/editorial-update';
 import { LibrosCreate } from './features/libros/components/create/libros-create';
 import { LibrosRead } from './features/libros/components/read/libros-read';
-import { Breadcrumb } from './core/components/breadcrumb/breadcrumb';
+
 import { LibrosUpdate } from './features/libros/components/update/libros-update';
-import { PrestamosRead } from './features/prestamos/read/prestamos-read';
-import { PrestamosCreate } from './features/prestamos/create/prestamos-create';
+import { PrestamosRead } from './features/prestamos/components/read/prestamos-read';
+import { PrestamosCreate } from './features/prestamos/components/create/prestamos-create';
 
 export const routes: Routes = [
   {
