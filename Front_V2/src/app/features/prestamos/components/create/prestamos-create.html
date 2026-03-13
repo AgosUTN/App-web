@@ -26,6 +26,7 @@
             class="form__button form__button--mobile"
             type="button"
             [disabled]="!step1Form.valid || isLoading"
+            [class.form__button--disabled]="!step1Form.valid"
             (click)="verifySocio()"
           >
             Validar socio

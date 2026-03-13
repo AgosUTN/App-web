@@ -136,10 +136,12 @@
 }
 
 @media (max-width: $mobile-breakpoint) {
+  :host {
+    padding-top: 35px;
+  }
   .card {
     height: auto;
     min-height: 550px;
-    margin-bottom: 40px;
   }
   .form {
     grid-template-columns: 1fr;

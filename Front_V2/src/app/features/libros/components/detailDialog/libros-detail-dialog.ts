@@ -4,14 +4,14 @@ import { LibroDetailDTO } from '../../models/libroDetail.dto';
 import { CommonModule } from '@angular/common';
 import { icons } from '../../../../shared/constants/iconPaths';
 import { EjemplarTableDTO, EstadoEjemplar } from '../../models/ejemplarTable.dto';
-
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { EjemplarService } from '../../services/ejemplar-service';
 import { NotificationService } from '../../../../shared/services/notificationService/notification-service';
 import { DialogService } from '../../../../shared/services/dialogService/dialog-service';
 
 @Component({
   selector: 'app-libros-detail-dialog',
-  imports: [CommonModule],
+  imports: [CommonModule, MatProgressSpinnerModule],
   templateUrl: './libros-detail-dialog.html',
   styleUrl: './libros-detail-dialog.scss',
 })
