@@ -58,7 +58,9 @@ export class LibrosDetailDialog {
       },
       error: () => {
         this.isLoading = false;
-        this.notificationService.error('Error inesperado al crear el ejemplar'); //No alcanzable en flujo normal.
+        this.cdr.detectChanges();
+        this.closeDialog();
+        this.notificationService.error('Error inesperado al crear el ejemplar'); // (Libro not found o condición de carrera)
       },
     });
   }

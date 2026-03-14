@@ -2,7 +2,10 @@ import { Request, Response, NextFunction } from "express";
 import { orm } from "../shared/DB/orm.js";
 import { Ejemplar } from "./ejemplar.entity.js";
 import { Libro } from "../libro/libro.entity.js";
-import { NotFoundError } from "@mikro-orm/core";
+import {
+  NotFoundError,
+  UniqueConstraintViolationException,
+} from "@mikro-orm/core";
 import { EjemplarMapper } from "./ejemplar.mapper.js";
 import { Socio } from "../socio/socio.entity.js";
 
@@ -32,6 +35,14 @@ async function altaEjemplarManual(
       .status(201)
       .json({ message: "Ejemplar creado", data: ejemplarDTO });
   } catch (error: any) {
+    if (error instanceof UniqueConstraintViolationException) {
+      // Este error se usa para manejar la posible condición de carrera de dos usuarios queriendo dar de alta un ejemplar del mismo libro.
+      //  No se usa select for update porque no tiene sentido serializar las 2 request concurrentes, la idea sería crear solo 1 ejemplar.
+      return res.status(409).json({
+        message: "Error al generar el ID del ejemplar, reintente.",
+        code: "EJEMPLAR_ID_CONFLICT",
+      });
+    }
     if (error instanceof NotFoundError) {
       return res
         .status(404)

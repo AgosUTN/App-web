@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { orm } from "../shared/DB/orm.js";
 import { Socio } from "../socio/socio.entity.js";
-import { NotFoundError } from "@mikro-orm/core";
+import { LockMode, NotFoundError } from "@mikro-orm/core";
 import { Prestamo } from "./prestamo.entity.js";
 import { Ejemplar } from "../ejemplar/ejemplar.entity.js";
 import { PoliticaBiblioteca } from "../politicaBiblioteca/politicaBiblioteca.entity.js";
@@ -9,10 +9,10 @@ import { LineaPrestamo } from "../lineaPrestamo/lineaPrestamo.entity.js";
 import { Sancion } from "../sancion/sancion.entity.js";
 import { addDays, differenceInDays, startOfDay } from "date-fns";
 import { PoliticaSancion } from "../politicaSancion/politicaSancion.entity.js";
-import { PrestamoCreateDTO } from "./dtos/prestamoWrite.dto.js";
+
 import { EjemplarPrestamoDTO } from "../ejemplar/dtos/ejemplarPrestamo.dto.js";
 import { PrestamoMapper } from "./prestamo.mapper.js";
-
+import { LockWaitTimeoutException } from "@mikro-orm/core";
 const em = orm.em;
 
 async function altaPrestamo(req: Request, res: Response, next: NextFunction) {
@@ -54,6 +54,10 @@ async function altaPrestamo(req: Request, res: Response, next: NextFunction) {
       .where(`(e.id, e.mi_libro_id) IN (${tuples})`)
       .andWhere({ bajaLogica: false })
       .getResultList();
+
+    // Se bloquean los registros (para lectura "for update") de los ejemplares hasta que termine esta request.
+    // Es posible que se de un deadlock pero lo resuelve la BD, se maneja el error.
+
     if (ejemplares.length != ejemplaresEncontrados.length) {
       return res.status(400).json({
         message: "Uno de los ejemplares no existe",
@@ -118,6 +122,12 @@ async function altaPrestamo(req: Request, res: Response, next: NextFunction) {
       data: prestamoWriteDTO,
     });
   } catch (error: any) {
+    if (error.code === "ER_LOCK_DEADLOCK") {
+      return res.status(409).json({
+        message: "Conflicto de concurrencia, reintente.",
+        code: "DEADLOCK",
+      });
+    }
     if (error.message.includes("PoliticaBiblioteca")) {
       return res
         .status(500)

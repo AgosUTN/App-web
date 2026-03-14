@@ -142,9 +142,14 @@ export class PrestamosCreate {
         this.router.navigate(['/prestamos']);
         this.notificationService.success('Préstamo creado');
       },
-      error: (err) => {
+      error: (err: HttpErrorResponse) => {
         this.isLoading = false;
-        this.notificationService.error('Error al crear el préstamo'); //Todos los errores ya fueron manejados.
+        if (err.status === 409) {
+          this.notificationService.error(
+            'Dos usuarios quisieron prestar el mismo ejemplar. Por favor reintente.',
+          );
+        }
+        this.notificationService.error('Error al crear el préstamo'); //Todos los errores ya fueron manejados en los pasos anteriores, por eso solo un toast.
       },
     });
   }
