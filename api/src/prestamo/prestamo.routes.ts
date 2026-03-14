@@ -6,6 +6,7 @@ import {
   buscarEjemplaresPendientesSocio,
   devolverLibroD,
   altaPrestamo,
+  altaPrestamoDeadlock,
 } from "./prestamo.controller.js";
 import { validateInput } from "../middlewares/middleware.validateInput.js";
 import {
@@ -13,8 +14,14 @@ import {
   devolverLibroRequest,
 } from "../schemas/schemas.casosDeUso.js";
 import { prestamoAltaSchema } from "../schemas/schemas.prestamo.js";
+import { deadlockTestSchema } from "../schemas/testConcurrencia.schema.js";
 export const prestamoRouter = Router({ mergeParams: true });
 
+prestamoRouter.post(
+  "/deadlockTest",
+  validateInput(undefined, prestamoAltaSchema, deadlockTestSchema),
+  altaPrestamoDeadlock,
+);
 prestamoRouter.post(
   "/",
   validateInput(undefined, prestamoAltaSchema),

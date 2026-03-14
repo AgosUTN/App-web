@@ -139,12 +139,21 @@ export class PrestamosCreate {
     this.prestamoService.post(this.idSocio, this.ejemplares).subscribe({
       next: () => {
         this.isLoading = false;
+        this.cdr.detectChanges();
         this.router.navigate(['/prestamos']);
         this.notificationService.success('Préstamo creado');
       },
       error: (err: HttpErrorResponse) => {
         this.isLoading = false;
+        this.cdr.detectChanges();
+        if (err.error.code === 'BORROWED_EJEMPLAR') {
+          // Caso de concurrencia donde se serializan las 2 requests de forma correcta
+          this.notificationService.error(
+            'Uno de los ejemplares ya fue prestado mientras usted realizaba el préstamo',
+          );
+        }
         if (err.status === 409) {
+          // Caso de concurrencia donde se produce un interbloqueo (mínimo 2 ejemplares en conflicto                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          )
           this.notificationService.error(
             'Dos usuarios quisieron prestar el mismo ejemplar. Por favor reintente.',
           );

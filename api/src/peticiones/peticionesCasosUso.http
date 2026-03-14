@@ -21,25 +21,6 @@ Content-Type: application/json
 
 }
 
-### Retirar libros paso 3 refactor. 
-
-POST http://localhost:3000/api/prestamos
-Content-Type: application/json
-
-{
-    "idSocio": 2,
-    "ejemplares":[
-      {
-        "idEjemplar": 40,
-        "idLibro":15
-      }
-    ]
-
-}
-
-
-
-
 
 ### Devolver un libro. 
 
@@ -49,4 +30,42 @@ Content-Type: application/json
 {
     "idSocio": 1
 
+}
+
+### Deadlock test
+
+POST http://localhost:3000/api/prestamos/deadlockTest?reverse=true
+Content-Type: application/json
+
+{
+  "idSocio": 12,
+  "ejemplares": [
+    {
+      "idEjemplar": 7,
+      "idLibro": 16
+    },
+    {
+      "idEjemplar": 47,
+      "idLibro": 15
+    }
+  ]
+}
+
+### segunda
+
+POST http://localhost:3000/api/prestamos/deadlockTest?reverse=false
+Content-Type: application/json
+
+{
+  "idSocio": 13,
+  "ejemplares": [
+    {
+      "idEjemplar": 7,
+      "idLibro": 16
+    },
+    {
+      "idEjemplar": 47,
+      "idLibro": 15
+    }
+  ]
 }

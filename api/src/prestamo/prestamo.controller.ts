@@ -12,7 +12,8 @@ import { PoliticaSancion } from "../politicaSancion/politicaSancion.entity.js";
 
 import { EjemplarPrestamoDTO } from "../ejemplar/dtos/ejemplarPrestamo.dto.js";
 import { PrestamoMapper } from "./prestamo.mapper.js";
-import { LockWaitTimeoutException } from "@mikro-orm/core";
+import { PrestamoWriteDTO } from "./dtos/prestamoRead.dto.js";
+
 const em = orm.em;
 
 async function altaPrestamo(req: Request, res: Response, next: NextFunction) {
@@ -31,115 +32,259 @@ async function altaPrestamo(req: Request, res: Response, next: NextFunction) {
         code: "DUPLICATED_LIBRO",
       });
     }
-    /* query con or
-    const condiciones = ejemplares.map((e) => ({
-      id: e.idEjemplar,
-      miLibro: e.idLibro,
-    }));
-    const ejemplaresEncontrados = await em.find(
-      Ejemplar,
-      { bajaLogica: false, $or: condiciones },
-      { populate: ["miLibro", "misLp"] },
+
+    let prestamoWriteDTO: PrestamoWriteDTO = await em.transactional(
+      async (em) => {
+        const tuples = ejemplares
+          .map((e) => `(${e.idEjemplar}, ${e.idLibro})`)
+          .join(",");
+
+        const ejemplaresEncontrados = await em
+          .createQueryBuilder(Ejemplar, "e")
+          .select("*")
+          .leftJoinAndSelect("e.miLibro", "l")
+          .leftJoinAndSelect("e.misLp", "lp")
+          .where(`(e.id, e.mi_libro_id) IN (${tuples})`)
+          .andWhere({ bajaLogica: false })
+          .setLockMode(LockMode.PESSIMISTIC_WRITE)
+          .getResultList();
+
+        // Se bloquean los registros (para lectura "for update") de los ejemplares hasta que termine esta request.
+        // Es posible que se de un deadlock pero lo resuelve la BD, se maneja el error.
+
+        if (ejemplares.length != ejemplaresEncontrados.length) {
+          throw {
+            status: 400,
+            message: "Uno de los ejemplares no existe",
+            code: "EJEMPLAR_NOT_FOUND",
+          };
+        }
+
+        const socio = await em.findOneOrFail(Socio, idSocio, {
+          populate: ["misPrestamos.misLpPrestamo.miEjemplar.miLibro"],
+        });
+
+        for (const ejemplar of ejemplaresEncontrados) {
+          if (socio.tenesPendiente(ejemplar.getLibro())) {
+            throw {
+              status: 400,
+              message: "El socio tiene pendiente un ejemplar de ese libro",
+              code: "ALREADY_BORROWED_BY_SOCIO",
+            };
+          }
+        }
+
+        for (const ejemplar of ejemplaresEncontrados) {
+          if (ejemplar.estasPendiente()) {
+            throw {
+              status: 400,
+              message:
+                "Existe un ejemplar que no esta disponible para ser prestado.",
+              code: "BORROWED_EJEMPLAR",
+            };
+          }
+        }
+
+        const politicaBiblioteca = await em.findOneOrFail(
+          PoliticaBiblioteca,
+          1,
+        );
+        const disponibles =
+          politicaBiblioteca.getCantPendientesMaximo() -
+          socio.getCantPendientes();
+        if (ejemplaresEncontrados.length > disponibles) {
+          throw {
+            status: 400,
+            message:
+              "Se recibieron más ejemplares de los que el socio puede retirar",
+            code: "EXCEDED_EJEMPLARES",
+          };
+        }
+
+        const prestamo = em.create(Prestamo, {
+          miSocioPrestamo: socio,
+          fechaPrestamo: new Date(),
+          ordenLinea: 0,
+        });
+        const hoy = new Date();
+        const diasPrestamo = politicaBiblioteca.getDiasPrestamo();
+        const fechaDevolucionTeorica = addDays(hoy, diasPrestamo);
+        for (const ejemplar of ejemplaresEncontrados) {
+          const lp = em.create(LineaPrestamo, {
+            miEjemplar: ejemplar,
+            ordenLinea: prestamo.getOrdenLinea(),
+            fechaDevolucionTeorica: fechaDevolucionTeorica,
+          });
+          prestamo.misLpPrestamo.add(lp);
+        }
+        await em.flush();
+        prestamoWriteDTO = PrestamoMapper.toWriteDTO(prestamo);
+        return prestamoWriteDTO;
+      },
     );
-    */
-    const tuples = ejemplares
-      .map((e) => `(${e.idEjemplar}, ${e.idLibro})`)
-      .join(",");
-
-    const ejemplaresEncontrados = await em
-      .createQueryBuilder(Ejemplar, "e")
-      .select("*")
-      .leftJoinAndSelect("e.miLibro", "l")
-      .leftJoinAndSelect("e.misLp", "lp")
-      .where(`(e.id, e.mi_libro_id) IN (${tuples})`)
-      .andWhere({ bajaLogica: false })
-      .getResultList();
-
-    // Se bloquean los registros (para lectura "for update") de los ejemplares hasta que termine esta request.
-    // Es posible que se de un deadlock pero lo resuelve la BD, se maneja el error.
-
-    if (ejemplares.length != ejemplaresEncontrados.length) {
-      return res.status(400).json({
-        message: "Uno de los ejemplares no existe",
-        code: "EJEMPLAR_NOT_FOUND",
-      });
-    }
-
-    const socio = await em.findOneOrFail(Socio, idSocio, {
-      populate: ["misPrestamos.misLpPrestamo.miEjemplar.miLibro"],
-    });
-    for (const ejemplar of ejemplaresEncontrados) {
-      if (socio.tenesPendiente(ejemplar.getLibro())) {
-        return res.status(400).json({
-          message: "El socio tiene pendiente un ejemplar de ese libro",
-          code: "ALREADY_BORROWED_BY_SOCIO",
-        });
-      }
-    }
-    for (const ejemplar of ejemplaresEncontrados) {
-      if (ejemplar.estasPendiente()) {
-        return res.status(400).json({
-          message:
-            "Existe un ejemplar que no esta disponible para ser prestado.",
-          code: "BORROWED_EJEMPLAR",
-        });
-      }
-    }
-
-    const politicaBiblioteca = await em.findOneOrFail(PoliticaBiblioteca, 1);
-    const disponibles =
-      politicaBiblioteca.getCantPendientesMaximo() - socio.getCantPendientes();
-    if (ejemplaresEncontrados.length > disponibles) {
-      return res.status(400).json({
-        message:
-          "Se recibieron más ejemplares de los que el socio puede retirar",
-        code: "EXCEDED_EJEMPLARES",
-      });
-    }
-
-    const prestamo = em.create(Prestamo, {
-      miSocioPrestamo: socio,
-      fechaPrestamo: new Date(),
-      ordenLinea: 0,
-    });
-    const hoy = new Date();
-    const diasPrestamo = politicaBiblioteca.getDiasPrestamo();
-    const fechaDevolucionTeorica = addDays(hoy, diasPrestamo);
-    for (const ejemplar of ejemplaresEncontrados) {
-      const lp = em.create(LineaPrestamo, {
-        miEjemplar: ejemplar,
-        ordenLinea: prestamo.getOrdenLinea(),
-        fechaDevolucionTeorica: fechaDevolucionTeorica,
-      });
-      prestamo.misLpPrestamo.add(lp);
-    }
-    await em.flush();
-
-    const prestamoWriteDTO = PrestamoMapper.toWriteDTO(prestamo);
 
     return res.status(201).json({
-      message: "Prestámo creado",
+      message: "Préstamo creado",
       data: prestamoWriteDTO,
     });
   } catch (error: any) {
+    if (error.status) {
+      return res
+        .status(error.status)
+        .json({ message: error.message, code: error.code });
+    }
     if (error.code === "ER_LOCK_DEADLOCK") {
       return res.status(409).json({
-        message: "Conflicto de concurrencia, reintente.",
+        message:
+          "Se intentaron realizar dos préstamos en simultáneo con ejemplares iguales",
         code: "DEADLOCK",
       });
     }
-    if (error.message.includes("PoliticaBiblioteca")) {
+    if (error.message?.includes("PoliticaBiblioteca")) {
       return res
         .status(500)
-        .json({ message: "Politica biblioteca  inaccesible" });
+        .json({ message: "Politica biblioteca inaccesible" });
     }
-    if (error.message.includes("Socio") && error instanceof NotFoundError) {
+    if (error.message?.includes("Socio") && error instanceof NotFoundError) {
       return res.status(400).json({ message: "Socio inexistente" });
     }
     next(error);
   }
 }
 
+async function altaPrestamoDeadlock(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
+  try {
+    const sleep = (ms: number) =>
+      new Promise((resolve) => setTimeout(resolve, ms));
+    const ejemplares: EjemplarPrestamoDTO[] = req.body.ejemplares;
+    const idSocio = req.body.idSocio;
+
+    const libros = ejemplares.map((e) => e.idLibro);
+    const librosUnicos = new Set(libros);
+    if (librosUnicos.size !== libros.length) {
+      return res.status(400).json({
+        message: "No se pueden retirar dos ejemplares del mismo libro",
+        code: "DUPLICATED_LIBRO",
+      });
+    }
+
+    let prestamoWriteDTO: any;
+
+    await em.transactional(async (em) => {
+      const ejemplaresOrdenados =
+        req.query.reverse === "true" ? [...ejemplares].reverse() : ejemplares;
+
+      const tuples = ejemplaresOrdenados
+        .map((e) => `(${e.idEjemplar}, ${e.idLibro})`)
+        .join(",");
+      const ejemplaresEncontrados = await em
+        .createQueryBuilder(Ejemplar, "e")
+        .select("*")
+        .leftJoinAndSelect("e.miLibro", "l")
+        .leftJoinAndSelect("e.misLp", "lp")
+        .where(`(e.id, e.mi_libro_id) IN (${tuples})`)
+        .andWhere({ bajaLogica: false })
+        .setLockMode(LockMode.PESSIMISTIC_WRITE)
+        .getResultList();
+      await sleep(10000);
+      if (ejemplares.length != ejemplaresEncontrados.length) {
+        throw {
+          status: 400,
+          message: "Uno de los ejemplares no existe",
+          code: "EJEMPLAR_NOT_FOUND",
+        };
+      }
+
+      const socio = await em.findOneOrFail(Socio, idSocio, {
+        populate: ["misPrestamos.misLpPrestamo.miEjemplar.miLibro"],
+      });
+
+      for (const ejemplar of ejemplaresEncontrados) {
+        if (socio.tenesPendiente(ejemplar.getLibro())) {
+          throw {
+            status: 400,
+            message: "El socio tiene pendiente un ejemplar de ese libro",
+            code: "ALREADY_BORROWED_BY_SOCIO",
+          };
+        }
+      }
+
+      for (const ejemplar of ejemplaresEncontrados) {
+        if (ejemplar.estasPendiente()) {
+          throw {
+            status: 400,
+            message:
+              "Existe un ejemplar que no esta disponible para ser prestado.",
+            code: "BORROWED_EJEMPLAR",
+          };
+        }
+      }
+
+      const politicaBiblioteca = await em.findOneOrFail(PoliticaBiblioteca, 1);
+      const disponibles =
+        politicaBiblioteca.getCantPendientesMaximo() -
+        socio.getCantPendientes();
+      if (ejemplaresEncontrados.length > disponibles) {
+        throw {
+          status: 400,
+          message:
+            "Se recibieron más ejemplares de los que el socio puede retirar",
+          code: "EXCEDED_EJEMPLARES",
+        };
+      }
+
+      const prestamo = em.create(Prestamo, {
+        miSocioPrestamo: socio,
+        fechaPrestamo: new Date(),
+        ordenLinea: 0,
+      });
+      const hoy = new Date();
+      const diasPrestamo = politicaBiblioteca.getDiasPrestamo();
+      const fechaDevolucionTeorica = addDays(hoy, diasPrestamo);
+      for (const ejemplar of ejemplaresEncontrados) {
+        const lp = em.create(LineaPrestamo, {
+          miEjemplar: ejemplar,
+          ordenLinea: prestamo.getOrdenLinea(),
+          fechaDevolucionTeorica: fechaDevolucionTeorica,
+        });
+        prestamo.misLpPrestamo.add(lp);
+      }
+      await em.flush();
+      prestamoWriteDTO = PrestamoMapper.toWriteDTO(prestamo);
+    });
+
+    return res.status(201).json({
+      message: "Préstamo creado",
+      data: prestamoWriteDTO,
+    });
+  } catch (error: any) {
+    if (error.status) {
+      return res
+        .status(error.status)
+        .json({ message: error.message, code: error.code });
+    }
+    if (error.code === "ER_LOCK_DEADLOCK") {
+      return res.status(409).json({
+        message:
+          "Se intentaron realizar dos préstamos en simultáneo con ejemplares iguales",
+        code: "DEADLOCK",
+      });
+    }
+    if (error.message?.includes("PoliticaBiblioteca")) {
+      return res
+        .status(500)
+        .json({ message: "Politica biblioteca inaccesible" });
+    }
+    if (error.message?.includes("Socio") && error instanceof NotFoundError) {
+      return res.status(400).json({ message: "Socio inexistente" });
+    }
+    next(error);
+  }
+}
 async function devolverLibro(req: Request, res: Response, next: NextFunction) {
   try {
     const ejemplar = await em.findOneOrFail(
@@ -322,6 +467,7 @@ export {
   buscarPrestamosSocio,
   buscarEjemplaresPendientesSocio,
   devolverLibroD,
+  altaPrestamoDeadlock,
 };
 
 /* 
