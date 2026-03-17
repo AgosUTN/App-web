@@ -48,10 +48,10 @@ export class EditorialesUpdate {
   }
 
   onSubmit(): void {
-    const editorialUpdate = this.getUpdateDTO();
+    const editorialUpdateDTO = this.getUpdateDTO();
 
     this.loading = true;
-    this.editorialService.update(this.id, editorialUpdate).subscribe({
+    this.editorialService.update(this.id, editorialUpdateDTO).subscribe({
       next: () => {
         this.notification.success('Editorial actualizada correctamente');
         this.loading = false;
@@ -68,5 +68,5 @@ export class EditorialesUpdate {
   private getUpdateDTO(): EditorialUpdateDTO {
     const { nombre } = this.editorialForm.getRawValue();
     return { nombre: nombre! };
-  } // Nota: No es la mejor práctica dejar que el componente sepa que esta mandando un Partial.
+  }
 }

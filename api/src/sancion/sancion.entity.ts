@@ -1,7 +1,7 @@
 import { Entity, ManyToOne, Property, DateType, Rel } from "@mikro-orm/core";
 import { Socio } from "../socio/socio.entity.js";
 import { BaseEntity } from "../shared/DB/baseEntity.entity.js";
-import { addDays, isBefore } from "date-fns";
+import { addDays, isAfter, isBefore } from "date-fns";
 
 @Entity()
 export class Sancion extends BaseEntity {
@@ -21,7 +21,7 @@ export class Sancion extends BaseEntity {
   estasVigente(): boolean {
     const hoy = new Date();
 
-    return isBefore(this.getFechaFinSancion(), hoy);
+    return isAfter(this.getFechaFinSancion(), hoy);
   }
   getDiasSancion(): number {
     return this.diasSancion;

@@ -27,7 +27,7 @@ export class LibroService extends BaseCrudService<
   }
   getLibroDetail(id: number): Observable<LibroDetailDTO> {
     return this.http
-      .get<ApiResponseGet<LibroDetailDTO>>(this.baseUrl + '/detail/' + id)
+      .get<ApiResponseGet<LibroDetailDTO>>(this.baseUrl + '/' + id + '/detail')
       .pipe(map((res) => res.data));
   }
 }

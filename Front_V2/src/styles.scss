@@ -109,3 +109,42 @@ body,
   backdrop-filter: blur(4px);
   background: rgba(27, 27, 31, 0.5) !important;
 }
+
+// Mat toggle
+.mat-button-toggle-group {
+  background: var(--color-primary-light);
+  border: none !important;
+  border-radius: 10px !important;
+  padding: 3px;
+  gap: 2px;
+  box-shadow: none !important;
+
+  .mat-button-toggle {
+    background: transparent;
+    border: none !important;
+    border-radius: 7px !important;
+    color: var(--color-primary-hover);
+    font-size: 13px;
+
+    .mat-button-toggle-label-content {
+      line-height: 34px;
+      padding: 0 16px;
+    }
+
+    &:hover:not(.mat-button-toggle-checked) {
+      background: rgba(27, 132, 255, 0.12);
+    }
+  }
+
+  .mat-button-toggle-checked {
+    background: var(--color-primary) !important;
+    color: var(--color-on-primary) !important;
+    font-weight: 500;
+    border-radius: 7px !important;
+  }
+
+  // Elimina el separador vertical entre botones
+  .mat-button-toggle-appearance-standard + .mat-button-toggle-appearance-standard {
+    border-left: none !important;
+  }
+}

@@ -47,17 +47,15 @@ export abstract class BaseCrudService<Tcreate, Tread, Tupdate, Ttable> {
       .set('sortOrder', sortOrder)
       .set('filterValue', filterValue);
 
-    return this.http
-      .get<ApiResponseGetByPage<Ttable[]>>(this.baseUrl + '/byPage', { params: params })
-      .pipe(
-        map(
-          (res) =>
-            <PagedResult<Ttable[]>>{
-              data: res.data,
-              total: res.total,
-            },
-        ),
-      );
+    return this.http.get<ApiResponseGetByPage<Ttable[]>>(this.baseUrl, { params: params }).pipe(
+      map(
+        (res) =>
+          <PagedResult<Ttable[]>>{
+            data: res.data,
+            total: res.total,
+          },
+      ),
+    );
   }
 }
 

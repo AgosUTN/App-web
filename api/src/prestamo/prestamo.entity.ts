@@ -14,15 +14,16 @@ import { LineaPrestamo } from "../lineaPrestamo/lineaPrestamo.entity.js";
 
 import { Libro } from "../libro/libro.entity.js";
 import { Ejemplar } from "../ejemplar/ejemplar.entity.js";
+import { EstadoPrestamo } from "./prestamoEstado.type.js";
 
 @Entity()
 export class Prestamo extends BaseEntity {
-  @Property({ type: DateType })
+  @Property({ columnType: "datetime" })
   fechaPrestamo = new Date();
   @Property()
   ordenLinea = 0;
-  @Property() // 14/11 le saco hidden a estado y ordenLinea para facilitar el manejo en el front. No recuerdo si era por "seguridad" o por algo importante que agregue hidden. Tener cuidado.
-  estadoPrestamo? = "Pendiente";
+  @Property()
+  estadoPrestamo?: EstadoPrestamo = "PENDIENTE";
 
   @ManyToOne(() => Socio, { deleteRule: "cascade" })
   miSocioPrestamo!: Rel<Socio>;
@@ -72,10 +73,10 @@ export class Prestamo extends BaseEntity {
     return noDevueltos;
   }
   estasPendiente(): boolean {
-    return this.estadoPrestamo === "Pendiente";
+    return this.estadoPrestamo === "PENDIENTE";
   }
   setFinalizado(): void {
-    this.estadoPrestamo = "Finalizado";
+    this.estadoPrestamo = "FINALIZADO";
   }
   getLinea(id: number): LineaPrestamo | undefined {
     return this.misLpPrestamo.find((lp) => lp.ordenLinea === id);

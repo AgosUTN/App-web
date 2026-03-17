@@ -8,7 +8,7 @@ import { Entity, Property } from "@mikro-orm/core";
     "(count(l.mi_editorial_id)) as cantlibros " +
     "from editorial e " +
     "left join libro l on e.id = l.mi_editorial_id " +
-    "group by e.id ",
+    "group by e.id, e.nombre ",
 })
 export class editorialCount {
   @Property()

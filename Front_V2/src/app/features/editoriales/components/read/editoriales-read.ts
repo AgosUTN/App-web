@@ -36,7 +36,7 @@ import { NotificationService } from '../../../../shared/services/notificationSer
 export class EditorialesRead extends BasePagedComponent<EditorialTableDTO> {
   icons = icons;
   searchInput = new FormGroup({
-    data: new FormControl('', [Validators.maxLength(15)]),
+    data: new FormControl('', [Validators.maxLength(30)]),
   });
 
   displayedColumns: string[] = ['id', 'nombre', 'cantlibros', 'actions'];

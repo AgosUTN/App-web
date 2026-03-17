@@ -1,0 +1,119 @@
+<div class="dialog">
+  <div class="dialog-header">
+    <div class="badge">Préstamo #{{ prestamo.id }}</div>
+    <h2 id="dialog-title">
+      {{ prestamo.miSocioPrestamo.nombre }} {{ prestamo.miSocioPrestamo.apellido }}
+    </h2>
+    <span class="isbn">
+      {{ prestamo.miSocioPrestamo.email }} · {{ prestamo.miSocioPrestamo.telefono }}
+    </span>
+    <button class="dialog-close" (click)="closeDialog()">
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2.5"
+        stroke-linecap="round"
+      >
+        <path [attr.d]="icons.exitPath" />
+      </svg>
+    </button>
+  </div>
+
+  <div class="dialog-body">
+    <div class="prestamo-meta">
+      <div class="meta-item">
+        <span class="section-label">Fecha préstamo</span>
+        <span class="meta-value">{{ prestamo.fechaPrestamo | date: 'dd/MM/yyyy' }}</span>
+      </div>
+      <div class="meta-item">
+        <span class="section-label section-label--estado">Estado</span>
+        <span class="estado-badge" [ngClass]="getEstadoStyle(prestamo.estadoPrestamo)">
+          {{ prestamo.estadoPrestamo }}
+        </span>
+      </div>
+    </div>
+
+    <div class="ejemplares-section" *ngIf="!socioSancionado">
+      <div class="ejemplares-header">
+        <p class="section-label" style="margin-bottom: 0">Líneas de préstamo</p>
+      </div>
+
+      <table class="ejemplares-table" *ngIf="!isLoading">
+        <thead>
+          <tr>
+            <th>Libro</th>
+            <th>Ejemplar</th>
+            <th>Dev. pactada</th>
+            <th>Dev. real</th>
+            <th>Acción</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let lp of prestamo.misLpPrestamo">
+            <td class="titulo-cell">
+              <span
+                #textRef
+                class="table__item--ellipsis"
+                [matTooltip]="lp.miEjemplar.miLibro.titulo"
+                matTooltipPosition="above"
+                >{{ lp.miEjemplar.miLibro.titulo }}</span
+              >
+            </td>
+
+            <td class="id-cell">#{{ lp.miEjemplar.id }}</td>
+            <td>{{ lp.fechaDevolucionTeorica | date: 'dd/MM/yy' }}</td>
+            <td>
+              <span
+                *ngIf="lp.fechaDevolucionReal; else pendiente"
+                [class.fecha-atrasada]="isAtrasada(lp)"
+              >
+                {{ lp.fechaDevolucionReal | date: 'dd/MM/yy' }}
+              </span>
+              <ng-template #pendiente>
+                <span class="estado-badge estado-nuevo">Pendiente</span>
+              </ng-template>
+            </td>
+            <td>
+              <button
+                class="btn-devolver"
+                [disabled]="lp.fechaDevolucionReal !== null || isLoading"
+                (click)="devolverEjemplar(lp)"
+              >
+                <svg height="18px" viewBox="0 -960 960 960" width="18px" fill="#1a8a52">
+                  <path [attr.d]="icons.backPath" />
+                </svg>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div *ngIf="isLoading" class="spinner-container">
+        <mat-spinner></mat-spinner>
+      </div>
+    </div>
+    <div class="sancionado-container" *ngIf="socioSancionado">
+      <div class="card card--error">
+        <div class="exit-container">
+          <button class="exit-button" type="button" (click)="closeSancionadoMessage()">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.5"
+              stroke-linecap="round"
+            >
+              <path [attr.d]="icons.exitPath" />
+            </svg>
+          </button>
+        </div>
+        <p>{{ socioSancionadoMessage }}</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="dialog-footer">
+    <button class="btn-cerrar" (click)="closeDialog()">Cerrar</button>
+  </div>
+</div>

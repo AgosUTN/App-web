@@ -15,7 +15,7 @@ Content-Type: application/json
 }
 
 ### Delete de un autor por ID
-DELETE  http://localhost:3000/api/autores/1
+DELETE  http://localhost:3000/api/autores/11
 
 
 

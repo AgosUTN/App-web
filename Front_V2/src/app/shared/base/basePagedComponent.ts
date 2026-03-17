@@ -47,7 +47,7 @@ export abstract class BasePagedComponent<T> {
     this.loadData();
   }
 
-  private resetPaginator(): void {
+  protected resetPaginator(): void {
     this.pageIndex = 0;
   }
 

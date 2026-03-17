@@ -48,7 +48,7 @@ export class Socio extends BaseEntity {
     }
     return rta;
   }
-  // Versión depurada con recomendaciones de la IA
+
   getDiasSancion(): number {
     let acumulador = 0;
 

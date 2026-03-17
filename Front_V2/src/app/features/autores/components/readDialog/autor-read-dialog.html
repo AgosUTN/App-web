@@ -1,0 +1,82 @@
+<div class="layout-desktop">
+  <div class="card">
+    <form class="table__searchContainer" [formGroup]="searchInput" (ngSubmit)="onSubmit()">
+      <input
+        class="form__input"
+        id="data"
+        type="text"
+        formControlName="data"
+        placeholder="Nombre autor"
+        maxlength="100"
+      />
+
+      <button
+        mat-raised-button
+        class="form__button"
+        type="submit"
+        [disabled]="searchInput.invalid"
+        [class.form__button--disabled]="searchInput.invalid"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          height="24px"
+          viewBox="0 -960 960 960"
+          width="24px"
+          fill="white"
+        >
+          <path [attr.d]="icons.searchPath" />
+        </svg>
+      </button>
+    </form>
+    <table
+      mat-table
+      [dataSource]="dataSource"
+      (matSortChange)="onSortChange($event)"
+      matSort
+      class="table"
+    >
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
+        <td mat-cell *matCellDef="let autor" (click)="confirm(autor)">
+          <ng-container *ngIf="!isLoading; else skeleton1">{{ autor.id }}</ng-container>
+          <ng-template #skeleton1>
+            <div class="skeleton skeleton-id"></div>
+          </ng-template></td
+      ></ng-container>
+      <ng-container matColumnDef="nombrecompleto">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Nombre</th>
+        <td mat-cell *matCellDef="let autor" (click)="confirm(autor)">
+          <ng-container *ngIf="!isLoading; else skeleton2">
+            <span
+              #textRef
+              class="table__item--ellipsis"
+              [matTooltip]="autor.nombre"
+              matTooltipPosition="above"
+              >{{ autor.nombrecompleto }}</span
+            >
+          </ng-container>
+          <ng-template #skeleton2>
+            <div class="skeleton skeleton-nombre"></div>
+          </ng-template>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr
+        mat-row
+        *matRowDef="let row; columns: displayedColumns"
+        [class.table__row--empty]="!row.id"
+        [class.selectable]="!isLoading"
+      ></tr>
+    </table>
+    <mat-paginator
+      [length]="totalRecords"
+      [hidePageSize]="true"
+      [pageSize]="pageSize"
+      [pageIndex]="pageIndex"
+      aria-label="Seleccionar página"
+      (page)="onPageChange($event)"
+    >
+    </mat-paginator>
+  </div>
+</div>

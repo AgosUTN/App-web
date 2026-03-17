@@ -99,7 +99,7 @@ export class LibrosUpdate extends LibrosCreate {
       descripcion: libro.descripcion!,
       isbn: libro.isbn!,
       miEditorial: this.idEditorial!,
-      miAutor: this.idAutor,
+      miAutor: this.idAutor!,
     };
   }
 }

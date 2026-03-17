@@ -11,7 +11,7 @@ import {
 import { Prestamo } from "../prestamo/prestamo.entity.js";
 import { Ejemplar } from "../ejemplar/ejemplar.entity.js";
 import { Libro } from "../libro/libro.entity.js";
-import { isBefore } from "date-fns";
+import { isBefore, isAfter } from "date-fns";
 
 @Entity()
 export class LineaPrestamo {
@@ -50,9 +50,9 @@ export class LineaPrestamo {
   estasAtrasado(): boolean {
     if (!this.fechaDevolucionReal) {
       const hoy = new Date();
-      return !isBefore(hoy, this.fechaDevolucionTeorica);
+      return isAfter(hoy, this.fechaDevolucionTeorica);
     }
-    return isBefore(this.fechaDevolucionReal, this.fechaDevolucionTeorica);
+    return isAfter(this.fechaDevolucionReal, this.fechaDevolucionTeorica);
   }
   setFechaDevolucionReal(fecha: Date): void {
     this.fechaDevolucionReal = fecha;

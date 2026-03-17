@@ -1,0 +1,259 @@
+<ng-container *ngIf="!isMobile; else mobileTemplate">
+  <div class="layout-desktop">
+    <div class="card">
+      <form class="table__searchContainer" [formGroup]="searchInput" (ngSubmit)="onSubmit()">
+        <input
+          class="form__input"
+          id="data"
+          type="text"
+          formControlName="data"
+          placeholder="Nombre autor"
+          maxlength="100"
+        />
+
+        <button
+          mat-raised-button
+          class="form__button"
+          type="submit"
+          [disabled]="searchInput.invalid"
+          [class.form__button--disabled]="searchInput.invalid"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="24px"
+            viewBox="0 -960 960 960"
+            width="24px"
+            fill="white"
+          >
+            <path [attr.d]="icons.searchPath" />
+          </svg>
+        </button>
+        <button mat-raised-button type="button" class="form__addButton" routerLink="/autores/alta">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="24px"
+            viewBox="0 -960 960 960"
+            width="24px"
+            fill="black"
+          >
+            <path [attr.d]="icons.addPath" />
+          </svg>
+        </button>
+      </form>
+      <table
+        mat-table
+        [dataSource]="dataSource"
+        (matSortChange)="onSortChange($event)"
+        matSort
+        class="table"
+      >
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
+          <td mat-cell *matCellDef="let autor">
+            <ng-container *ngIf="!isLoading; else skeleton1">{{ autor.id }}</ng-container>
+            <ng-template #skeleton1>
+              <div class="skeleton skeleton-id"></div>
+            </ng-template></td
+        ></ng-container>
+        <ng-container matColumnDef="nombrecompleto">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Nombre completo</th>
+          <td mat-cell *matCellDef="let autor">
+            <ng-container *ngIf="!isLoading; else skeleton2">
+              <span
+                #textRef
+                class="table__item--ellipsis"
+                [matTooltip]="autor.nombrecompleto"
+                matTooltipPosition="above"
+                >{{ autor.nombrecompleto }}</span
+              >
+            </ng-container>
+            <ng-template #skeleton2>
+              <div class="skeleton skeleton-nombrecompleto"></div>
+            </ng-template>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="cantlibros">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Cantidad libros</th>
+          <td mat-cell *matCellDef="let autor">
+            <ng-container *ngIf="!isLoading; else skeleton3">
+              {{ autor.cantlibros }}
+            </ng-container>
+            <ng-template #skeleton3>
+              <div class="skeleton skeleton-cantlibros"></div>
+            </ng-template>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="actions">
+          <th class="actions-header" mat-header-cell *matHeaderCellDef>Acciones</th>
+          <td mat-cell *matCellDef="let autor">
+            <div class="actions-container">
+              <button
+                mat-button
+                type="button"
+                class="actions-button"
+                [routerLink]="['/autores/editar', autor.id]"
+                [disabled]="isLoading"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 -960 960 960"
+                  class="actions-button__svg"
+                >
+                  <path [attr.d]="icons.editPath" />
+                </svg>
+              </button>
+              <button
+                mat-button
+                class="actions-button"
+                [disabled]="autor.cantlibros !== 0 || isLoading"
+                [class.actions-button--disabled]="autor.cantlibros !== 0"
+                (click)="deleteAutor(autor)"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="actions-button__svg"
+                  viewBox="0 -960 960 960"
+                >
+                  <path [attr.d]="icons.deletePath" />
+                </svg>
+              </button>
+            </div>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr
+          mat-row
+          *matRowDef="let row; columns: displayedColumns"
+          [class.table__row--empty]="!row.id"
+        ></tr>
+      </table>
+      <mat-paginator
+        [length]="totalRecords"
+        [pageSize]="pageSize"
+        [pageSizeOptions]="[6, 10, 25]"
+        [pageIndex]="pageIndex"
+        aria-label="Seleccionar página"
+        (page)="onPageChange($event)"
+      >
+      </mat-paginator>
+    </div>
+  </div>
+</ng-container>
+
+<ng-template #mobileTemplate>
+  <div class="layout-mobile">
+    <div class="layout-header">
+      <form class="table__searchContainer" [formGroup]="searchInput" (ngSubmit)="onSubmit()">
+        <input
+          class="form__input"
+          id="data"
+          type="text"
+          formControlName="data"
+          placeholder="Nombre autor"
+          maxlength="100"
+        />
+
+        <button
+          mat-raised-button
+          class="form__button"
+          type="submit"
+          [disabled]="searchInput.invalid"
+          [class.form__button--disabled]="searchInput.invalid"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="24px"
+            viewBox="0 -960 960 960"
+            width="24px"
+            fill="white"
+          >
+            <path [attr.d]="icons.searchPath" />
+          </svg>
+        </button>
+        <button mat-raised-button type="button" class="form__addButton" routerLink="/autores/alta">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="24px"
+            viewBox="0 -960 960 960"
+            width="24px"
+            fill="black"
+          >
+            <path [attr.d]="icons.addPath" />
+          </svg>
+        </button>
+      </form>
+    </div>
+    <div class="layout-content">
+      <ng-container *ngFor="let autor of dataSource.data">
+        <div class="crud-card" *ngIf="autor.id !== 0">
+          <div class="card__header-strip"></div>
+
+          <div class="card__body">
+            <div class="card__top-row">
+              <span class="card__id">ID #{{ autor.id }}</span>
+              <div class="card__actions">
+                <button
+                  mat-button
+                  type="button"
+                  class="actions-button"
+                  [routerLink]="['/autores/editar', autor.id]"
+                  [disabled]="isLoading"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 -960 960 960"
+                    class="actions-button__svg"
+                  >
+                    <path [attr.d]="icons.editPath" />
+                  </svg>
+                </button>
+                <button
+                  mat-button
+                  class="actions-button"
+                  (click)="deleteAutor(autor)"
+                  [disabled]="autor.cantlibros !== 0 || isLoading"
+                  [class.actions-button--disabled]="autor.cantlibros !== 0"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="actions-button__svg"
+                    viewBox="0 -960 960 960"
+                  >
+                    <path [attr.d]="icons.deletePath" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <span class="card__nombrecompleto">{{ autor.nombrecompleto }}</span>
+          </div>
+          <div class="card__footer">
+            <span class="card__cantidad-label">Libros totales</span>
+            <span
+              class="card__prestamos-badge"
+              [class.card__prestamos-badge--active]="autor.cantlibros > 0"
+              [class.card__prestamos-badge--zero]="autor.cantlibros === 0"
+            >
+              {{
+                autor.cantlibros > 0
+                  ? autor.cantlibros + ' Libro' + (autor.cantlibros > 1 ? 's' : '')
+                  : 'Sin libros'
+              }}
+            </span>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+    <div class="layout-footer">
+      <mat-paginator
+        [length]="totalRecords"
+        [pageSize]="pageSize"
+        [pageSizeOptions]="[6, 10, 25]"
+        [pageIndex]="pageIndex"
+        aria-label="Seleccionar página"
+        (page)="onPageChange($event)"
+      >
+      </mat-paginator>
+    </div>
+  </div>
+</ng-template>

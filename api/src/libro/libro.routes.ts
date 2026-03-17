@@ -16,12 +16,12 @@ import { libroGetByPageSchema } from "../schemas/getByPage/libro.schema.js";
 export const libroRouter = Router();
 
 libroRouter.get(
-  "/byPage",
+  "/",
   validateInput(undefined, undefined, libroGetByPageSchema),
   buscarLibrosByPage,
 );
 libroRouter.get(
-  "/detail/:id",
+  "/:id/detail",
   validateInput(schemaParamsId, undefined),
   buscaLibroDetail,
 );

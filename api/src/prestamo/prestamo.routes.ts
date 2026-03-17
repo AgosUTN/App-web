@@ -1,10 +1,9 @@
 import { Router } from "express";
 
 import {
-  buscarPrestamos,
-  buscarPrestamosSocio,
-  buscarEjemplaresPendientesSocio,
-  devolverLibroD,
+  buscarPrestamo,
+  buscarPrestamosByPage,
+  devolverLibro,
   altaPrestamo,
   altaPrestamoDeadlock,
 } from "./prestamo.controller.js";
@@ -15,8 +14,21 @@ import {
 } from "../schemas/schemas.casosDeUso.js";
 import { prestamoAltaSchema } from "../schemas/schemas.prestamo.js";
 import { deadlockTestSchema } from "../schemas/testConcurrencia.schema.js";
+import { prestamoGetByPageSchema } from "../schemas/getByPage/prestamo.schema.js";
+import { schemaParamsId } from "../schemas/schema.paramsId.js";
+
 export const prestamoRouter = Router({ mergeParams: true });
 
+prestamoRouter.get(
+  "/:id/detail",
+  validateInput(schemaParamsId, undefined),
+  buscarPrestamo,
+);
+prestamoRouter.get(
+  "/",
+  validateInput(undefined, undefined, prestamoGetByPageSchema),
+  buscarPrestamosByPage,
+);
 prestamoRouter.post(
   "/deadlockTest",
   validateInput(undefined, prestamoAltaSchema, deadlockTestSchema),
@@ -28,30 +40,8 @@ prestamoRouter.post(
   altaPrestamo,
 );
 
-// prestamoRouter.patch("/devolverLibro", devolverLibro);  DEPRECADO.
-
-// Rutas nuevas/ desacopladas
-
-prestamoRouter.get("/", (req, res, next) => {
-  // Puede venir desde /socios/:id/prestamos o desde /prestamos.
-  const { id } = req.params as { id?: string };
-  if (id) {
-    return buscarPrestamosSocio(req, res, next);
-  }
-  return buscarPrestamos(req, res, next);
-});
-prestamoRouter.get(
-  "/listarEjemplaresPendientes",
-  buscarEjemplaresPendientesSocio,
-); // Podria moverse a ejemplares quizas. (Actualmente esta anidada a socio) No hay query params, no tiene sentido.
-
 prestamoRouter.patch(
   "/:id/lineas/:idLP/devolver",
   validateInput(devolverLibroParams, devolverLibroRequest),
-  devolverLibroD,
-); // Linea préstamo no tiene controlador ni rutas, por eso el endpoint este.
-
-/* Query Params para buscarPrestamos y buscarPrestamosSocio:
-/prestamos?estadoPrestamo=Pendiente
-/prestamos?estadoPrestamo=Finalizado
-*/
+  devolverLibro,
+);

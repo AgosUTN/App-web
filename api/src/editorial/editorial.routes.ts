@@ -16,7 +16,7 @@ import { editorialGetByPageSchema } from "../schemas/getByPage/editorial.schema.
 export const editorialRouter = Router();
 
 editorialRouter.get(
-  "/byPage",
+  "/",
   validateInput(undefined, undefined, editorialGetByPageSchema),
   buscarEditorialesByPage,
 );

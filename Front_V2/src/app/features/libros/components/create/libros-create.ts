@@ -29,7 +29,7 @@ export class LibrosCreate {
   submitLabel: string = 'Crear Libro';
   successMessage: string = 'Libro creado correctamente';
   idEditorial: number | null = null;
-  idAutor: number = 1; // CAMBIAR CUANDO SE TERMINE CRUD AUTOR.
+  idAutor: number | null = null;
 
   constructor(
     protected dialogService: DialogService,
@@ -44,6 +44,16 @@ export class LibrosCreate {
         this.libroForm.patchValue({ editorial: editorial.nombre });
         this.idEditorial = editorial.id;
         this.cdr.detectChanges(); //Necesario porque la actualización de idEditorial sucede por fuera de reactive forms.
+      }
+    });
+  }
+  selectAutor(): void {
+    console.log('Anda el selectAutor');
+    this.dialogService.selectAutor().subscribe((autor) => {
+      if (autor) {
+        this.libroForm.patchValue({ autor: autor.nombrecompleto });
+        this.idAutor = autor.id;
+        this.cdr.detectChanges();
       }
     });
   }
@@ -84,7 +94,7 @@ export class LibrosCreate {
       descripcion: libro.descripcion!,
       isbn: libro.isbn!,
       miEditorial: this.idEditorial!,
-      miAutor: this.idAutor,
+      miAutor: this.idAutor!,
       cantEjemplares: Number(libro.cantejemplares!),
     };
   }

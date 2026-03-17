@@ -1,1 +1,3 @@
 - Ahora se puede borrar un libro por más que tenga ejemplares. Solo no se puede si fue prestado. Validación en memoria. 
+- Un ejemplar puede tener baja lógica o baja fisica según si fue prestado o no.
+- La política de sanción debe tener al menos 1 día de sanción. 

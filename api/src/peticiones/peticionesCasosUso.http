@@ -28,7 +28,9 @@ PATCH http://localhost:3000/api/prestamos/1/lineas/1/devolver
 Content-Type: application/json
 
 {
-    "idSocio": 1
+    "idSocio": 1,
+    "idEjemplar":1,
+    "idLibro":1
 
 }
 

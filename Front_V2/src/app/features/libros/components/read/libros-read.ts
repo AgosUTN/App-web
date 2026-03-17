@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, HostListener } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { BasePagedComponent } from '../../../../shared/base/basePagedComponent';
 import { LibroTableDTO } from '../../models/libroTable.dto';
 import { MatTableModule } from '@angular/material/table';
@@ -34,7 +34,7 @@ import { ViewportService } from '../../../../core/services/viewportService/viewp
 export class LibrosRead extends BasePagedComponent<LibroTableDTO> {
   icons = icons;
   searchInput = new FormGroup({
-    data: new FormControl('', [Validators.maxLength(15)]),
+    data: new FormControl('', [Validators.maxLength(100)]),
   });
 
   displayedColumns: string[] = ['id', 'titulo', 'autor', 'editorial', 'cantprestamos', 'actions'];

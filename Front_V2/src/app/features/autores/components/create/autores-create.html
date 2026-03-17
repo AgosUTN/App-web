@@ -1,0 +1,39 @@
+<div class="card">
+  <form class="form" [formGroup]="autorForm" (ngSubmit)="onSubmit()">
+    <div class="form__field">
+      <label class="form__label" for="nombrecompleto"> Nombre completo del autor * </label>
+
+      <input
+        class="form__input"
+        id="nombrecompleto"
+        type="text"
+        formControlName="nombrecompleto"
+        placeholder="Nombre completo"
+        maxlength="100"
+      />
+
+      <small
+        class="error"
+        *ngIf="
+          autorForm.get('nombrecompleto')?.hasError('required') &&
+          autorForm.get('nombrecompleto')?.touched
+        "
+      >
+        El nombre es obligatorio
+      </small>
+      <small class="error" *ngIf="autorForm.get('nombrecompleto')?.hasError('repetido')"
+        >El nombre ingresado ya está en uso.</small
+      >
+    </div>
+
+    <button
+      mat-raised-button
+      class="form__button"
+      type="submit"
+      [disabled]="autorForm.invalid || this.loading"
+      [class.form__button--disabled]="autorForm.invalid || this.loading"
+    >
+      {{ submitLabel }}
+    </button>
+  </form>
+</div>

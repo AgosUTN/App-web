@@ -6,6 +6,10 @@ import { EditorialReadDialog } from '../../../features/editoriales/components/re
 import { EditorialTableDTO } from '../../../features/editoriales/models/editorialTable.dto';
 import { LibrosDetailDialog } from '../../../features/libros/components/detailDialog/libros-detail-dialog';
 import { LibroDetailDTO } from '../../../features/libros/models/libroDetail.dto';
+import { AutorTableDTO } from '../../../features/autores/models/autorTable.dto';
+import { AutorReadDialog } from '../../../features/autores/components/readDialog/autor-read-dialog';
+import { PrestamosDetailDialog } from '../../../features/prestamos/components/detailDialog/prestamos-detail-dialog';
+import { PrestamoDetailDTO } from '../../../features/prestamos/models/prestamoDetail.dto';
 
 @Injectable({
   providedIn: 'root',
@@ -45,6 +49,19 @@ export class DialogService {
       })
       .afterClosed();
   }
+  selectAutor(): Observable<AutorTableDTO | undefined> {
+    console.log('Anda el select del dialog');
+    return this.dialog
+      .open(AutorReadDialog, {
+        width: '900px',
+        height: '600px',
+        disableClose: false,
+        backdropClass: 'custom-backdrop',
+
+        maxHeight: '95vh',
+      })
+      .afterClosed();
+  }
   openLibroDetail(libro: LibroDetailDTO): Observable<any> {
     return this.dialog
       .open(LibrosDetailDialog, {
@@ -53,6 +70,18 @@ export class DialogService {
         disableClose: false,
         backdropClass: 'custom-backdrop',
         data: libro,
+        maxHeight: '95vh',
+      })
+      .afterClosed();
+  }
+  openPrestamoDetail(prestamo: PrestamoDetailDTO): Observable<any> {
+    return this.dialog
+      .open(PrestamosDetailDialog, {
+        width: '900px',
+        height: '600px',
+        disableClose: false,
+        backdropClass: 'custom-backdrop',
+        data: prestamo,
         maxHeight: '95vh',
       })
       .afterClosed();

@@ -13,6 +13,9 @@ import { LibrosRead } from './features/libros/components/read/libros-read';
 import { LibrosUpdate } from './features/libros/components/update/libros-update';
 import { PrestamosRead } from './features/prestamos/components/read/prestamos-read';
 import { PrestamosCreate } from './features/prestamos/components/create/prestamos-create';
+import { AutoresRead } from './features/autores/components/read/autores-read';
+import { AutoresCreate } from './features/autores/components/create/autores-create';
+import { AutoresUpdate } from './features/autores/components/update/autores-update';
 
 export const routes: Routes = [
   {
@@ -93,6 +96,27 @@ export const routes: Routes = [
             path: 'alta',
             component: PrestamosCreate,
             data: { breadcrumb: 'Crear', crud: CRUD_names.Prestamo },
+          },
+        ],
+      },
+      {
+        path: 'autores',
+        data: { breadcrumb: 'Autores' },
+        children: [
+          {
+            path: '',
+            component: AutoresRead,
+            data: { breadcrumb: '', crud: CRUD_names.Autor },
+          },
+          {
+            path: 'alta',
+            component: AutoresCreate,
+            data: { breadcrumb: 'Alta', crud: CRUD_names.Autor },
+          },
+          {
+            path: 'editar/:id',
+            component: AutoresUpdate,
+            data: { breadcrumb: 'Editar', crud: CRUD_names.Autor },
           },
         ],
       },
