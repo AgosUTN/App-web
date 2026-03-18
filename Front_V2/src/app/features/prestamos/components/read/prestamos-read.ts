@@ -9,7 +9,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { icons } from '../../../../shared/constants/iconPaths';
-import { Subscription } from 'rxjs';
+import { Subscription, switchMap } from 'rxjs';
 import { NotificationService } from '../../../../shared/services/notificationService/notification-service';
 import { DialogService } from '../../../../shared/services/dialogService/dialog-service';
 import { ViewportService } from '../../../../core/services/viewportService/viewport-service';
@@ -59,6 +59,12 @@ export class PrestamosRead extends BasePagedComponent<PrestamoTableDTO> {
   ngOnInit(): void {
     this.initTrackers();
     this.loadData();
+
+    const state = history.state;
+
+    if (state?.origen === 'libroDetail') {
+      this.openDetailDialogByEjemplar(history.state.idEjemplar, history.state.idLibro);
+    }
   }
   ngOnDestroy(): void {
     this.mobileSubscription.unsubscribe();
@@ -70,7 +76,6 @@ export class PrestamosRead extends BasePagedComponent<PrestamoTableDTO> {
   }
 
   override loadData(): void {
-    console.log('se activo');
     this.setLoadingState();
     this.prestamoService
       .getByPage(
@@ -128,6 +133,21 @@ export class PrestamosRead extends BasePagedComponent<PrestamoTableDTO> {
     this.prestamoService.getPrestamoDetail(id).subscribe({
       next: (prestamo) => {
         this.dialogService.openPrestamoDetail(prestamo).subscribe((prestamoFinalizado: boolean) => {
+          if (prestamoFinalizado) {
+            this.loadData();
+          }
+        });
+      },
+      error: () => {
+        this.notificationService.error('Préstamo no encontrado');
+      },
+    });
+  }
+  openDetailDialogByEjemplar(idEjemplar: number, idLibro: number): void {
+    this.prestamoService.getPrestamoDetailByEjemplar(idEjemplar, idLibro).subscribe({
+      next: (prestamo) => {
+        this.dialogService.openPrestamoDetail(prestamo).subscribe((prestamoFinalizado: boolean) => {
+          history.replaceState({}, '');
           if (prestamoFinalizado) {
             this.loadData();
           }

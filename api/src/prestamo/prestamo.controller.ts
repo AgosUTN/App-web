@@ -346,7 +346,35 @@ async function buscarPrestamo(req: Request, res: Response, next: NextFunction) {
     next(err);
   }
 }
+async function buscarPrestamoByEjemplar(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
+  try {
+    const idEjemplar = parseInt(req.query.idEjemplar as string);
+    const idLibro = parseInt(req.query.idLibro as string);
 
+    const lp = await em.findOneOrFail(
+      LineaPrestamo,
+      { miEjemplar: [idEjemplar, idLibro], fechaDevolucionReal: null },
+      { populate: ["miPrestamo"] },
+    );
+
+    const prestamo = await em.findOneOrFail(Prestamo, lp.miPrestamo.id!, {
+      populate: ["miSocioPrestamo", "misLpPrestamo.miEjemplar.miLibro"],
+    });
+    const prestamoDTO = PrestamoMapper.toDetailDTO(prestamo);
+    return res
+      .status(200)
+      .json({ message: "Préstamo encontrado", data: prestamoDTO });
+  } catch (err) {
+    if (err instanceof NotFoundError) {
+      return res.status(404).json({ message: "Préstamo inexistente" });
+    }
+    next(err);
+  }
+}
 async function buscarPrestamosSocio(
   req: Request,
   res: Response,
@@ -506,4 +534,5 @@ export {
   buscarEjemplaresPendientesSocio,
   devolverLibro,
   altaPrestamoDeadlock,
+  buscarPrestamoByEjemplar,
 };

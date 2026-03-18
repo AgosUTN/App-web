@@ -8,6 +8,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { EjemplarService } from '../../services/ejemplar-service';
 import { NotificationService } from '../../../../shared/services/notificationService/notification-service';
 import { DialogService } from '../../../../shared/services/dialogService/dialog-service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-libros-detail-dialog',
@@ -26,6 +27,7 @@ export class LibrosDetailDialog {
     private cdr: ChangeDetectorRef,
     private notificationService: NotificationService,
     private dialogService: DialogService,
+    private router: Router,
   ) {}
 
   ngOnInit(): void {
@@ -91,6 +93,28 @@ export class LibrosDetailDialog {
       });
     });
   }
+  navigateToPrestamo(ejemplar: EjemplarTableDTO): void {
+    if (ejemplar.estado !== 'PRESTADO') {
+      return;
+    }
+    this.dialogService
+      .confirm('Ir a préstamo', '¿Desea ir al préstamo del ejemplar?', 'Confirmar')
+      .subscribe((confirmed) => {
+        if (!confirmed) return;
+
+        const idEjemplar = ejemplar.idEjemplar;
+        const idLibro = ejemplar.idLibro;
+        this.closeDialog();
+        this.router.navigateByUrl('prestamos', {
+          state: {
+            idEjemplar: idEjemplar,
+            idLibro: idLibro,
+            origen: 'libroDetail',
+          },
+        });
+      });
+  }
+
   private getConfirmContent(ejemplar: EjemplarTableDTO): { titulo: string; mensaje: string } {
     return ejemplar.estado === 'NUEVO'
       ? {

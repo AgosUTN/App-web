@@ -6,12 +6,14 @@ import {
   devolverLibro,
   altaPrestamo,
   altaPrestamoDeadlock,
+  buscarPrestamoByEjemplar,
 } from "./prestamo.controller.js";
 import { validateInput } from "../middlewares/middleware.validateInput.js";
 import {
   devolverLibroParams,
   devolverLibroRequest,
-} from "../schemas/schemas.casosDeUso.js";
+  getByEjemplarSchema,
+} from "../schemas/schemas.prestamo.js";
 import { prestamoAltaSchema } from "../schemas/schemas.prestamo.js";
 import { deadlockTestSchema } from "../schemas/testConcurrencia.schema.js";
 import { prestamoGetByPageSchema } from "../schemas/getByPage/prestamo.schema.js";
@@ -23,6 +25,11 @@ prestamoRouter.get(
   "/:id/detail",
   validateInput(schemaParamsId, undefined),
   buscarPrestamo,
+);
+prestamoRouter.get(
+  "/detail",
+  validateInput(undefined, undefined, getByEjemplarSchema),
+  buscarPrestamoByEjemplar,
 );
 prestamoRouter.get(
   "/",

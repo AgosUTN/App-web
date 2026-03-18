@@ -55,7 +55,11 @@
 
         <tbody>
           <ng-container *ngIf="ejemplares.length > 0; else emptyState">
-            <tr *ngFor="let ejemplar of ejemplares">
+            <tr
+              *ngFor="let ejemplar of ejemplares"
+              [class.clickeable]="ejemplar.estado == 'PRESTADO'"
+              (click)="navigateToPrestamo(ejemplar)"
+            >
               <td class="id-cell">{{ ejemplar.idEjemplar }}</td>
               <td>
                 <span [ngClass]="getStateStyle(ejemplar.estado)" class="estado-badge">{{

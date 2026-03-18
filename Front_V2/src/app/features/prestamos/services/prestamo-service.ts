@@ -68,6 +68,13 @@ export class PrestamoService {
       .pipe(map((res) => res.data));
   }
 
+  getPrestamoDetailByEjemplar(idEjemplar: number, idLibro: number): Observable<PrestamoDetailDTO> {
+    const params = new HttpParams().set('idEjemplar', idEjemplar).set('idLibro', idLibro);
+    return this.http
+      .get<ApiResponseGet<PrestamoDetailDTO>>(this.baseUrl + '/detail', { params: params })
+      .pipe(map((res) => res.data));
+  }
+
   devolverEjemplar(
     prestamo: PrestamoDetailDTO,
     lp: LineaPrestamoDTO,
