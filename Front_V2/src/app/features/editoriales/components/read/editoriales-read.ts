@@ -110,6 +110,7 @@ export class EditorialesRead extends BasePagedComponent<EditorialTableDTO> {
       .confirm(
         'Eliminar editorial',
         `¿Seguro que deseas eliminar la editorial "${editorial.nombre}"?`,
+        'BORRAR',
       )
       .subscribe((confirmed) => {
         if (!confirmed) return;

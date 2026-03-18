@@ -1,9 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../../../enviroments/enviroment';
-import { map, Observable } from 'rxjs';
-
-import { ApiResponseGetByPage, PagedResult } from '../../../shared/models/apiResponseGet.model';
 
 import { BaseCrudService } from '../../../shared/base/baseCrudService';
 import { EditorialCreateDTO } from '../models/editorialCreate.dto';

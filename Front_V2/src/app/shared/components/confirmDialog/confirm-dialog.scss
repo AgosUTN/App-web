@@ -18,7 +18,15 @@
     opacity: 0.9;
   }
 }
-
+.dialog__confirmButton {
+  padding: 20px;
+  background-color: var(--color-primary) !important;
+  color: var(--color-on-primary) !important;
+  margin-left: 50px;
+  &:hover {
+    opacity: 0.9;
+  }
+}
 .dialog__cancelButton {
   background-color: var(--color-secondary);
   color: var(--color-on-primary);

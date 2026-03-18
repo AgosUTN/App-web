@@ -2,10 +2,11 @@ import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogModule } from '@angular/material/dialog';
 import { ConfirmDialogData } from '../../models/confirmDialogData.model';
 import { MatButtonModule } from '@angular/material/button';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-confirm-dialog',
-  imports: [MatDialogModule, MatButtonModule],
+  imports: [MatDialogModule, MatButtonModule, CommonModule],
   templateUrl: './confirm-dialog.html',
   styleUrl: './confirm-dialog.scss',
 })
@@ -21,5 +22,11 @@ export class ConfirmDialog {
 
   cancel(): void {
     this.dialogRef.close(false);
+  }
+
+  getActionButtonStyle(): string {
+    if (this.data.tipoConfirmacion === 'BORRAR') {
+      return 'dialog__deleteButton';
+    } else return 'dialog__confirmButton';
   }
 }

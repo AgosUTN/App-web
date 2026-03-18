@@ -69,7 +69,7 @@ export class LibrosDetailDialog {
   deleteEjemplar(ejemplar: EjemplarTableDTO): void {
     const { titulo, mensaje } = this.getConfirmContent(ejemplar);
 
-    this.dialogService.confirm(titulo, mensaje).subscribe((confirmed) => {
+    this.dialogService.confirm(titulo, mensaje, 'BORRAR').subscribe((confirmed) => {
       if (!confirmed) return;
 
       this.ejemplarService.delete(ejemplar.idEjemplar, ejemplar.idLibro).subscribe({
@@ -98,7 +98,7 @@ export class LibrosDetailDialog {
       return;
     }
     this.dialogService
-      .confirm('Ir a préstamo', '¿Desea ir al préstamo del ejemplar?', 'Confirmar')
+      .confirm('Ir a préstamo', '¿Desea ir al préstamo del ejemplar?', 'CONFIRMAR', 'Confirmar')
       .subscribe((confirmed) => {
         if (!confirmed) return;
 

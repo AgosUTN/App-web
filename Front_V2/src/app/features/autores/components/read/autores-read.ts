@@ -107,7 +107,11 @@ export class AutoresRead extends BasePagedComponent<AutorTableDTO> {
   }
   deleteAutor(autor: AutorTableDTO): void {
     this.dialogService
-      .confirm('Eliminar autor', `¿Seguro que deseas eliminar al autor "${autor.nombrecompleto}"?`)
+      .confirm(
+        'Eliminar autor',
+        `¿Seguro que deseas eliminar al autor "${autor.nombrecompleto}"?`,
+        'BORRAR',
+      )
       .subscribe((confirmed) => {
         if (!confirmed) return;
 

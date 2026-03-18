@@ -106,6 +106,7 @@ export class LibrosRead extends BasePagedComponent<LibroTableDTO> {
       .confirm(
         'Eliminar libro',
         `¿Seguro que deseas eliminar el libro "${libro.titulo}" y todos sus ejemplares?`,
+        'BORRAR',
       )
       .subscribe((confirmed) => {
         if (!confirmed) return;

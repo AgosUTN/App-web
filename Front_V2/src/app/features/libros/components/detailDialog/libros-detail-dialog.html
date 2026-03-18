@@ -55,11 +55,7 @@
 
         <tbody>
           <ng-container *ngIf="ejemplares.length > 0; else emptyState">
-            <tr
-              *ngFor="let ejemplar of ejemplares"
-              [class.clickeable]="ejemplar.estado == 'PRESTADO'"
-              (click)="navigateToPrestamo(ejemplar)"
-            >
+            <tr *ngFor="let ejemplar of ejemplares">
               <td class="id-cell">{{ ejemplar.idEjemplar }}</td>
               <td>
                 <span [ngClass]="getStateStyle(ejemplar.estado)" class="estado-badge">{{
@@ -69,8 +65,9 @@
               <td>
                 <button
                   class="btn-eliminar"
-                  [disabled]="ejemplar.estado == 'ELIMINADO' || ejemplar.estado == 'PRESTADO'"
+                  [disabled]="ejemplar.estado == 'ELIMINADO'"
                   (click)="deleteEjemplar(ejemplar)"
+                  *ngIf="ejemplar.estado !== 'PRESTADO'"
                 >
                   <svg
                     viewBox="0 0 24 24"
@@ -83,6 +80,14 @@
                     <path [attr.d]="icons.altDeletePath" />
                   </svg>
                   Eliminar
+                </button>
+                <button
+                  type="button"
+                  class="btn-eliminar"
+                  (click)="navigateToPrestamo(ejemplar)"
+                  *ngIf="ejemplar.estado === 'PRESTADO'"
+                >
+                  Ver préstamo
                 </button>
               </td>
             </tr>

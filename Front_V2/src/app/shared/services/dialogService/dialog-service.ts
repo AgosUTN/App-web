@@ -10,6 +10,7 @@ import { AutorTableDTO } from '../../../features/autores/models/autorTable.dto';
 import { AutorReadDialog } from '../../../features/autores/components/readDialog/autor-read-dialog';
 import { PrestamosDetailDialog } from '../../../features/prestamos/components/detailDialog/prestamos-detail-dialog';
 import { PrestamoDetailDTO } from '../../../features/prestamos/models/prestamoDetail.dto';
+import { TipoConfirmacion } from '../../models/confirmDialogData.model';
 
 @Injectable({
   providedIn: 'root',
@@ -20,6 +21,7 @@ export class DialogService {
   confirm(
     title: string,
     message: string,
+    tipoConfirmacion: TipoConfirmacion,
     confirmText = 'Eliminar',
     cancelText = 'Cancelar',
     width: string = '400px',
@@ -30,7 +32,7 @@ export class DialogService {
         height: height,
         width: width,
         disableClose: false,
-        data: { title, message, confirmText, cancelText },
+        data: { title, message, tipoConfirmacion, confirmText, cancelText },
         position: {
           top: '50px',
         },
