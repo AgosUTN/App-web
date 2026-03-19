@@ -19,6 +19,7 @@ import { AutoresUpdate } from './features/autores/components/update/autores-upda
 import { PoliticasSancionRead } from './features/politicasSancion/components/read/politicas-sancion-read';
 import { PoliticasSancionCreate } from './features/politicasSancion/components/create/politicas-sancion-create';
 import { PoliticasSancionUpdate } from './features/politicasSancion/components/update/politicas-sancion-update';
+import { PoliticaBibliotecaUpdate } from './features/politicaBiblioteca/components/update/politica-biblioteca-update';
 
 export const routes: Routes = [
   {
@@ -144,6 +145,11 @@ export const routes: Routes = [
           },
         ],
       },
+      {
+        path: 'politicaBiblioteca',
+        component: PoliticaBibliotecaUpdate,
+        data: { breadcrumb: 'Política de biblioteca', crud: CRUD_names.PoliticaSancion },
+      }, // Hecho apróposito. Si se navega a politica biblioteca desde ps, no se debería borrar cache.
 
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
     ],

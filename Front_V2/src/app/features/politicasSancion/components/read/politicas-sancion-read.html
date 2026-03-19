@@ -9,6 +9,7 @@
           formControlName="data"
           placeholder="Días de atraso máximo"
           maxlength="5"
+          size="1"
           onlyNumbers
         />
 
@@ -28,6 +29,12 @@
           >
             <path [attr.d]="icons.searchPath" />
           </svg>
+        </button>
+        <button type="button" class="pb-button" routerLink="/politicaBiblioteca">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" class="pb-button__svg">
+            <path [attr.d]="icons.visibilityPath" />
+          </svg>
+          <span class="pb-button__span">Politica de Biblioteca</span>
         </button>
         <button
           mat-raised-button
@@ -224,6 +231,12 @@
       </ng-container>
     </div>
     <div class="layout-footer">
+      <button type="button" class="pb-button" routerLink="/politicaBiblioteca">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" class="pb-button__svg">
+          <path [attr.d]="icons.visibilityPath" />
+        </svg>
+        <span class="pb-button__span">Politica de Biblioteca</span>
+      </button>
       <mat-paginator
         [length]="totalRecords"
         [pageSize]="pageSize"

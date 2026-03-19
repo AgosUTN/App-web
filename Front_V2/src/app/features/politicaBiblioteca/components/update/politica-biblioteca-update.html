@@ -1,1 +1,49 @@
-<p>politica-biblioteca-update works!</p>
+<div class="card">
+  <form class="form" [formGroup]="politicaForm" (ngSubmit)="onSubmit()">
+    <div class="form__field">
+      <label class="form__label" for="diasSancionMaxima"> Días de sanción máxima * </label>
+
+      <input
+        class="form__input"
+        id="diasSancionMaxima"
+        type="text"
+        formControlName="diasSancionMaxima"
+        maxlength="10"
+        onlyNumbers
+      />
+    </div>
+    <div class="form__field">
+      <label class="form__label" for="diasPrestamo"> Días de préstamo de un libro * </label>
+
+      <input
+        class="form__input"
+        id="diasPrestamo"
+        type="text"
+        formControlName="diasPrestamo"
+        maxlength="10"
+        onlyNumbers
+      />
+    </div>
+    <div class="form__field">
+      <label class="form__label" for="cantPendientesMaximo"> Cantidad de libros por socio * </label>
+
+      <input
+        class="form__input"
+        id="cantPendientesMaximo"
+        type="text"
+        formControlName="cantPendientesMaximo"
+        maxlength="10"
+        onlyNumbers
+      />
+    </div>
+    <button
+      mat-raised-button
+      class="form__button"
+      type="submit"
+      [disabled]="politicaForm.invalid || this.loading"
+      [class.form__button--disabled]="politicaForm.invalid || this.loading"
+    >
+      Guardar cambios
+    </button>
+  </form>
+</div>
