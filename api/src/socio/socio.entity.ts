@@ -54,7 +54,7 @@ export class Socio extends BaseEntity {
 
     for (const sancion of this.misSanciones) {
       if (sancion.estasVigente()) {
-        acumulador += sancion.getDiasSancion();
+        acumulador += sancion.getDiasSancionRestantes();
       }
     }
 

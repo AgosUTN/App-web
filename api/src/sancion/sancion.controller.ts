@@ -9,7 +9,7 @@ const em = orm.em;
 async function buscarSanciones(
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) {
   try {
     const sanciones = await em.find(Sancion, {});
@@ -37,25 +37,6 @@ async function buscarSancion(req: Request, res: Response, next: NextFunction) {
   }
 }
 
-async function buscarSancionesSocio(
-  req: Request,
-  res: Response,
-  next: NextFunction
-) {
-  try {
-    //No se valida el socio apropósito, podría revisarse más adelante para mantener consistencia.
-    const idSocio = Number.parseInt(req.params.id);
-    const sanciones = await em.find(Sancion, {
-      miSocioSancion: idSocio,
-    });
-    return res.status(200).json({
-      message: "Las sanciones del socio encontradas son: ",
-      data: sanciones,
-    });
-  } catch (error: any) {
-    next(error);
-  }
-}
 async function bajaSancion(req: Request, res: Response, next: NextFunction) {
   try {
     const id = Number.parseInt(req.params.id);
@@ -67,4 +48,4 @@ async function bajaSancion(req: Request, res: Response, next: NextFunction) {
   }
 }
 
-export { buscarSancionesSocio, buscarSancion, buscarSanciones, bajaSancion };
+export { buscarSancion, buscarSanciones, bajaSancion };
