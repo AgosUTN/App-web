@@ -192,7 +192,9 @@ async function altaPrestamoDeadlock(
         .andWhere({ bajaLogica: false })
         .setLockMode(LockMode.PESSIMISTIC_WRITE)
         .getResultList();
-      await sleep(10000);
+
+      await sleep(10000); // Frena la request para que la otra se tope con el lock
+
       if (ejemplares.length != ejemplaresEncontrados.length) {
         throw {
           status: 400,
@@ -375,54 +377,6 @@ async function buscarPrestamoByEjemplar(
     next(err);
   }
 }
-async function buscarPrestamosSocio(
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) {
-  try {
-    //No se valida el socio apropósito
-    const estadoPrestamo = req.query.estadoPrestamo as string | undefined;
-    const idSocio = Number.parseInt(req.params.id);
-
-    const filtros: any = { miSocioPrestamo: idSocio };
-    if (estadoPrestamo) {
-      filtros.estadoPrestamo = estadoPrestamo;
-    }
-
-    const prestamos = await em.find(Prestamo, filtros, {
-      populate: ["misLpPrestamo.miEjemplar"],
-    });
-    res.status(200).json({
-      message: "Los prestámos del socio encontrados son:",
-      data: prestamos,
-    });
-  } catch (error: any) {
-    next(error);
-  }
-}
-async function buscarEjemplaresPendientesSocio(
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) {
-  try {
-    const idSocio = Number.parseInt(req.params.id);
-    const socio = await em.findOneOrFail(Socio, idSocio, {
-      populate: [
-        "misPrestamos.misLpPrestamo.miEjemplar.miLibro.miAutor",
-        "misPrestamos.misLpPrestamo.miEjemplar.miLibro.miEditorial",
-      ],
-    });
-    const noDevueltos = socio.getNoDevueltos();
-    res.status(200).json({
-      message: "Los ejemplares no devueltos del socio son",
-      ejemplares: noDevueltos,
-    });
-  } catch (error: any) {
-    next(error);
-  }
-}
 
 async function devolverLibro(req: Request, res: Response, next: NextFunction) {
   try {
@@ -530,9 +484,7 @@ export {
   altaPrestamo,
   buscarPrestamo,
   buscarPrestamosByPage,
-  buscarPrestamosSocio,
-  buscarEjemplaresPendientesSocio,
+  buscarPrestamoByEjemplar,
   devolverLibro,
   altaPrestamoDeadlock,
-  buscarPrestamoByEjemplar,
 };

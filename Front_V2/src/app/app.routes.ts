@@ -16,6 +16,9 @@ import { PrestamosCreate } from './features/prestamos/components/create/prestamo
 import { AutoresRead } from './features/autores/components/read/autores-read';
 import { AutoresCreate } from './features/autores/components/create/autores-create';
 import { AutoresUpdate } from './features/autores/components/update/autores-update';
+import { PoliticasSancionRead } from './features/politicasSancion/components/read/politicas-sancion-read';
+import { PoliticasSancionCreate } from './features/politicasSancion/components/create/politicas-sancion-create';
+import { PoliticasSancionUpdate } from './features/politicasSancion/components/update/politicas-sancion-update';
 
 export const routes: Routes = [
   {
@@ -117,6 +120,27 @@ export const routes: Routes = [
             path: 'editar/:id',
             component: AutoresUpdate,
             data: { breadcrumb: 'Editar', crud: CRUD_names.Autor },
+          },
+        ],
+      },
+      {
+        path: 'politicasSancion',
+        data: { breadcrumb: 'Politicas de Sanción' },
+        children: [
+          {
+            path: '',
+            component: PoliticasSancionRead,
+            data: { breadcrumb: '', crud: CRUD_names.PoliticaSancion },
+          },
+          {
+            path: 'alta',
+            component: PoliticasSancionCreate,
+            data: { breadcrumb: 'Alta', crud: CRUD_names.PoliticaSancion },
+          },
+          {
+            path: 'editar/:id',
+            component: PoliticasSancionUpdate,
+            data: { breadcrumb: 'Editar', crud: CRUD_names.PoliticaSancion },
           },
         ],
       },

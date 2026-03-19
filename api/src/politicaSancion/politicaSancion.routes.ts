@@ -10,29 +10,36 @@ import { validateInput } from "../middlewares/middleware.validateInput.js";
 import { schemaParamsId } from "../schemas/schema.paramsId.js";
 import {
   politicaSancionAltaSchema,
-  politicaSancionPutSchema,
+  politicaSancionPatchSchema,
 } from "../schemas/schemas.politicaSancion.js";
+import { psGetByPageSchema } from "../schemas/getByPage/politicaSancion.schema.js";
 export const politicaSancionRouter = Router();
 
-politicaSancionRouter.get("/", buscarPoliticasSancion);
+politicaSancionRouter.get(
+  "/",
+  validateInput(undefined, undefined, psGetByPageSchema),
+  buscarPoliticasSancion,
+);
 politicaSancionRouter.get(
   "/:id",
   validateInput(schemaParamsId, undefined),
-  buscarPoliticaSancion
+  buscarPoliticaSancion,
 );
+
 politicaSancionRouter.post(
   "/",
   validateInput(undefined, politicaSancionAltaSchema),
-  altaPoliticaSancion
+  altaPoliticaSancion,
 );
-politicaSancionRouter.put(
+
+politicaSancionRouter.patch(
   "/:id",
-  validateInput(schemaParamsId, politicaSancionPutSchema),
-  actualizarPoliticaSancion
+  validateInput(schemaParamsId, politicaSancionPatchSchema),
+  actualizarPoliticaSancion,
 );
-// .patch("/:id",(validacion), actualizarPoliticaSancion);
+
 politicaSancionRouter.delete(
   "/:id",
   validateInput(schemaParamsId, undefined),
-  bajaPoliticaSancion
+  bajaPoliticaSancion,
 );

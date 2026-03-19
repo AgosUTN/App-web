@@ -16,6 +16,7 @@ import { PoliticaBibliotecaService } from '../../../politicaBiblioteca/services/
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
 import { PrestamoService } from '../../services/prestamo-service';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { OnlyNumbersDirective } from '../../../../shared/directives/onlyNumbers.directive';
 
 @Component({
   selector: 'app-prestamos-create',
@@ -27,6 +28,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     Step2Component,
     RouterLink,
     MatProgressSpinnerModule,
+    OnlyNumbersDirective,
   ],
   templateUrl: './prestamos-create.html',
   styleUrl: './prestamos-create.scss',
@@ -167,10 +169,6 @@ export class PrestamosCreate {
       //Al volver al paso 2 se cambia la flag para evitar que se pueda ir al paso 3 sin tocar confirmar selección.
       this.selectionConfirmed = false;
     }
-  }
-  sanitize(event: Event) {
-    const input = event.target as HTMLInputElement;
-    input.value = input.value.replace(/[^0-9]/g, '');
   }
 
   private initTrackers(): void {

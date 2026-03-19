@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { orm } from "../shared/DB/orm.js";
 import { PoliticaBiblioteca } from "./politicaBiblioteca.entity.js";
 import { NotFoundError } from "@mikro-orm/core";
+import { PoliticaBibliotecaMapper } from "./politicaBiblioteca.mapper.js";
 
 const em = orm.em;
 
@@ -14,42 +15,23 @@ async function buscarPoliticaBiblioteca(
     const politica = await em.findOneOrFail(PoliticaBiblioteca, {
       id: 1,
     });
+    const politicaDTO = PoliticaBibliotecaMapper.toReadDTO(politica);
     return res.status(200).json({
       message: "La politica de biblioteca actual es: ",
-      data: politica,
+      data: politicaDTO,
     });
   } catch (error: any) {
     if (error instanceof NotFoundError) {
-      return res
-        .status(500)
-        .json({
-          message: "Politica de biblioteca inaccesible",
-          code: "SYSTEM_CONFIGURATION_ERROR",
-        }); // Parche temporal
+      return res.status(500).json({
+        message: "Politica de biblioteca inaccesible",
+        code: "SYSTEM_CONFIGURATION_ERROR",
+      });
     }
     next(error);
   }
 }
 
-async function altaPoliticaBiblioteca(
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) {
-  //Funcion para desarrollo, migrar en producción.
-  try {
-    const politica = em.create(PoliticaBiblioteca, req.body);
-
-    await em.flush();
-    return res
-      .status(201)
-      .json({ message: "Politica de biblioteca creada", data: politica });
-  } catch (error: any) {
-    next(error);
-  }
-}
-
-async function actualizarPoliticaBiblioteca(
+async function actualizarPoliticaBiblioteca( // No es cacheada.
   req: Request,
   res: Response,
   next: NextFunction,
@@ -66,17 +48,4 @@ async function actualizarPoliticaBiblioteca(
   }
 }
 
-async function bajaPoliticaBiblioteca(
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) {
-  //Funcion para desarollo.
-  return res.status(500).json({ message: "Not implemented" });
-}
-export {
-  buscarPoliticaBiblioteca,
-  altaPoliticaBiblioteca,
-  actualizarPoliticaBiblioteca,
-  bajaPoliticaBiblioteca,
-};
+export { buscarPoliticaBiblioteca, actualizarPoliticaBiblioteca };

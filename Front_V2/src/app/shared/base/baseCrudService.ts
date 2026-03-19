@@ -26,8 +26,10 @@ export abstract class BaseCrudService<Tcreate, Tread, Tupdate, Ttable> {
       .pipe(map((res) => res.message));
   }
 
-  update(id: number, data: Tupdate): Observable<apiResponseUpdate> {
-    return this.http.patch<apiResponseUpdate>(`${this.baseUrl}/${id}`, data);
+  update(id: number, data: Tupdate): Observable<string> {
+    return this.http
+      .patch<apiResponseUpdate>(`${this.baseUrl}/${id}`, data)
+      .pipe(map((res) => res.message));
   }
 
   post(data: Tcreate): Observable<Tread> {

@@ -9,9 +9,11 @@ import { LibroService } from '../../services/libro-service';
 import { NotificationService } from '../../../../shared/services/notificationService/notification-service';
 import { CommonModule } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
+import { OnlyNumbersDirective } from '../../../../shared/directives/onlyNumbers.directive';
+
 @Component({
   selector: 'app-libros-create',
-  imports: [ReactiveFormsModule, MatButtonModule, CommonModule],
+  imports: [ReactiveFormsModule, MatButtonModule, CommonModule, OnlyNumbersDirective],
   templateUrl: './libros-create.html',
   styleUrl: './libros-create.scss',
 })
@@ -83,10 +85,7 @@ export class LibrosCreate {
       },
     });
   }
-  sanitize(event: Event) {
-    const input = event.target as HTMLInputElement;
-    input.value = input.value.replace(/[^0-9]/g, '');
-  }
+
   protected getCreateDTO(): LibroCreateDTO {
     const libro = this.libroForm.getRawValue();
     return {

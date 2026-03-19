@@ -4,13 +4,7 @@
       <div class="form__field">
         <label class="form__label"> Identificador del libro</label>
 
-        <input
-          class="form__input"
-          id="idLibro"
-          type="text"
-          formControlName="idLibro"
-          (input)="sanitize($event)"
-        />
+        <input class="form__input" id="idLibro" type="text" formControlName="idLibro" onlyNumbers />
       </div>
       <div class="form__field">
         <label class="form__label"> Identificador del ejemplar</label>
@@ -20,7 +14,7 @@
           id="idEjemplar"
           type="text"
           formControlName="idEjemplar"
-          (input)="sanitize($event)"
+          onlyNumbers
         />
       </div>
       <button

@@ -10,10 +10,11 @@ import { HttpErrorResponse } from '@angular/common/http';
 
 import { SocioReadDTO } from '../../../socios/models/socioRead.dto';
 import { finalize } from 'rxjs';
+import { OnlyNumbersDirective } from '../../../../shared/directives/onlyNumbers.directive';
 
 @Component({
   selector: 'app-step2-component',
-  imports: [ReactiveFormsModule, MatButtonModule, CommonModule],
+  imports: [ReactiveFormsModule, MatButtonModule, CommonModule, OnlyNumbersDirective],
   templateUrl: './step2-component.html',
   styleUrl: './step2-component.scss',
 })
@@ -85,11 +86,6 @@ export class Step2Component {
   deleteEjemplar(ejemplar: EjemplarCartDTO): void {
     this.ejemplares = this.ejemplares.filter((e) => e.idLibro !== ejemplar.idLibro);
     this.emitEjemplares();
-  }
-
-  sanitize(event: Event) {
-    const input = event.target as HTMLInputElement;
-    input.value = input.value.replace(/[^0-9]/g, '');
   }
 
   closeError(): void {

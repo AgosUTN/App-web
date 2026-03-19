@@ -1,0 +1,63 @@
+<div class="card">
+  <form class="form" [formGroup]="politicaForm" (ngSubmit)="onSubmit()">
+    <div class="form__field">
+      <label class="form__label" for="diasHasta">Días de atraso máximo *</label>
+
+      <input
+        class="form__input"
+        id="diasHasta"
+        type="text"
+        formControlName="diasHasta"
+        placeholder=""
+        maxlength="5"
+        onlyNumbers
+      />
+
+      <small
+        class="error"
+        *ngIf="
+          politicaForm.get('diasHasta')?.hasError('required') &&
+          politicaForm.get('diasHasta')?.touched
+        "
+        >Campo obligatorio
+      </small>
+      <small class="error" *ngIf="politicaForm.get('diasHasta')?.hasError('repetido')"
+        >Ya existe una política con el mismo limite de días.</small
+      >
+    </div>
+    <div class="form__field form__field--last">
+      <label class="form__label" for="diasSancion">Días de sanción *</label>
+
+      <input
+        class="form__input"
+        id="diasSancion"
+        type="text"
+        formControlName="diasSancion"
+        placeholder=""
+        maxlength="5"
+        onlyNumbers
+      />
+
+      <small
+        class="error"
+        *ngIf="
+          politicaForm.get('diasSancion')?.hasError('required') &&
+          politicaForm.get('diasSancion')?.touched
+        "
+        >Campo obligatorio
+      </small>
+      <small class="error" *ngIf="politicaForm.get('diasSancion')?.hasError('zero')"
+        >No se puede registrar una política con cero días de sanción.</small
+      >
+    </div>
+    <button
+      mat-raised-button
+      class="form__button"
+      type="submit"
+      [disabled]="politicaForm.invalid || this.loading"
+      [class.form__button--disabled]="politicaForm.invalid || this.loading"
+    >
+      {{ submitLabel }}
+    </button>
+  </form>
+</div>

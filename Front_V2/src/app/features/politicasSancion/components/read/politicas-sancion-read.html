@@ -1,4 +1,4 @@
-<ng-container *ngIf="!isMobile; else mobile">
+<ng-container *ngIf="!isMobile; else mobileTemplate">
   <div class="layout-desktop">
     <div class="card">
       <form class="table__searchContainer" [formGroup]="searchInput" (ngSubmit)="onSubmit()">
@@ -7,9 +7,8 @@
           id="data"
           type="text"
           formControlName="data"
-          placeholder="ID Socio"
-          maxlength="10"
-          size="1"
+          placeholder="Días de atraso máximo"
+          maxlength="5"
           onlyNumbers
         />
 
@@ -30,21 +29,11 @@
             <path [attr.d]="icons.searchPath" />
           </svg>
         </button>
-        <mat-button-toggle-group
-          class="button-group"
-          value=""
-          [hideSingleSelectionIndicator]="true"
-          (change)="onToggleChange($event)"
-        >
-          <mat-button-toggle value="">Todos</mat-button-toggle>
-          <mat-button-toggle value="PENDIENTE">Pendientes</mat-button-toggle>
-          <mat-button-toggle value="FINALIZADO">Finalizados</mat-button-toggle>
-        </mat-button-toggle-group>
         <button
           mat-raised-button
           type="button"
           class="form__addButton"
-          routerLink="/prestamos/alta"
+          routerLink="/politicasSancion/alta"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -64,67 +53,59 @@
         matSort
         class="table"
       >
-        <ng-container matColumnDef="idsocio">
-          <th mat-header-cell *matHeaderCellDef>ID Socio</th>
-          <td mat-cell *matCellDef="let prestamo">
-            <ng-container *ngIf="!isLoading; else skeleton1">{{ prestamo.idSocio }}</ng-container>
+        <ng-container matColumnDef="diasHasta">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Dias de atraso máximo</th>
+          <td mat-cell *matCellDef="let politica">
+            <ng-container *ngIf="!isLoading; else skeleton1">{{ politica.diasHasta }}</ng-container>
             <ng-template #skeleton1>
               <div class="skeleton"></div>
             </ng-template></td
         ></ng-container>
-        <ng-container matColumnDef="fechaPrestamo">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha</th>
-          <td mat-cell *matCellDef="let prestamo">
+        <ng-container matColumnDef="diasSancion">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Días de sanción</th>
+          <td mat-cell *matCellDef="let politica">
             <ng-container *ngIf="!isLoading; else skeleton2">
-              <span #textRef>{{ prestamo.fechaCreacion | date: 'dd/MM/yyyy' }}</span>
+              {{ politica.diasSancion }}
             </ng-container>
             <ng-template #skeleton2>
               <div class="skeleton"></div>
             </ng-template>
           </td>
         </ng-container>
-
-        <ng-container matColumnDef="estado">
-          <th mat-header-cell *matHeaderCellDef>Estado</th>
-          <td mat-cell *matCellDef="let prestamo">
-            <ng-container *ngIf="!isLoading; else skeleton3">
-              <span #textRef>{{ prestamo.estado }}</span>
-            </ng-container>
-            <ng-template #skeleton3>
-              <div class="skeleton"></div>
-            </ng-template>
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="cantlibros">
-          <th mat-header-cell *matHeaderCellDef>Libros</th>
-          <td mat-cell *matCellDef="let prestamo">
-            <ng-container *ngIf="!isLoading; else skeleton4">
-              <span #textRef>{{ prestamo.cantlibros }}</span>
-            </ng-container>
-            <ng-template #skeleton4>
-              <div class="skeleton"></div>
-            </ng-template>
-          </td>
-        </ng-container>
         <ng-container matColumnDef="actions">
           <th class="actions-header" mat-header-cell *matHeaderCellDef>Acciones</th>
-
-          <td mat-cell *matCellDef="let prestamo">
-            <button
-              mat-button
-              type="button"
-              class="actions-button"
-              (click)="openDetailDialog(prestamo.id)"
-              [disabled]="isLoading"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 -960 960 960"
-                class="actions-button__svg"
+          <td mat-cell *matCellDef="let politica">
+            <div class="actions-container">
+              <button
+                mat-button
+                type="button"
+                class="actions-button"
+                [routerLink]="['/politicasSancion/editar', politica.diasHasta]"
+                [disabled]="isLoading"
               >
-                <path [attr.d]="icons.visibilityPath" />
-              </svg>
-            </button>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 -960 960 960"
+                  class="actions-button__svg"
+                >
+                  <path [attr.d]="icons.editPath" />
+                </svg>
+              </button>
+              <button
+                mat-button
+                class="actions-button"
+                [disabled]="isLoading"
+                (click)="deletePolitica(politica)"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="actions-button__svg"
+                  viewBox="0 -960 960 960"
+                >
+                  <path [attr.d]="icons.deletePath" />
+                </svg>
+              </button>
+            </div>
           </td>
         </ng-container>
 
@@ -132,7 +113,7 @@
         <tr
           mat-row
           *matRowDef="let row; columns: displayedColumns"
-          [class.table__row--empty]="!row.id"
+          [class.table__row--empty]="!row.diasHasta"
         ></tr>
       </table>
       <mat-paginator
@@ -147,7 +128,8 @@
     </div>
   </div>
 </ng-container>
-<ng-template #mobile>
+
+<ng-template #mobileTemplate>
   <div class="layout-mobile">
     <div class="layout-header">
       <form class="table__searchContainer" [formGroup]="searchInput" (ngSubmit)="onSubmit()">
@@ -156,10 +138,11 @@
           id="data"
           type="text"
           formControlName="data"
-          placeholder="ID Socio"
-          maxlength="10"
+          placeholder="Días de atraso máximo"
+          maxlength="5"
           onlyNumbers
         />
+
         <button
           mat-raised-button
           class="form__button"
@@ -167,7 +150,13 @@
           [disabled]="searchInput.invalid"
           [class.form__button--disabled]="searchInput.invalid"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" fill="white">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="24px"
+            viewBox="0 -960 960 960"
+            width="24px"
+            fill="white"
+          >
             <path [attr.d]="icons.searchPath" />
           </svg>
         </button>
@@ -175,29 +164,34 @@
           mat-raised-button
           type="button"
           class="form__addButton"
-          routerLink="/prestamos/alta"
+          routerLink="/politicasSancion/alta"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" fill="black">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="24px"
+            viewBox="0 -960 960 960"
+            width="24px"
+            fill="black"
+          >
             <path [attr.d]="icons.addPath" />
           </svg>
         </button>
       </form>
     </div>
-
     <div class="layout-content">
-      <ng-container *ngFor="let prestamo of dataSource.data">
-        <div class="crud-card" *ngIf="prestamo.id !== 0">
+      <ng-container *ngFor="let politica of dataSource.data">
+        <div class="crud-card" *ngIf="politica.diasHasta !== 0">
           <div class="card__header-strip"></div>
 
           <div class="card__body">
             <div class="card__top-row">
-              <span class="card__id">ID Socio #{{ prestamo.idSocio }}</span>
+              <span class="card__id">{{ politica.diasHasta }} Dias de atraso máximo</span>
               <div class="card__actions">
                 <button
                   mat-button
                   type="button"
                   class="actions-button"
-                  (click)="openDetailDialog(prestamo.id)"
+                  [routerLink]="['/politicasSancion/editar', politica.diasHasta]"
                   [disabled]="isLoading"
                 >
                   <svg
@@ -205,26 +199,30 @@
                     viewBox="0 -960 960 960"
                     class="actions-button__svg"
                   >
-                    <path [attr.d]="icons.visibilityPath" />
+                    <path [attr.d]="icons.editPath" />
+                  </svg>
+                </button>
+                <button
+                  mat-button
+                  class="actions-button"
+                  (click)="deletePolitica(politica)"
+                  [disabled]="isLoading"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="actions-button__svg"
+                    viewBox="0 -960 960 960"
+                  >
+                    <path [attr.d]="icons.deletePath" />
                   </svg>
                 </button>
               </div>
             </div>
-
-            <span class="card__nombre">{{ prestamo.fechaCreacion | date: 'dd/MM/yyyy' }}</span>
-            <span class="card__autor">{{ prestamo.estado }}</span>
-          </div>
-
-          <div class="card__footer">
-            <span class="card__cantidad-label">Libros </span>
-            <span class="card__prestamos-badge card__prestamos-badge--active">
-              {{ prestamo.cantlibros + ' libro' + (prestamo.cantlibros > 1 ? 's' : '') }}
-            </span>
+            <span class="card__nombre">{{ politica.diasSancion }} Días de sanción</span>
           </div>
         </div>
       </ng-container>
     </div>
-
     <div class="layout-footer">
       <mat-paginator
         [length]="totalRecords"

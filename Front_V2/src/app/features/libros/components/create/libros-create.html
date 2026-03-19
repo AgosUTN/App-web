@@ -25,7 +25,7 @@
     </div>
     <div class="form__field form__field--ejemplares">
       <label>Cantidad de ejemplares</label>
-      <input type="text" formControlName="cantejemplares" (input)="sanitize($event)" />
+      <input type="text" formControlName="cantejemplares" onlyNumbers />
     </div>
 
     <div class="form__field form__field--editorial">

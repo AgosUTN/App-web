@@ -17,6 +17,7 @@ import { PrestamoTableDTO } from '../../models/prestamoTable.dto';
 import { PrestamoService } from '../../services/prestamo-service';
 import { MatButtonToggleChange, MatButtonToggleModule } from '@angular/material/button-toggle';
 import { EstadoPrestamo } from '../../models/prestamoEstado.type';
+import { OnlyNumbersDirective } from '../../../../shared/directives/onlyNumbers.directive';
 
 @Component({
   selector: 'app-prestamos-read',
@@ -30,6 +31,7 @@ import { EstadoPrestamo } from '../../models/prestamoEstado.type';
     CommonModule,
     RouterLink,
     MatButtonToggleModule,
+    OnlyNumbersDirective,
   ],
   templateUrl: './prestamos-read.html',
   styleUrl: './prestamos-read.scss',
