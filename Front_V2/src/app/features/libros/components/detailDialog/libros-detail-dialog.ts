@@ -71,10 +71,20 @@ export class LibrosDetailDialog {
 
     this.dialogService.confirm(titulo, mensaje, 'BORRAR').subscribe((confirmed) => {
       if (!confirmed) return;
-
+      this.isLoading = true;
+      this.cdr.detectChanges();
       this.ejemplarService.delete(ejemplar.idEjemplar, ejemplar.idLibro).subscribe({
         next: () => {
-          this.ejemplares = this.ejemplares.filter((e) => e.idEjemplar !== ejemplar.idEjemplar);
+          this.isLoading = false;
+          if (ejemplar.estado === 'NUEVO') {
+            this.ejemplares = this.ejemplares.filter((e) => e.idEjemplar !== ejemplar.idEjemplar);
+          } else {
+            this.ejemplares = this.ejemplares.map((e) =>
+              e.idEjemplar === ejemplar.idEjemplar
+                ? { ...e, estado: 'ELIMINADO' as EstadoEjemplar }
+                : e,
+            );
+          }
           this.cdr.detectChanges();
         },
 
