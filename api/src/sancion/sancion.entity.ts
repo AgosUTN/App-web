@@ -1,8 +1,16 @@
-import { Entity, ManyToOne, Property, DateType, Rel } from "@mikro-orm/core";
+import {
+  Entity,
+  ManyToOne,
+  Property,
+  DateType,
+  Rel,
+  OneToOne,
+} from "@mikro-orm/core";
 import { Socio } from "../socio/socio.entity.js";
 import { BaseEntity } from "../shared/DB/baseEntity.entity.js";
 import { addDays, differenceInDays, isAfter, isBefore } from "date-fns";
 import { EstadoSancion } from "./estadoSancion.type.js";
+import { LineaPrestamo } from "../lineaPrestamo/lineaPrestamo.entity.js";
 
 @Entity()
 export class Sancion extends BaseEntity {
@@ -15,8 +23,11 @@ export class Sancion extends BaseEntity {
   @Property({ type: DateType, nullable: true })
   fechaRevocacion?: Date;
 
-  @ManyToOne(() => Socio, { deleteRule: "cascade" })
+  @ManyToOne(() => Socio)
   miSocioSancion!: Rel<Socio>;
+
+  @OneToOne(() => LineaPrestamo)
+  miLineaPrestamo!: Rel<LineaPrestamo>;
 
   getFechaFinSancion(): Date {
     return addDays(this.fechaSancion, this.diasSancion);

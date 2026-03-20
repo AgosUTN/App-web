@@ -1,21 +1,17 @@
 import { Router } from "express";
-import {
-  buscarSanciones,
-  buscarSancion,
-  bajaSancion,
-} from "./sancion.controller.js";
+import { buscarSancionesByPage, bajaSancion } from "./sancion.controller.js";
 import { validateInput } from "../middlewares/middleware.validateInput.js";
 import { schemaParamsId } from "../schemas/schema.paramsId.js";
+import { sancionGetByPageSchema } from "../schemas/getByPage/sancion.schema.js";
 
 export const sancionRouter = Router({ mergeParams: true });
 
-sancionRouter.get("/", buscarSanciones);
-
 sancionRouter.get(
-  "/:id",
-  validateInput(schemaParamsId, undefined),
-  buscarSancion,
+  "/",
+  validateInput(undefined, undefined, sancionGetByPageSchema),
+  buscarSancionesByPage,
 );
+
 sancionRouter.delete(
   "/:id",
   validateInput(schemaParamsId, undefined),

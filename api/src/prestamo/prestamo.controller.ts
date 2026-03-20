@@ -442,6 +442,7 @@ async function devolverLibro(req: Request, res: Response, next: NextFunction) {
         diasSancion: diasSancion,
         miSocioSancion: idSocio,
         fechaSancion: hoy,
+        miLineaPrestamo: lpPendiente,
       });
     }
 

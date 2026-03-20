@@ -9,7 +9,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { icons } from '../../../../shared/constants/iconPaths';
-import { Subscription, switchMap } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { NotificationService } from '../../../../shared/services/notificationService/notification-service';
 import { DialogService } from '../../../../shared/services/dialogService/dialog-service';
 import { ViewportService } from '../../../../core/services/viewportService/viewport-service';
@@ -96,7 +96,6 @@ export class PrestamosRead extends BasePagedComponent<PrestamoTableDTO> {
             this.cdr.markForCheck();
           }
         },
-        error: (err) => console.log(err),
         complete: () => {
           this.isLoading = false;
         },

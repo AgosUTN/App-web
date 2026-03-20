@@ -6,12 +6,14 @@ import {
   Rel,
   PrimaryKey,
   PrimaryKeyProp,
+  OneToOne,
 } from "@mikro-orm/core";
 
 import { Prestamo } from "../prestamo/prestamo.entity.js";
 import { Ejemplar } from "../ejemplar/ejemplar.entity.js";
 import { Libro } from "../libro/libro.entity.js";
 import { isBefore, isAfter } from "date-fns";
+import { Sancion } from "../sancion/sancion.entity.js";
 
 @Entity()
 export class LineaPrestamo {
@@ -35,6 +37,11 @@ export class LineaPrestamo {
 
   @ManyToOne(() => Ejemplar)
   miEjemplar!: Rel<Ejemplar>;
+
+  @OneToOne(() => Sancion, (sancion) => sancion.miLineaPrestamo, {
+    nullable: true,
+  }) // El mapped by esta acá porque sanción es el owner
+  miSancion?: Rel<Sancion>;
 
   tenesPendiente(libro: Libro): boolean {
     if (!this.estasPendiente()) {
