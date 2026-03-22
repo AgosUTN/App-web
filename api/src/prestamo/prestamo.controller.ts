@@ -335,7 +335,7 @@ async function buscarPrestamo(req: Request, res: Response, next: NextFunction) {
     const idPrestamo = parseInt(req.params.id);
 
     const prestamo = await em.findOneOrFail(Prestamo, idPrestamo, {
-      populate: ["miSocioPrestamo", "misLpPrestamo.miEjemplar.miLibro"],
+      populate: ["miSocioPrestamo.miUser", "misLpPrestamo.miEjemplar.miLibro"],
     });
     const prestamoDTO = PrestamoMapper.toDetailDTO(prestamo);
     return res
@@ -364,7 +364,7 @@ async function buscarPrestamoByEjemplar(
     );
 
     const prestamo = await em.findOneOrFail(Prestamo, lp.miPrestamo.id!, {
-      populate: ["miSocioPrestamo", "misLpPrestamo.miEjemplar.miLibro"],
+      populate: ["miSocioPrestamo.miUser", "misLpPrestamo.miEjemplar.miLibro"],
     });
     const prestamoDTO = PrestamoMapper.toDetailDTO(prestamo);
     return res

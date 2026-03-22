@@ -55,7 +55,7 @@ app.use(
 app.use("/api/socios", verifyToken, verifyRol("ADMIN"), socioRouter);
 app.use("/api/prestamos", prestamoRouter);
 app.use("/api/sanciones", sancionRouter);
-app.use("/api/users", userRouter);
+app.use("/api/users", verifyToken, verifyRol("ADMIN", "USER"), userRouter); // Redudante el verifyRol pero por explicitud.
 app.use("/api/auth", authRouter);
 
 app.use(handleInternalError);

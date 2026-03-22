@@ -6,7 +6,7 @@ import { Rol } from "../auth/rol.type.js";
 
 @Entity()
 export class User extends BaseEntity {
-  @Property() // Falta unique true
+  @Property({ unique: true })
   email!: string;
 
   @Property()
@@ -18,7 +18,7 @@ export class User extends BaseEntity {
   @Property()
   bajaLogica?: boolean = false;
 
-  @OneToOne(() => Socio)
+  @OneToOne(() => Socio, { nullable: true }) // Un admin no tiene socio
   miSocio!: Rel<Socio>;
 
   setBajaLogica(): void {

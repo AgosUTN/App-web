@@ -32,7 +32,7 @@ export class PrestamoMapper {
         id: prestamo.miSocioPrestamo.id!,
         nombre: prestamo.miSocioPrestamo.nombre,
         apellido: prestamo.miSocioPrestamo.apellido,
-        email: prestamo.miSocioPrestamo.email,
+        email: prestamo.miSocioPrestamo.miUser!.email,
         telefono: prestamo.miSocioPrestamo.telefono,
       },
       misLpPrestamo: prestamo.misLpPrestamo.map((lp) => ({

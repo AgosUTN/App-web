@@ -1,17 +1,49 @@
 import { Request, Response, NextFunction } from "express";
 import { orm } from "../shared/DB/orm.js";
 import { Socio } from "./socio.entity.js";
-import { NotFoundError } from "@mikro-orm/core";
+import {
+  NotFoundError,
+  UniqueConstraintViolationException,
+} from "@mikro-orm/core";
 import { PoliticaBiblioteca } from "../politicaBiblioteca/politicaBiblioteca.entity.js";
+import { User } from "../users/user.entity.js";
+import bcrypt from "bcrypt";
+import { SocioWriteDTO } from "./dtos/socioWrite.dto.js";
+import { SocioMapper } from "./socio.mapper.js";
 
 const em = orm.em;
 
-async function buscarSocios(req: Request, res: Response, next: NextFunction) {
+async function buscarSociosByPage(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
   try {
-    const socios = await em.find(Socio, {});
+    const sortOrder = req.query.sortOrder as string;
+    const sortColumn = req.query.sortColumn as string;
+    const filterValue = req.query.filterValue as string;
+    const pageSize = Number(req.query.pageSize as string);
+    const pageIndex = Number(req.query.pageIndex as string);
+
+    const offset = pageSize * pageIndex;
+
+    let filter = { bajaLogica: false };
+
+    if (filterValue) {
+      filter = Object.assign(filter, { nombre: { $like: `%${filterValue}%` } });
+    }
+
+    const [socios, totalCount] = await em.findAndCount(Socio, filter, {
+      limit: pageSize,
+      offset: offset,
+      orderBy: { [sortColumn]: sortOrder },
+    });
+    const sociosDTO = SocioMapper.toTableDTOList(socios);
+
     return res.status(200).json({
       message: "Socios encontrados: ",
-      data: socios,
+      data: sociosDTO,
+      total: totalCount,
     });
   } catch (error: any) {
     next(error);
@@ -21,10 +53,12 @@ async function buscarSocios(req: Request, res: Response, next: NextFunction) {
 async function buscarSocio(req: Request, res: Response, next: NextFunction) {
   try {
     const id = Number.parseInt(req.params.id);
-    const socio = await em.findOneOrFail(Socio, { id });
+    const socio = await em.findOneOrFail(Socio, { id: id, bajaLogica: false });
+    const socioDTO = SocioMapper.toReadDTO(socio);
+
     return res.status(200).json({
       message: "Socio encontrado: ",
-      data: socio,
+      data: socioDTO,
     });
   } catch (error: any) {
     if (error instanceof NotFoundError) {
@@ -36,10 +70,31 @@ async function buscarSocio(req: Request, res: Response, next: NextFunction) {
 
 async function altaSocio(req: Request, res: Response, next: NextFunction) {
   try {
-    const socioCreado = em.create(Socio, req.body);
-    await em.flush();
-    return res.status(201).json({ message: "Socio creado", data: socioCreado });
+    const socioDTO: SocioWriteDTO = await em.transactional(async (em) => {
+      let socio = em.create(Socio, req.body.socio);
+
+      const password_hash = await bcrypt.hash(req.body.user.password, 10);
+
+      const user = em.create(User, {
+        email: req.body.user.email,
+        password_hash: password_hash,
+        rol: "USER",
+        miSocio: socio,
+      });
+
+      socio.setUser(user);
+
+      await em.flush();
+      return SocioMapper.toWriteDTO(socio);
+    });
+
+    return res.status(201).json({ message: "Socio creado", data: socioDTO });
   } catch (error: any) {
+    if (error instanceof UniqueConstraintViolationException) {
+      return res
+        .status(409)
+        .json({ message: "Email ya registrado", code: "DUPLICATED_EMAIL" });
+    }
     next(error);
   }
 }
@@ -72,7 +127,7 @@ async function bajaSocio(req: Request, res: Response, next: NextFunction) {
       });
     }
     if (socio.misPrestamos.length > 0) {
-      socio.setBajaLogica();
+      socio.setBajaLogica(); // Le da baja lógica al usuario también.
       await em.flush();
       return res.status(200).send({ message: "Socio dado de baja" });
     } else {
@@ -135,7 +190,7 @@ async function validarSocio(req: Request, res: Response, next: NextFunction) {
 }
 
 export {
-  buscarSocios,
+  buscarSociosByPage,
   buscarSocio,
   altaSocio,
   actualizarSocio,

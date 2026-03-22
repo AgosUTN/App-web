@@ -1,7 +1,5 @@
 import { Router } from "express";
 
-import { validateInput } from "../middlewares/middleware.validateInput.js";
-
 import { verifyToken } from "../middlewares/middleware.authentication.js";
 import { cambiarContrasenia } from "./user.controller.js";
 import { verifyRol } from "../middlewares/middleware.authorization.js";

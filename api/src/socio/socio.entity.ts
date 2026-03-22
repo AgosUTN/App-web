@@ -19,8 +19,6 @@ export class Socio extends BaseEntity {
   @Property()
   apellido!: string;
   @Property()
-  email!: string;
-  @Property()
   domicilio!: string;
   @Property()
   telefono!: string;
@@ -33,7 +31,7 @@ export class Socio extends BaseEntity {
   @OneToMany(() => Sancion, (sancion) => sancion.miSocioSancion)
   misSanciones = new Collection<Sancion>(this);
 
-  @OneToOne(() => User, (user) => user.miSocio, { nullable: true })
+  @OneToOne(() => User, (user) => user.miSocio, { nullable: true }) // Para el alta
   miUser?: Rel<User>;
 
   estasInhabilitado(): boolean {
@@ -109,5 +107,9 @@ export class Socio extends BaseEntity {
     if (this.miUser) {
       this.miUser.setBajaLogica();
     }
+  }
+
+  setUser(user: User): void {
+    this.miUser = user;
   }
 }
