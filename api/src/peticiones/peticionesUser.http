@@ -1,0 +1,35 @@
+### Subir user
+
+POST http://localhost:3000/api/users/user
+Content-Type: application/json
+
+{
+    "email": "agosMonti@hotmail.com",
+    "password": "password123",
+    "socio":3
+
+}
+
+### Subir admin
+
+POST http://localhost:3000/api/users/admin
+Content-Type: application/json
+
+{
+    "email": "agosMonti2@hotmail.com",
+    "password": "password12345",
+    "socio":4
+
+}
+
+### Subir user
+
+POST http://localhost:3000/api/users/user
+Content-Type: application/json
+
+{
+    "email": "agosMonti3@hotmail.com",
+    "password": "password123",
+    "socio":5
+
+}

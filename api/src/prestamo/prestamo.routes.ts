@@ -18,37 +18,53 @@ import { prestamoAltaSchema } from "../schemas/schemas.prestamo.js";
 import { deadlockTestSchema } from "../schemas/testConcurrencia.schema.js";
 import { prestamoGetByPageSchema } from "../schemas/getByPage/prestamo.schema.js";
 import { schemaParamsId } from "../schemas/schema.paramsId.js";
+import { verifyToken } from "../middlewares/middleware.authentication.js";
+import { verifyRol } from "../middlewares/middleware.authorization.js";
 
 export const prestamoRouter = Router({ mergeParams: true });
 
 prestamoRouter.get(
   "/:id/detail",
+  verifyToken,
+  verifyRol("ADMIN"),
   validateInput(schemaParamsId, undefined),
   buscarPrestamo,
 );
 prestamoRouter.get(
   "/detail",
+  verifyToken,
+  verifyRol("ADMIN"),
   validateInput(undefined, undefined, getByEjemplarSchema),
   buscarPrestamoByEjemplar,
 );
 prestamoRouter.get(
   "/",
+  verifyToken,
+  verifyRol("ADMIN"),
   validateInput(undefined, undefined, prestamoGetByPageSchema),
   buscarPrestamosByPage,
 );
 prestamoRouter.post(
   "/deadlockTest",
+  verifyToken,
+  verifyRol("ADMIN"),
   validateInput(undefined, prestamoAltaSchema, deadlockTestSchema),
   altaPrestamoDeadlock,
 );
 prestamoRouter.post(
   "/",
+  verifyToken,
+  verifyRol("ADMIN"),
   validateInput(undefined, prestamoAltaSchema),
   altaPrestamo,
 );
 
 prestamoRouter.patch(
   "/:id/lineas/:idLP/devolver",
+  verifyToken,
+  verifyRol("ADMIN"),
   validateInput(devolverLibroParams, devolverLibroRequest),
   devolverLibro,
 );
+
+// Cuando cree lo del user, quizás cree nuevos endpoints.

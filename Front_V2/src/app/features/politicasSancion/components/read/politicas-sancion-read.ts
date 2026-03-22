@@ -7,7 +7,7 @@ import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
-import { MatSortModule } from '@angular/material/sort';
+import { MatSortModule, Sort } from '@angular/material/sort';
 import { CommonModule } from '@angular/common';
 import { ViewportService } from '../../../../core/services/viewportService/viewport-service';
 import { Subscription } from 'rxjs';
@@ -96,12 +96,18 @@ export class PoliticasSancionRead extends BasePagedComponent<PoliticaSancionRead
       diasSancion: 0,
     };
   }
-  private initTrackers(): void {
-    this.mobileSubscription = this.viewportService.getMobileTracker().subscribe((state) => {
-      this.isMobile = state;
-      this.cdr.markForCheck();
-    });
+
+  override onSortChange(event: Sort): void {
+    this.sortColumn = event.active;
+    this.sortOrder = event.direction.toString();
+    if (this.sortOrder === '') {
+      this.sortColumn = 'diasHasta';
+      this.sortOrder = 'asc';
+    }
+    this.resetPaginator();
+    this.loadData();
   }
+
   deletePolitica(politica: PoliticaSancionTableDTO): void {
     this.dialogService
       .confirm(
@@ -117,5 +123,12 @@ export class PoliticasSancionRead extends BasePagedComponent<PoliticaSancionRead
           error: () => {}, // No hay error que llegue.
         });
       });
+  }
+
+  private initTrackers(): void {
+    this.mobileSubscription = this.viewportService.getMobileTracker().subscribe((state) => {
+      this.isMobile = state;
+      this.cdr.markForCheck();
+    });
   }
 }

@@ -5,7 +5,7 @@ export const CRUD_names = {
   Autor: 'autores',
   PoliticaSancion: 'politicasSancion',
   Socio: 'socios',
-  Sancion: 'sancines',
+  Sancion: 'sanciones',
 } as const;
 
 // Archivo duplicado en la API.

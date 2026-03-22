@@ -5,6 +5,9 @@ import { Sancion } from "./sancion.entity.js";
 import { NotFoundError } from "@mikro-orm/core";
 import { EstadoSancion } from "./estadoSancion.type.js";
 import { SancionMapper } from "./sancion.mapper.js";
+import { SOCKET_EVENTS } from "../shared/constants/socketEvents.config.js";
+import { CRUD_names } from "../shared/constants/crudNames.config.js";
+import { io } from "../app.js";
 
 const em = orm.em;
 
@@ -88,6 +91,8 @@ async function bajaSancion(req: Request, res: Response, next: NextFunction) {
 
     em.assign(sancion, { fechaRevocacion: new Date() });
     await em.flush();
+
+    io.emit(SOCKET_EVENTS.CACHE_INVALIDATE, { crud: CRUD_names.Sancion });
 
     return res.status(200).json({ message: "Sancion revocada" });
   } catch (error: any) {

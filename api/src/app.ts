@@ -1,6 +1,7 @@
 import "reflect-metadata";
 import express from "express";
 import cors from "cors";
+import cookieParser from "cookie-parser";
 
 import { autorRouter } from "./autor/autor.routes.js";
 import { orm, syncSchema } from "./shared/DB/orm.js";
@@ -16,29 +17,44 @@ import { handleInternalError } from "./middlewares/middleware.handleInternalErro
 import { sancionRouter } from "./sancion/sancion.routes.js";
 import { createServer } from "http";
 import { Server } from "socket.io";
+import { verifyToken } from "./middlewares/middleware.authentication.js";
+import { verifyRol } from "./middlewares/middleware.authorization.js";
+import { userRouter } from "./users/user.routes.js";
 
 const app = express();
 const httpServer = createServer(app);
 export const io = new Server(httpServer, {
-  cors: { origin: "*" },
+  cors: { origin: process.env.FRONTEND_URL, credentials: true },
 });
 
-app.use(cors());
+app.use(cors({ origin: process.env.FRONTEND_URL, credentials: true }));
 app.use(express.json());
+app.use(cookieParser());
 app.use(handleJsonSyntaxError);
 
 app.use((req, res, next) => {
   RequestContext.create(orm.em, next);
 });
 
-app.use("/api/autores", autorRouter);
-app.use("/api/editoriales", editorialRouter);
-app.use("/api/libros", libroRouter);
-app.use("/api/politicaBiblioteca", politicaBibliotecaRouter);
-app.use("/api/politicasSancion", politicaSancionRouter);
-app.use("/api/socios", socioRouter);
+app.use("/api/autores", verifyToken, verifyRol("ADMIN"), autorRouter);
+app.use("/api/editoriales", verifyToken, verifyRol("ADMIN"), editorialRouter);
+app.use("/api/libros", verifyToken, verifyRol("ADMIN"), libroRouter);
+app.use(
+  "/api/politicaBiblioteca",
+  verifyToken,
+  verifyRol("ADMIN"),
+  politicaBibliotecaRouter,
+);
+app.use(
+  "/api/politicasSancion",
+  verifyToken,
+  verifyRol("ADMIN"),
+  politicaSancionRouter,
+);
+app.use("/api/socios", verifyToken, verifyRol("ADMIN"), socioRouter);
 app.use("/api/prestamos", prestamoRouter);
 app.use("/api/sanciones", sancionRouter);
+app.use("/api/users", userRouter);
 
 app.use(handleInternalError);
 

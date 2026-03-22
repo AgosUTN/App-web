@@ -1,0 +1,46 @@
+<div class="card" [formGroup]="loginForm">
+  <div class="logo">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" height="22px" width="22px">
+      <path
+        d="M300-80q-58 0-99-41t-41-99v-520q0-58 41-99t99-41h500v600q-25 0-42.5 17.5T740-220q0 25 17.5 42.5T800-160v80H300Zm-60-267q14-7 29-10t31-3h20v-440h-20q-25 0-42.5 17.5T240-740v393Zm160-13h320v-440H400v440Zm-160 13v-453 453Zm60 187h373q-6-14-9.5-28.5T660-220q0-16 3-31t10-29H300q-26 0-43 17.5T240-220q0 26 17 43t43 17Z"
+      />
+    </svg>
+  </div>
+  <h1>Bienvenido de nuevo</h1>
+  <p class="subtitle">Ingresá tus datos para continuar</p>
+
+  <div class="field">
+    <label for="email">Email</label>
+    <div class="input-wrap">
+      <input id="email" type="email" placeholder="tu@email.com" formControlName="email" />
+    </div>
+  </div>
+
+  <div class="field">
+    <label for="password">Contraseña</label>
+    <div class="input-wrap">
+      <input
+        id="password"
+        [type]="passwordType"
+        placeholder="••••••••"
+        formControlName="password"
+      />
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        (click)="togglePasswordType()"
+      >
+        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+        <path d="M9 12a3 3 0 1 0 6 0 3 3 0 0 0-6 0" />
+      </svg>
+    </div>
+  </div>
+  <small class="error" *ngIf="loginError">Email o contraseña incorrectos.</small>
+  <button type="button" class="btn" [disabled]="!loginForm.valid || isLoading" (click)="onSubmit()">
+    Iniciar sesión
+  </button>
+</div>

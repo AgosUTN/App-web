@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MenuItem } from '../../models/menuItem.model';
 import { Router, RouterLink } from '@angular/router';
+import { AuthService } from '../../services/authService/auth-service';
 
 @Component({
   selector: 'app-sidenav',
@@ -18,7 +19,10 @@ export class Sidenav {
   @Input() isMobile: boolean = false;
   @Output() itemClicked = new EventEmitter<boolean>();
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private authService: AuthService,
+  ) {}
 
   isActive(route: string | undefined): boolean {
     if (!route) return false;
@@ -30,5 +34,12 @@ export class Sidenav {
       this.sideNavOpen = false;
       this.itemClicked.emit(true);
     }
+  }
+
+  logOut(): void {
+    localStorage.removeItem('rol'); // No es lo ideal, pero es para evitar que moleste el login guard. Evita que redireccione a dashboard o a prestamos.
+    this.authService.logOut().subscribe(() => {
+      this.router.navigateByUrl('/login');
+    });
   }
 }

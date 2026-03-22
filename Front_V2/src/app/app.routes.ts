@@ -21,6 +21,9 @@ import { PoliticasSancionCreate } from './features/politicasSancion/components/c
 import { PoliticasSancionUpdate } from './features/politicasSancion/components/update/politicas-sancion-update';
 import { PoliticaBibliotecaUpdate } from './features/politicaBiblioteca/components/update/politica-biblioteca-update';
 import { SancionesRead } from './features/sanciones/components/read/sanciones-read';
+import { LoginPage } from './core/pages/login-page/login-page';
+import { AuthGuard } from './core/guards/auth.guard';
+import { LoginGuard } from './core/guards/login.guard';
 
 export const routes: Routes = [
   {
@@ -34,8 +37,10 @@ export const routes: Routes = [
       },
       {
         path: 'editoriales',
+        canActivate: [AuthGuard],
         data: {
           breadcrumb: 'Editoriales',
+          rol: 'ADMIN',
         },
         children: [
           {
@@ -66,11 +71,13 @@ export const routes: Routes = [
       },
       {
         path: 'libros',
-        data: { breadcrumb: 'Libros' },
+        data: { breadcrumb: 'Libros', rol: 'ADMIN' },
+        canActivate: [AuthGuard],
         children: [
           {
             path: '',
             component: LibrosRead,
+
             data: {
               breadcrumb: '',
               crud: CRUD_names.Libro,
@@ -91,6 +98,7 @@ export const routes: Routes = [
       {
         path: 'prestamos',
         data: { breadcrumb: 'Préstamos' },
+        canActivate: [AuthGuard],
         children: [
           {
             path: '',
@@ -106,7 +114,8 @@ export const routes: Routes = [
       },
       {
         path: 'autores',
-        data: { breadcrumb: 'Autores' },
+        data: { breadcrumb: 'Autores', rol: 'ADMIN' },
+        canActivate: [AuthGuard],
         children: [
           {
             path: '',
@@ -127,7 +136,8 @@ export const routes: Routes = [
       },
       {
         path: 'politicasSancion',
-        data: { breadcrumb: 'Politicas de Sanción' },
+        canActivate: [AuthGuard],
+        data: { breadcrumb: 'Politicas de Sanción', rol: 'ADMIN' },
         children: [
           {
             path: '',
@@ -149,16 +159,28 @@ export const routes: Routes = [
       {
         path: 'politicaBiblioteca',
         component: PoliticaBibliotecaUpdate,
-        data: { breadcrumb: 'Política de biblioteca', crud: CRUD_names.PoliticaSancion },
+        canActivate: [AuthGuard],
+        data: {
+          breadcrumb: 'Política de biblioteca',
+          crud: CRUD_names.PoliticaSancion,
+          rol: 'ADMIN',
+        },
       }, // Hecho apróposito. Si se navega a politica biblioteca desde ps, no se debería borrar cache.
       {
         path: 'sanciones',
         component: SancionesRead,
+        canActivate: [AuthGuard],
         data: { breadcrumb: 'Sanciones', crud: CRUD_names.Sancion },
       },
 
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
     ],
+  },
+  {
+    path: 'login',
+    component: EmptyLayoutComponent,
+    canActivate: [LoginGuard],
+    children: [{ path: '', component: LoginPage }],
   },
   {
     path: 'error',
@@ -173,3 +195,5 @@ export const routes: Routes = [
     redirectTo: 'error/404',
   },
 ];
+
+//Si no hay rol, cualquiera con token válido puede entrar. (cualquiera logueado, osea cualquier rol).

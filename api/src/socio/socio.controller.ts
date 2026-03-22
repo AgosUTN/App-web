@@ -64,18 +64,24 @@ async function bajaSocio(req: Request, res: Response, next: NextFunction) {
   try {
     const id = Number.parseInt(req.params.id);
     const socio = await em.findOneOrFail(Socio, id, {
-      populate: ["misPrestamos.misLpPrestamo"],
+      populate: ["misPrestamos.misLpPrestamo", "miUser"],
     });
     if (socio.getCantPendientes() > 0) {
       return res.status(409).json({
         message: "No se puede eliminar un socio que tenga libros sin devolver",
       });
     }
-    await em.removeAndFlush(socio);
-    return res.status(200).send({ message: "Socio borrado" });
+    if (socio.misPrestamos.length > 0) {
+      socio.setBajaLogica();
+      await em.flush();
+      return res.status(200).send({ message: "Socio dado de baja" });
+    } else {
+      await em.removeAndFlush(socio);
+      return res.status(200).send({ message: "Socio borrado" });
+    }
   } catch (error: any) {
     if (error instanceof NotFoundError) {
-      return res.status(200).send({ message: "Socio borrado" });
+      return res.status(200).send({ message: "Socio borrado" }); // Por seguridad.
     }
     next(error);
   }

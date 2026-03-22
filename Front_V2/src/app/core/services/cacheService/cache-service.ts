@@ -38,8 +38,11 @@ export class CacheService {
     //Elimina el cache si se navega a otro CRUD.
 
     this.crudTrackingService.getCrudTracker().subscribe((newCrud) => {
+      console.log(this.currentCrud);
+      console.log(newCrud);
       if (newCrud && this.currentCrud !== newCrud) {
         // Si se navega a una pagina sin crud, vuelve newCrud null y no limpiamos cache.
+        this.currentCrud = newCrud;
         this.clearData();
       }
     });

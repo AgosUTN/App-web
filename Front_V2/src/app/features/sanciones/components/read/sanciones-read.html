@@ -61,7 +61,13 @@
           <th mat-header-cell *matHeaderCellDef>Libro</th>
           <td mat-cell *matCellDef="let sancion">
             <ng-container *ngIf="!isLoading; else skeleton2">
-              <span #textRef>{{ sancion.titulo }}</span>
+              <span
+                #textRef
+                class="table__item--ellipsis"
+                [matTooltip]="sancion.titulo"
+                matTooltipPosition="above"
+                >{{ sancion.titulo }}</span
+              >
             </ng-container>
             <ng-template #skeleton2>
               <div class="skeleton"></div>

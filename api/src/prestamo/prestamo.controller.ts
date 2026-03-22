@@ -453,7 +453,8 @@ async function devolverLibro(req: Request, res: Response, next: NextFunction) {
     }
 
     await em.flush();
-    io.emit(SOCKET_EVENTS.CACHE_INVALIDATE, { crud: CRUD_names.Prestamo }); // Considerar agregar el de sanción.
+    io.emit(SOCKET_EVENTS.CACHE_INVALIDATE, { crud: CRUD_names.Prestamo });
+    io.emit(SOCKET_EVENTS.CACHE_INVALIDATE, { crud: CRUD_names.Sancion });
 
     const prestamoDTO = PrestamoMapper.toDetailDTO(prestamo);
 

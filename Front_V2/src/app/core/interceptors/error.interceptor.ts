@@ -18,16 +18,31 @@ export class ErrorInterceptor implements HttpInterceptor {
     return next.handle(req).pipe(
       catchError((error: HttpErrorResponse) => {
         switch (error.status) {
-          case 0:
+          case 0: // API caida
             this.router.navigate(['/error', 0]);
             return EMPTY;
-          // Red caida
+
           case 400:
             if (error.error.code === 'INVALID_JSON' || error.error.code === 'VALIDATION_ERROR') {
               this.router.navigate(['/error', 400]);
               return EMPTY;
             }
             return throwError(() => error); // Si es un 400 del controlador, lo maneja componente.
+
+          case 401:
+            if (error.error.code === 'INVALID_TOKEN') {
+              localStorage.removeItem('rol');
+              // Se limpia para que la próxima vez sea el guard el que evite la navegación. De todas formas
+              // la primera vez luego del vencimiento se va a ver un momento la page destino, hasta que llegue el 401.
+              this.router.navigate(['/login']);
+
+              return EMPTY;
+            }
+            return throwError(() => error); // Si es 401 de la pantalla de login es por email/contraseña.
+
+          case 403:
+            this.router.navigate(['/error', 404]);
+            return EMPTY; // Más allá del guard, si viene 403 del backend redirijo a not found para no dar información. (Nota: Lo mantengo así pero en realidad no sirve porque el 403 lo pueden ver igual)
 
           case 404:
             if (error.error.code === 'NOT_FOUND') {
