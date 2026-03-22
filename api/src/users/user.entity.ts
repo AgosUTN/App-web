@@ -2,7 +2,7 @@ import { Entity, Property, OneToOne, Rel } from "@mikro-orm/core";
 
 import { BaseEntity } from "../shared/DB/baseEntity.entity.js";
 import { Socio } from "../socio/socio.entity.js";
-import { Rol } from "./rol.type.js";
+import { Rol } from "../auth/rol.type.js";
 
 @Entity()
 export class User extends BaseEntity {

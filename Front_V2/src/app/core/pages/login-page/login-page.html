@@ -1,4 +1,4 @@
-<div class="card" [formGroup]="loginForm">
+<form class="card" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
   <div class="logo">
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" height="22px" width="22px">
       <path
@@ -40,7 +40,7 @@
     </div>
   </div>
   <small class="error" *ngIf="loginError">Email o contraseña incorrectos.</small>
-  <button type="button" class="btn" [disabled]="!loginForm.valid || isLoading" (click)="onSubmit()">
+  <button type="submit" class="btn" [disabled]="!loginForm.valid || isLoading">
     Iniciar sesión
   </button>
-</div>
+</form>

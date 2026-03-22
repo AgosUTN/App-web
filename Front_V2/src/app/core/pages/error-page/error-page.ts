@@ -20,7 +20,7 @@ export class ErrorPage {
 
   ngOnInit(): void {
     const code = this.route.snapshot.paramMap.get('code');
-    this.defineErrorPage(code); //REVISAR si siempre viene null.
+    this.defineErrorPage(code);
   }
 
   private defineErrorPage(code: string | null): void {

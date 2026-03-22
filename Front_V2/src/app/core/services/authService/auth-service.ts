@@ -5,12 +5,13 @@ import { map, Observable, tap } from 'rxjs';
 import { LoginDTO } from '../../models/login.dto';
 import { ApiResponseLogin } from '../../models/apiResponseLogin.model';
 import { ApiResponseLogout } from '../../models/apiResponseLogout.model';
+import { Rol } from '../../models/rol.type';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private readonly baseUrl = `${environment.apiUrl}/api/users`;
+  private readonly baseUrl = `${environment.apiUrl}/api/auth`;
 
   constructor(private http: HttpClient) {}
 
@@ -20,8 +21,8 @@ export class AuthService {
       map((res) => res.data.rol),
     );
   }
-  getRol(): string | null {
-    return localStorage.getItem('rol');
+  getRol(): Rol | null {
+    return localStorage.getItem('rol') as Rol;
   }
 
   verificarToken(): Observable<any> {

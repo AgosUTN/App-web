@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { Rol } from "../users/rol.type";
+import { Rol } from "../auth/rol.type";
 
 export function verifyRol(...roles: Rol[]) {
   return (req: Request, res: Response, next: NextFunction) => {

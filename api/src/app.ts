@@ -20,6 +20,7 @@ import { Server } from "socket.io";
 import { verifyToken } from "./middlewares/middleware.authentication.js";
 import { verifyRol } from "./middlewares/middleware.authorization.js";
 import { userRouter } from "./users/user.routes.js";
+import { authRouter } from "./auth/auth.routes.js";
 
 const app = express();
 const httpServer = createServer(app);
@@ -55,6 +56,7 @@ app.use("/api/socios", verifyToken, verifyRol("ADMIN"), socioRouter);
 app.use("/api/prestamos", prestamoRouter);
 app.use("/api/sanciones", sancionRouter);
 app.use("/api/users", userRouter);
+app.use("/api/auth", authRouter);
 
 app.use(handleInternalError);
 
