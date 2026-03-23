@@ -6,6 +6,6 @@ export const socioGetByPageSchema = z
     pageSize: z.coerce.number().int().min(1),
     sortOrder: z.enum(["asc", "desc"]),
     sortColumn: z.enum(["id"]),
-    filterValue: z.string().max(50),
+    filterValue: z.coerce.number().int().min(0),
   })
   .strict();

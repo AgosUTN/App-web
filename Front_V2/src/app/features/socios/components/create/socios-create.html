@@ -1,0 +1,53 @@
+<div class="card">
+  <form [formGroup]="socioForm" class="form" (ngSubmit)="onSubmit()">
+    <div class="form__field form__field--nombre" maxlength="50">
+      <label>Nombre *</label>
+      <input type="text" formControlName="nombre" />
+      <small
+        class="error"
+        *ngIf="socioForm.get('nombre')?.hasError('minlength') && socioForm.get('nombre')?.touched"
+        >Mínimo 3 carácteres.</small
+      >
+    </div>
+    <div class="form__field form__field--apellido">
+      <label>Apellido *</label>
+      <input type="text" formControlName="apellido" maxlength="50" />
+    </div>
+    <div class="form__field form__field--domicilio" maxlength="50">
+      <label>Domicilio *</label>
+      <input type="text" formControlName="domicilio" />
+    </div>
+    <div class="form__field form__field--telefono">
+      <label>Telefono *</label>
+      <input type="text" formControlName="telefono" onlyNumbers maxlength="20" />
+      <small
+        class="error"
+        *ngIf="
+          socioForm.get('telefono')?.hasError('minlength') && socioForm.get('telefono')?.touched
+        "
+        >Mínimo 4 carácteres.</small
+      >
+    </div>
+    <div class="form__field form__field--email">
+      <label>Email *</label>
+      <input type="text" formControlName="email" maxlength="50" />
+      <small
+        class="error"
+        *ngIf="socioForm.get('email')?.hasError('duplicated') && socioForm.get('email')?.touched"
+        >El email ya está registrado con un socio activo o dado de baja.</small
+      >
+    </div>
+
+    <div class="form__actions">
+      <button
+        mat-raised-button
+        class="form__button"
+        type="submit"
+        [disabled]="socioForm.invalid || this.isLoading"
+        [class.form__button--disabled]="socioForm.invalid || this.isLoading"
+      >
+        {{ submitLabel }}
+      </button>
+    </div>
+  </form>
+</div>

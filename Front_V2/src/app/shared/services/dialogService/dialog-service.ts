@@ -11,6 +11,8 @@ import { AutorReadDialog } from '../../../features/autores/components/readDialog
 import { PrestamosDetailDialog } from '../../../features/prestamos/components/detailDialog/prestamos-detail-dialog';
 import { PrestamoDetailDTO } from '../../../features/prestamos/models/prestamoDetail.dto';
 import { TipoConfirmacion } from '../../models/confirmDialogData.model';
+import { SocioDetailDTO } from '../../../features/socios/models/socioDetail.dto';
+import { SociosDetail } from '../../../features/socios/components/detail/socios-detail';
 
 @Injectable({
   providedIn: 'root',
@@ -64,7 +66,7 @@ export class DialogService {
       })
       .afterClosed();
   }
-  openLibroDetail(libro: LibroDetailDTO): Observable<any> {
+  openLibroDetail(libro: LibroDetailDTO): Observable<void> {
     return this.dialog
       .open(LibrosDetailDialog, {
         width: '900px',
@@ -76,7 +78,7 @@ export class DialogService {
       })
       .afterClosed();
   }
-  openPrestamoDetail(prestamo: PrestamoDetailDTO): Observable<any> {
+  openPrestamoDetail(prestamo: PrestamoDetailDTO): Observable<boolean> {
     return this.dialog
       .open(PrestamosDetailDialog, {
         width: '900px',
@@ -84,6 +86,18 @@ export class DialogService {
         disableClose: false,
         backdropClass: 'custom-backdrop',
         data: prestamo,
+        maxHeight: '95vh',
+      })
+      .afterClosed();
+  }
+  openSocioDetail(socio: SocioDetailDTO): Observable<void> {
+    return this.dialog
+      .open(SociosDetail, {
+        width: '900px',
+        height: '600px',
+        disableClose: false,
+        backdropClass: 'custom-backdrop',
+        data: socio,
         maxHeight: '95vh',
       })
       .afterClosed();

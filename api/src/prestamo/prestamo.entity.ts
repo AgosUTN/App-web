@@ -81,4 +81,11 @@ export class Prestamo extends BaseEntity {
   getLinea(id: number): LineaPrestamo | undefined {
     return this.misLpPrestamo.find((lp) => lp.ordenLinea === id);
   }
+
+  getFechaFin(): Date {
+    return this.misLpPrestamo[0].getFechaDevolucionTeorica();
+    // Nota: Originalmente no se puso la fecha de devolución teórica directamente
+    // en el préstamo porque contemplé la posbilidad de definir distintos días de retorno según que tan famoso/prestado era el libro.
+    // Por eso ahora se recurre a este parche, no es una buena redundancia.
+  }
 }

@@ -62,11 +62,7 @@ export class PrestamosRead extends BasePagedComponent<PrestamoTableDTO> {
     this.initTrackers();
     this.loadData();
 
-    const state = history.state;
-
-    if (state?.origen === 'libroDetail') {
-      this.openDetailDialogByEjemplar(history.state.idEjemplar, history.state.idLibro);
-    }
+    this.defineInitialization();
   }
   ngOnDestroy(): void {
     this.mobileSubscription.unsubscribe();
@@ -177,5 +173,26 @@ export class PrestamosRead extends BasePagedComponent<PrestamoTableDTO> {
       this.isMobile = state;
       this.cdr.markForCheck();
     });
+  }
+
+  private setFilterValue(id: string) {
+    this.searchInput.get('data')?.patchValue(id);
+    this.filterValue = id;
+  }
+
+  private defineInitialization(): void {
+    const state = history.state;
+    if (state?.origen === 'libroDetail') {
+      this.openDetailDialogByEjemplar(history.state.idEjemplar, history.state.idLibro);
+    }
+    if (state?.origen === 'socioDetail' && state?.idSocio) {
+      this.setFilterValue(state.idSocio!);
+      this.resetPaginator();
+      this.loadData();
+      history.replaceState({}, '');
+    }
+    if (state?.origen === 'socioDetail' && state?.idPrestamo) {
+      this.openDetailDialog(state?.idPrestamo!);
+    }
   }
 }

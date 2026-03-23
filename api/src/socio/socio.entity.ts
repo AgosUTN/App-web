@@ -12,6 +12,7 @@ import { Sancion } from "../sancion/sancion.entity.js";
 import { Libro } from "../libro/libro.entity.js";
 import { Ejemplar } from "../ejemplar/ejemplar.entity.js";
 import { User } from "../users/user.entity.js";
+import { EstadoSocio } from "./estadoSocio.type.js";
 @Entity()
 export class Socio extends BaseEntity {
   @Property()
@@ -99,6 +100,35 @@ export class Socio extends BaseEntity {
       }
     }
     return noDevueltos;
+  }
+  getPrestamosPendientes(): Prestamo[] {
+    const pendientes: Prestamo[] = [];
+    for (const prestamo of this.misPrestamos) {
+      if (prestamo.estasPendiente()) {
+        pendientes.push(prestamo);
+      }
+    }
+    return pendientes;
+  }
+
+  getSancionesVigentes(): Sancion[] {
+    const vigentes: Sancion[] = [];
+    for (const sancion of this.misSanciones) {
+      if (sancion.estasVigente()) {
+        vigentes.push(sancion);
+      }
+    }
+    return vigentes;
+  }
+
+  getEstado(): EstadoSocio {
+    if (this.bajaLogica) {
+      return "ELIMINADO";
+    } else if (this.estasInhabilitado()) {
+      return "INHABILITADO";
+    } else if (this.estasSancionado()) {
+      return "SANCIONADO";
+    } else return "HABILITADO";
   }
 
   setBajaLogica(): void {

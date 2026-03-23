@@ -69,6 +69,7 @@ export class SancionesRead extends BasePagedComponent<SancionTableDTO> {
   ngOnInit(): void {
     this.initTrackers();
     this.loadData();
+    this.defineInitialization();
   }
   ngOnDestroy(): void {
     this.mobileSubscription.unsubscribe();
@@ -168,5 +169,19 @@ export class SancionesRead extends BasePagedComponent<SancionTableDTO> {
       this.isMobile = state;
       this.cdr.markForCheck();
     });
+  }
+  private setFilterValue(id: string) {
+    this.searchInput.get('data')?.patchValue(id);
+    this.filterValue = id;
+  }
+  private defineInitialization(): void {
+    const state = history.state;
+
+    if (state?.origen === 'socioDetail' && state?.idSocio) {
+      this.setFilterValue(state.idSocio!);
+      this.resetPaginator();
+      this.loadData();
+      history.replaceState({}, '');
+    }
   }
 }

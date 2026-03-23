@@ -1,0 +1,148 @@
+<div class="dialog">
+  <div class="dialog-header">
+    <div class="badge">Socio</div>
+    <h2>{{ socio.nombre }} {{ socio.apellido }}</h2>
+    <span class="sub">{{ socio.email }} · +{{ socio.telefono }}</span>
+    <button class="dialog-close" (click)="closeDialog()">
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2.5"
+        stroke-linecap="round"
+      >
+        <path d="M18 6L6 18M6 6l12 12" />
+      </svg>
+    </button>
+  </div>
+
+  <div class="socio-info">
+    <div class="info-item">
+      <span class="info-label">ID</span>
+      <span class="info-value">#{{ socio.id }}</span>
+    </div>
+    <div class="info-item">
+      <span class="info-label">Domicilio</span>
+      <span class="info-value">{{ socio.domicilio }}</span>
+    </div>
+    <div class="info-item">
+      <span class="info-label">Sanciones vigentes</span>
+      <span class="info-value info-value--sanciones"
+        >{{ socio.sancionesVigentes.length }} Sanciones</span
+      >
+    </div>
+    <div class="info-item">
+      <span class="info-label">Préstamos activos</span>
+      <span class="info-value info-value--prestamos"
+        >{{ socio.prestamosPendientes.length }} Préstamos</span
+      >
+    </div>
+  </div>
+
+  <div class="dialog-body">
+    <div>
+      <div class="section-header">
+        <span class="section-label">Sanciones vigentes</span>
+        <button class="btn-ver" (click)="navigateToSanciones()">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+          >
+            <path
+              d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"
+            />
+          </svg>
+          Ver todas
+        </button>
+      </div>
+
+      <table class="data-table" *ngIf="socio.sancionesVigentes.length > 0; else emptySanciones">
+        <thead>
+          <tr>
+            <th>Libro</th>
+            <th>Vence</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let sancion of socio.sancionesVigentes">
+            <td>{{ sancion.libro }}</td>
+            <td>
+              <span class="sancion-badge">{{ sancion.fechaFin | date: 'dd/MM/yyyy' }}</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <ng-template #emptySanciones>
+        <div class="empty-state">
+          <svg viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round">
+            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          Sin sanciones vigentes
+        </div>
+      </ng-template>
+    </div>
+    <div>
+      <div class="section-header">
+        <span class="section-label">Préstamos pendientes</span>
+        <button class="btn-ver" (click)="navigateToPrestamos()">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+          >
+            <path
+              d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"
+            />
+          </svg>
+          Ver todos
+        </button>
+      </div>
+
+      <table class="data-table" *ngIf="socio.prestamosPendientes.length > 0; else emptyPrestamos">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Dev. pactada</th>
+            <th>Detalle</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let prestamo of socio.prestamosPendientes">
+            <td class="id-cell">#{{ prestamo.id }}</td>
+            <td>{{ prestamo.fechaFin | date: 'dd/MM/yyyy' }}</td>
+            <td>
+              <button class="btn-detalle" (click)="navigateToPrestamo(prestamo)">
+                <svg
+                  viewBox="0 0 24 24"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                  <circle cx="12" cy="12" r="3" />
+                </svg>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <ng-template #emptyPrestamos>
+        <div class="empty-state">
+          <svg viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round">
+            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          Sin préstamos pendientes
+        </div>
+      </ng-template>
+    </div>
+  </div>
+
+  <div class="dialog-footer">
+    <button class="btn-cerrar" (click)="closeDialog()">Cerrar</button>
+  </div>
+</div>

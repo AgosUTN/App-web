@@ -1,5 +1,4 @@
-export interface SocioReadDTO {
-  id: number;
+export interface SocioCreateDTO {
   nombre: string;
   apellido: string;
   domicilio: string;

@@ -1,4 +1,4 @@
-import { Entity, Property, OneToOne, Rel } from "@mikro-orm/core";
+import { Entity, Property, OneToOne, Rel, Cascade } from "@mikro-orm/core";
 
 import { BaseEntity } from "../shared/DB/baseEntity.entity.js";
 import { Socio } from "../socio/socio.entity.js";
@@ -18,7 +18,7 @@ export class User extends BaseEntity {
   @Property()
   bajaLogica?: boolean = false;
 
-  @OneToOne(() => Socio, { nullable: true }) // Un admin no tiene socio
+  @OneToOne(() => Socio, { deleteRule: "cascade", nullable: true }) // Un admin no tiene socio
   miSocio!: Rel<Socio>;
 
   setBajaLogica(): void {

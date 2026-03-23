@@ -6,6 +6,7 @@ import {
   bajaSocio,
   actualizarSocio,
   validarSocio,
+  buscarSocioDetail,
 } from "./socio.controller.js";
 import { validateInput } from "../middlewares/middleware.validateInput.js";
 import { schemaParamsId } from "../schemas/schema.paramsId.js";
@@ -29,6 +30,13 @@ socioRouter.get(
   verifyRol("ADMIN"),
   validateInput(schemaParamsId, undefined),
   validarSocio,
+);
+socioRouter.get(
+  "/:id/detail",
+  verifyToken,
+  verifyRol("ADMIN"),
+  validateInput(schemaParamsId, undefined),
+  buscarSocioDetail,
 );
 socioRouter.get(
   "/:id",

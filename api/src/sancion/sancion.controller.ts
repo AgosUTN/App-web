@@ -28,7 +28,7 @@ async function buscarSancionesByPage(
 
     let filter = {};
     if (filterValue) {
-      Object.assign(filter, { mi_socio_sancion_id: filterValue }); // ver
+      Object.assign(filter, { mi_socio_sancion_id: filterValue });
     }
 
     let sanciones: Sancion[] = [];

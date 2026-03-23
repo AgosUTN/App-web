@@ -12,13 +12,12 @@ Content-Type: application/json
 
 ### Subir admin
 
-POST http://localhost:3000/api/users/admin
+POST http://localhost:3000/api/auth/admin
 Content-Type: application/json
 
 {
     "email": "agosMonti2@hotmail.com",
-    "password": "password12345",
-    "socio":4
+    "password": "password12345"
 
 }
 

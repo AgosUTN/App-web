@@ -10,9 +10,10 @@ Content-Type: application/json
 {
     "nombre": "Carlos Luis",
     "apellido": "Montini",
-    "email": "agosLopez@gmail.com",
     "domicilio":"Las heras",
-    "telefono": "9991387"
+    "telefono": "9991387",
+     "email": "agosCreate@gmail.com",
+     "password": "create123"
 
 }
 

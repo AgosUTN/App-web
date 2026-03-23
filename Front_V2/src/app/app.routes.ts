@@ -24,6 +24,9 @@ import { SancionesRead } from './features/sanciones/components/read/sanciones-re
 import { LoginPage } from './core/pages/login-page/login-page';
 import { AuthGuard } from './core/guards/auth.guard';
 import { LoginGuard } from './core/guards/login.guard';
+import { SociosRead } from './features/socios/components/read/socios-read';
+import { SociosCreate } from './features/socios/components/create/socios-create';
+import { SociosUpdate } from './features/socios/components/update/socios-update';
 
 export const routes: Routes = [
   {
@@ -171,6 +174,24 @@ export const routes: Routes = [
         component: SancionesRead,
         canActivate: [AuthGuard],
         data: { breadcrumb: 'Sanciones', crud: CRUD_names.Sancion },
+      },
+      {
+        path: 'socios',
+        canActivate: [AuthGuard],
+        data: { breadcrumb: 'Socios', rol: 'ADMIN' },
+        children: [
+          { path: '', component: SociosRead, data: { breadcrumb: '', crud: CRUD_names.Socio } },
+          {
+            path: 'alta',
+            component: SociosCreate,
+            data: { breadcrumb: 'Alta', crud: CRUD_names.Socio },
+          },
+          {
+            path: 'editar/:id',
+            component: SociosUpdate,
+            data: { breadcrumb: 'Editar', crud: CRUD_names.Socio },
+          },
+        ],
       },
 
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },

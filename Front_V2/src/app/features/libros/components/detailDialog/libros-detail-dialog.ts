@@ -9,6 +9,7 @@ import { EjemplarService } from '../../services/ejemplar-service';
 import { NotificationService } from '../../../../shared/services/notificationService/notification-service';
 import { DialogService } from '../../../../shared/services/dialogService/dialog-service';
 import { Router } from '@angular/router';
+import { TipoConfirmacion } from '../../../../shared/models/confirmDialogData.model';
 
 @Component({
   selector: 'app-libros-detail-dialog',
@@ -67,9 +68,9 @@ export class LibrosDetailDialog {
     });
   }
   deleteEjemplar(ejemplar: EjemplarTableDTO): void {
-    const { titulo, mensaje } = this.getConfirmContent(ejemplar);
+    const { titulo, mensaje, confirmar } = this.getConfirmContent(ejemplar);
 
-    this.dialogService.confirm(titulo, mensaje, 'BORRAR').subscribe((confirmed) => {
+    this.dialogService.confirm(titulo, mensaje, confirmar).subscribe((confirmed) => {
       if (!confirmed) return;
       this.isLoading = true;
       this.cdr.detectChanges();
@@ -125,15 +126,21 @@ export class LibrosDetailDialog {
       });
   }
 
-  private getConfirmContent(ejemplar: EjemplarTableDTO): { titulo: string; mensaje: string } {
+  private getConfirmContent(ejemplar: EjemplarTableDTO): {
+    titulo: string;
+    mensaje: string;
+    confirmar: TipoConfirmacion;
+  } {
     return ejemplar.estado === 'NUEVO'
       ? {
           titulo: 'Eliminar Ejemplar',
           mensaje: `El ejemplar #${ejemplar.idEjemplar} es nuevo y será eliminado permanentemente.`,
+          confirmar: 'BORRAR',
         }
       : {
           titulo: 'Dar de baja Ejemplar',
           mensaje: `El ejemplar #${ejemplar.idEjemplar} está disponible. ¿Confirmar baja?`,
+          confirmar: 'CONFIRMAR',
         };
   }
 }

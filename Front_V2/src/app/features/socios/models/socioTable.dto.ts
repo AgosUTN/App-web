@@ -1,4 +1,4 @@
-import { EstadoSocio } from "../estadoSocio.type";
+import { EstadoSocio } from './estadoSocio.type';
 
 export interface SocioTableDTO {
   id: number;

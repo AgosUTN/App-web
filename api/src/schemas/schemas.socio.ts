@@ -2,25 +2,20 @@ import { z } from "zod";
 
 const socioAltaSchema = z
   .object({
-    socio: z.object({
-      nombre: z.string().max(50),
-      apellido: z.string().max(50),
-      domicilio: z.string().max(50),
-      telefono: z.string().max(20),
-    }),
-    user: z.object({
-      email: z.string().email().max(50),
-      password: z.string().max(30),
-    }),
+    nombre: z.string().min(3).max(50),
+    apellido: z.string().max(50),
+    domicilio: z.string().max(50),
+    telefono: z.string().min(4).max(20),
+    email: z.string().email().max(50),
   })
   .strict();
 
 const socioPatchSchema = z
   .object({
-    nombre: z.string().optional(),
-    apellido: z.string().optional(),
-    domicilio: z.string().optional(),
-    telefono: z.string().optional(),
+    nombre: z.string().min(3).max(50).optional(),
+    apellido: z.string().max(50).optional(),
+    domicilio: z.string().max(50).optional(),
+    telefono: z.string().min(4).max(20).optional(),
   })
   .strict();
 

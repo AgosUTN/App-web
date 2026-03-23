@@ -92,7 +92,7 @@ export class PrestamosCreate {
       .pipe(
         switchMap((disponibles) => {
           this.maxCantEjemplares = disponibles;
-          return this.socioService.get(this.idSocio);
+          return this.socioService.getById(parseInt(this.idSocio));
         }),
       )
       .subscribe({
@@ -110,6 +110,7 @@ export class PrestamosCreate {
           switch (res.status) {
             case 404:
               this.notificationService.error('Socio no encontrado');
+              this.cdr.detectChanges();
               break;
 
             case 409:
