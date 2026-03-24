@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { MenuItem } from '../../models/menuItem.model';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/authService/auth-service';
+import { MenuService } from '../../services/menuService/menu-service';
 
 @Component({
   selector: 'app-sidenav',
@@ -11,7 +12,7 @@ import { AuthService } from '../../services/authService/auth-service';
   styleUrl: './sidenav.scss',
 })
 export class Sidenav {
-  @Input() menuItems: MenuItem[] = []; // Los recibe para que cambie según rol.
+  menuItems: MenuItem[] = [];
   @Input() sideNavOpen: boolean = true;
 
   // Se tuvo que agregar estos dos para poder cerrar la sidenav al navegar en mobile. Quizás aumenta demasiado el acoplamiento.
@@ -22,7 +23,12 @@ export class Sidenav {
   constructor(
     private router: Router,
     private authService: AuthService,
+    private menuService: MenuService,
   ) {}
+
+  ngOnInit(): void {
+    this.menuItems = this.menuService.getMenuByRol(this.authService.getRol()!);
+  }
 
   isActive(route: string | undefined): boolean {
     if (!route) return false;

@@ -13,17 +13,14 @@ import { MenuService } from '../../services/menuService/menu-service';
   styleUrl: './main-layout-component.scss',
 })
 export class MainLayoutComponent {
-  menuItems: MenuItem[] = [];
-
   MOBILE_BREAKPOINT = 768;
   sideNavOpen: boolean = true;
   isMobile: boolean = false;
 
-  constructor(private menuService: MenuService) {}
+  constructor() {}
 
   ngOnInit(): void {
     this.checkMobile();
-    this.menuItems = this.menuService.getMenu();
   }
 
   @HostListener('window:resize')

@@ -13,6 +13,7 @@ import { NotificationService } from '../../../../shared/services/notificationSer
 
 import { PrestamoService } from '../../services/prestamo-service';
 import { finalize } from 'rxjs';
+import { AuthService } from '../../../../core/services/authService/auth-service';
 
 @Component({
   selector: 'app-prestamos-detail-dialog',
@@ -29,14 +30,20 @@ export class PrestamosDetailDialog {
   socioSancionado: boolean = false;
   socioSancionadoMessage: string = '';
 
+  isAdmin: boolean = false;
+
   constructor(
     private dialogRef: MatDialogRef<PrestamosDetailDialog>,
     @Inject(MAT_DIALOG_DATA) public prestamo: PrestamoDetailDTO,
     private cdr: ChangeDetectorRef,
     private notificationService: NotificationService,
-
     private prestamoService: PrestamoService,
+    private authService: AuthService,
   ) {}
+
+  ngOnInit(): void {
+    this.isAdmin = this.authService.isAdmin();
+  }
 
   getEstadoStyle(estado: EstadoPrestamo): string {
     if (estado === 'FINALIZADO') {

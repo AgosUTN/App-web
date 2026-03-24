@@ -11,7 +11,7 @@ export const sancionRouter = Router({ mergeParams: true });
 sancionRouter.get(
   "/",
   verifyToken,
-  verifyRol("ADMIN"),
+  verifyRol("ADMIN", "USER"),
   validateInput(undefined, undefined, sancionGetByPageSchema),
   buscarSancionesByPage,
 );

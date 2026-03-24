@@ -26,7 +26,7 @@ export const prestamoRouter = Router({ mergeParams: true });
 prestamoRouter.get(
   "/:id/detail",
   verifyToken,
-  verifyRol("ADMIN"),
+  verifyRol("ADMIN", "USER"),
   validateInput(schemaParamsId, undefined),
   buscarPrestamo,
 );
@@ -40,7 +40,7 @@ prestamoRouter.get(
 prestamoRouter.get(
   "/",
   verifyToken,
-  verifyRol("ADMIN"),
+  verifyRol("ADMIN", "USER"),
   validateInput(undefined, undefined, prestamoGetByPageSchema),
   buscarPrestamosByPage,
 );

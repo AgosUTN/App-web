@@ -46,7 +46,7 @@
             <th>Ejemplar</th>
             <th>Dev. pactada</th>
             <th>Dev. real</th>
-            <th>Acción</th>
+            <th *ngIf="isAdmin">Acción</th>
           </tr>
         </thead>
         <tbody>
@@ -74,7 +74,7 @@
                 <span class="estado-badge estado-nuevo">Pendiente</span>
               </ng-template>
             </td>
-            <td>
+            <td *ngIf="isAdmin">
               <button
                 class="btn-devolver"
                 [disabled]="lp.fechaDevolucionReal !== null || isLoading"

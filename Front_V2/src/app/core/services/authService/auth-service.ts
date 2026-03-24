@@ -17,7 +17,9 @@ export class AuthService {
 
   login(loginDTO: LoginDTO): Observable<string> {
     return this.http.post<ApiResponseLogin>(this.baseUrl + '/login', loginDTO).pipe(
-      tap((res) => localStorage.setItem('rol', res.data.rol)),
+      tap((res) => {
+        localStorage.setItem('rol', res.data.rol);
+      }),
       map((res) => res.data.rol),
     );
   }
@@ -34,5 +36,9 @@ export class AuthService {
       tap(() => localStorage.removeItem('rol')),
       map((res) => res.message),
     );
+  }
+
+  isAdmin(): boolean {
+    return 'ADMIN' === this.getRol();
   }
 }

@@ -18,6 +18,7 @@ import { PrestamoService } from '../../services/prestamo-service';
 import { MatButtonToggleChange, MatButtonToggleModule } from '@angular/material/button-toggle';
 import { EstadoPrestamo } from '../../models/prestamoEstado.type';
 import { OnlyNumbersDirective } from '../../../../shared/directives/onlyNumbers.directive';
+import { AuthService } from '../../../../core/services/authService/auth-service';
 
 @Component({
   selector: 'app-prestamos-read',
@@ -47,6 +48,8 @@ export class PrestamosRead extends BasePagedComponent<PrestamoTableDTO> {
 
   displayedColumns: string[] = ['idsocio', 'fechaPrestamo', 'estado', 'cantlibros', 'actions'];
 
+  isAdmin: boolean = false;
+
   private mobileSubscription: Subscription = new Subscription();
 
   constructor(
@@ -55,10 +58,14 @@ export class PrestamosRead extends BasePagedComponent<PrestamoTableDTO> {
     private dialogService: DialogService,
     private notificationService: NotificationService,
     private prestamoService: PrestamoService,
+    private authService: AuthService,
   ) {
     super();
   }
   ngOnInit(): void {
+    // El backend consulta el idSocio del token, asi que no cambio el filterValue. Solo guardo si es admin o no para decidir que mostrar.
+    this.isAdmin = this.authService.isAdmin();
+    this.defineColumnsByRol();
     this.initTrackers();
     this.loadData();
 
@@ -159,7 +166,7 @@ export class PrestamosRead extends BasePagedComponent<PrestamoTableDTO> {
   onToggleChange(event: MatButtonToggleChange): void {
     console.log(event);
     if (event.value) {
-      console.log(event.value);
+     
       this.estadoFilter = event.value;
     } else {
       this.estadoFilter = null;
@@ -193,6 +200,13 @@ export class PrestamosRead extends BasePagedComponent<PrestamoTableDTO> {
     }
     if (state?.origen === 'socioDetail' && state?.idPrestamo) {
       this.openDetailDialog(state?.idPrestamo!);
+    }
+  }
+  private defineColumnsByRol(): void {
+    if (this.authService.isAdmin()) {
+      this.displayedColumns = ['idsocio', 'fechaPrestamo', 'estado', 'cantlibros', 'actions'];
+    } else {
+      this.displayedColumns = ['fechaPrestamo', 'estado', 'cantlibros', 'actions'];
     }
   }
 }

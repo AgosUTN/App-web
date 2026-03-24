@@ -1,17 +1,18 @@
 import { Injectable } from '@angular/core';
 import { MenuItem } from '../../models/menuItem.model';
+import { Rol } from '../../models/rol.type';
 
 @Injectable({
   providedIn: 'root',
 })
 export class MenuService {
   private readonly MenuArray: MenuItem[] = [
-    {
+    /* {
       iconPath:
         'M160-200h160v-320H160v320Zm240 0h160v-560H400v560Zm240 0h160v-240H640v240ZM80-120v-480h240v-240h320v320h240v400H80Z',
       label: 'Dashboard',
       route: '/dashboard',
-    },
+    },*/
 
     {
       iconPath:
@@ -69,11 +70,12 @@ export class MenuService {
     },
   ];
 
-  getMenu(): MenuItem[] {
-    return this.MenuArray;
-  }
+  getMenuByRol(rol: Rol): MenuItem[] {
+    if (rol === 'ADMIN') {
+      return this.MenuArray;
+    }
 
-  /* getMenuByRol(rol: string):MenuItem[]{
-  Recibe el rol por el auth service. 
-  }*/
+    const rutasUser = ['/prestamos', '/sanciones', '/login'];
+    return this.MenuArray.filter((item) => rutasUser.includes(item.route));
+  }
 }

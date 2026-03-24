@@ -56,10 +56,14 @@ async function crearUsuarioADMIN(
 }
 async function loguearUsuario(req: Request, res: Response, next: NextFunction) {
   try {
-    const user = await em.findOneOrFail(User, {
-      email: req.body.email,
-      bajaLogica: false,
-    });
+    const user = await em.findOneOrFail(
+      User,
+      {
+        email: req.body.email,
+        bajaLogica: false,
+      },
+      { populate: ["miSocio"] },
+    );
     const isValid = await bcrypt.compare(req.body.password, user.password_hash);
     if (!isValid) {
       return res.status(401).json({
@@ -67,13 +71,28 @@ async function loguearUsuario(req: Request, res: Response, next: NextFunction) {
         code: "INVALID_USER",
       });
     }
-
-    const token = jwt.sign(
-      { id: user.id, rol: user.rol },
-      process.env.JWT_SECRET!,
-      { expiresIn: "1h" },
-    );
-
+    let token;
+    if (user.miSocio) {
+      token = jwt.sign(
+        {
+          id: user.id,
+          rol: user.rol,
+          idSocio: user.miSocio.id,
+        },
+        process.env.JWT_SECRET!,
+        { expiresIn: "1h" },
+      );
+    } else {
+      token = jwt.sign(
+        {
+          id: user.id,
+          rol: user.rol,
+          idSocio: null,
+        },
+        process.env.JWT_SECRET!,
+        { expiresIn: "1h" },
+      );
+    }
     return res
       .cookie("access_token", token, {
         httpOnly: true,
@@ -82,7 +101,10 @@ async function loguearUsuario(req: Request, res: Response, next: NextFunction) {
         maxAge: 1000 * 60 * 60,
       })
       .status(200)
-      .json({ message: "Sesión iniciada", data: { rol: user.rol } });
+      .json({
+        message: "Sesión iniciada",
+        data: { rol: user.rol },
+      });
   } catch (error: any) {
     if (error instanceof NotFoundError) {
       return res

@@ -9,7 +9,6 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { CommonModule } from '@angular/common';
 import { icons } from '../../../../shared/constants/iconPaths';
 import { Subscription } from 'rxjs';
-import { NotificationService } from '../../../../shared/services/notificationService/notification-service';
 import { DialogService } from '../../../../shared/services/dialogService/dialog-service';
 import { ViewportService } from '../../../../core/services/viewportService/viewport-service';
 
@@ -19,6 +18,7 @@ import { OnlyNumbersDirective } from '../../../../shared/directives/onlyNumbers.
 import { SancionTableDTO } from '../../models/sancionTable.dto';
 import { EstadoSancion } from '../../models/estadoSancion.type';
 import { SancionService } from '../../services/sancion-service';
+import { AuthService } from '../../../../core/services/authService/auth-service';
 
 @Component({
   selector: 'app-sanciones-read',
@@ -46,14 +46,9 @@ export class SancionesRead extends BasePagedComponent<SancionTableDTO> {
   override sortOrder: string = 'desc';
   estadoFilter: EstadoSancion | null = null;
 
-  displayedColumns: string[] = [
-    'idsocio',
-    'titulo',
-    'fechaSancion',
-    'fechaFin',
-    'estado',
-    'actions',
-  ];
+  displayedColumns: string[] = [];
+
+  isAdmin: boolean = false;
 
   private mobileSubscription: Subscription = new Subscription();
 
@@ -61,12 +56,14 @@ export class SancionesRead extends BasePagedComponent<SancionTableDTO> {
     private viewportService: ViewportService,
     private cdr: ChangeDetectorRef,
     private dialogService: DialogService,
-    private notificationService: NotificationService,
     private sancionService: SancionService,
+    private authService: AuthService,
   ) {
     super();
   }
   ngOnInit(): void {
+    this.isAdmin = this.authService.isAdmin();
+    this.defineColumnsByRol();
     this.initTrackers();
     this.loadData();
     this.defineInitialization();
@@ -182,6 +179,20 @@ export class SancionesRead extends BasePagedComponent<SancionTableDTO> {
       this.resetPaginator();
       this.loadData();
       history.replaceState({}, '');
+    }
+  }
+  private defineColumnsByRol(): void {
+    if (this.authService.isAdmin()) {
+      this.displayedColumns = [
+        'idsocio',
+        'titulo',
+        'fechaSancion',
+        'fechaFin',
+        'estado',
+        'actions',
+      ];
+    } else {
+      this.displayedColumns = ['titulo', 'fechaSancion', 'fechaFin', 'estado'];
     }
   }
 }

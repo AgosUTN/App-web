@@ -299,9 +299,13 @@ async function buscarPrestamosByPage(
     const estado = req.query.estado as string | undefined;
     const sortOrder = req.query.sortOrder as string;
     const sortColumn = req.query.sortColumn as string;
-    const filterValue = req.query.filterValue as string;
+    let filterValue = req.query.filterValue as string;
     const pageSize = Number(req.query.pageSize as string);
     const pageIndex = Number(req.query.pageIndex as string);
+
+    if ((req as any).user.idSocio) {
+      filterValue = (req as any).user.idSocio.toString(); // Por seguridad no lo manda el front, se toma el idSocio del payload del token.
+    }
 
     const offset = pageSize * pageIndex;
 
@@ -333,11 +337,24 @@ async function buscarPrestamosByPage(
 async function buscarPrestamo(req: Request, res: Response, next: NextFunction) {
   try {
     const idPrestamo = parseInt(req.params.id);
+    let idSocioRequest;
+
+    if ((req as any).user.idSocio) {
+      idSocioRequest = (req as any).user.idSocio;
+    }
 
     const prestamo = await em.findOneOrFail(Prestamo, idPrestamo, {
       populate: ["miSocioPrestamo.miUser", "misLpPrestamo.miEjemplar.miLibro"],
     });
+
+    if (idSocioRequest && prestamo.miSocioPrestamo.id !== idSocioRequest) {
+      return res.status(403).json({
+        message: "No tenés acceso al préstamo de otro socio.",
+      });
+    }
+
     const prestamoDTO = PrestamoMapper.toDetailDTO(prestamo);
+
     return res
       .status(200)
       .json({ message: "Préstamo encontrado", data: prestamoDTO });

@@ -11,6 +11,7 @@
           maxlength="10"
           size="1"
           onlyNumbers
+          *ngIf="isAdmin"
         />
 
         <button
@@ -19,6 +20,7 @@
           type="submit"
           [disabled]="searchInput.invalid"
           [class.form__button--disabled]="searchInput.invalid"
+          *ngIf="isAdmin"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -45,6 +47,7 @@
           type="button"
           class="form__addButton"
           routerLink="/prestamos/alta"
+          *ngIf="isAdmin"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -150,7 +153,12 @@
 <ng-template #mobile>
   <div class="layout-mobile">
     <div class="layout-header">
-      <form class="table__searchContainer" [formGroup]="searchInput" (ngSubmit)="onSubmit()">
+      <form
+        class="table__searchContainer"
+        [formGroup]="searchInput"
+        (ngSubmit)="onSubmit()"
+        *ngIf="isAdmin"
+      >
         <input
           class="form__input"
           id="data"

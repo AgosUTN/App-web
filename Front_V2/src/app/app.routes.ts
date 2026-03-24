@@ -194,7 +194,7 @@ export const routes: Routes = [
         ],
       },
 
-      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+      { path: '', redirectTo: 'prestamos', pathMatch: 'full' },
     ],
   },
   {

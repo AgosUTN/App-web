@@ -42,7 +42,7 @@ export class LoginPage {
     this.authService.login(loginDTO).subscribe({
       next: () => {
         this.isLoading = false;
-        this.router.navigateByUrl('/dashboard');
+        this.router.navigateByUrl('/prestamos');
       },
       error: () => {
         this.isLoading = false;

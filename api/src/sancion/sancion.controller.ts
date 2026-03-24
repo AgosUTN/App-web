@@ -20,9 +20,13 @@ async function buscarSancionesByPage(
     const estado = req.query.estado as EstadoSancion | undefined;
     const sortOrder = req.query.sortOrder as string;
     const sortColumn = req.query.sortColumn as string;
-    const filterValue = req.query.filterValue as string;
+    let filterValue = req.query.filterValue as string;
     const pageSize = Number(req.query.pageSize as string);
     const pageIndex = Number(req.query.pageIndex as string);
+
+    if ((req as any).user.idSocio) {
+      filterValue = (req as any).user.idSocio.toString();
+    }
 
     const offset = pageSize * pageIndex;
 
