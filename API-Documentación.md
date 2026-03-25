@@ -16,6 +16,18 @@ Nota: El endpoint de verify se usa para evitar que un usuario logueado entre a l
 
 ---
 
+### Autores
+
+**Base URL:** `/api/autores`
+
+| Método | Endpoint | Descripción                            | Rol requerido |
+|--------|----------|----------------------------------------|---------------|
+| GET    | /        | Obtener autores paginados              | admin         |
+| GET    | /:id     | Obtener un autor por ID                | admin         |
+| POST   | /        | Crear un nuevo autor                   | admin         |
+| PATCH  | /:id     | Actualizar un autor                    | admin         |
+| DELETE | /:id     | Eliminar un autor (baja lógica/física) | admin         |
+
 ### Editoriales
 
 **Base URL:** `/api/editoriales`
