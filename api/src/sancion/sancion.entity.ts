@@ -3,14 +3,14 @@ import {
   ManyToOne,
   Property,
   DateType,
-  Rel,
   OneToOne,
 } from "@mikro-orm/core";
 import { Socio } from "../socio/socio.entity.js";
 import { BaseEntity } from "../shared/DB/baseEntity.entity.js";
 import { addDays, differenceInDays, isAfter, isBefore } from "date-fns";
-import { EstadoSancion } from "./estadoSancion.type.js";
+import type { EstadoSancion } from "./estadoSancion.type.js";
 import { LineaPrestamo } from "../lineaPrestamo/lineaPrestamo.entity.js";
+import type { Rel } from "@mikro-orm/core";
 
 @Entity()
 export class Sancion extends BaseEntity {

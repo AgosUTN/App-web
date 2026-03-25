@@ -8,9 +8,9 @@ import {
 import {
   ejemplarAltaSchema,
   ejemplarQuerySchema,
-} from "../schemas/schemas.ejemplar.js";
+} from "../shared/schemas/schemas.ejemplar.js";
 import { validateInput } from "../middlewares/middleware.validateInput.js";
-import { schemaParamsIdEjemplar } from "../schemas/schema.paramsId.js";
+import { schemaParamsIdEjemplar } from "../shared/schemas/schema.paramsId.js";
 export const ejemplarRouter = Router({ mergeParams: true });
 
 ejemplarRouter.get(

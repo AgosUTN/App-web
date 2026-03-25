@@ -7,7 +7,7 @@
   "scripts": {
     "start:dev": "tsc-watch --noClear -p ./tsconfig.json --onSuccess \"node ./dist/app.js\"",
     "build": "tsc -p ./tsconfig.json",
-    "test": "jest"
+    "test": "docker compose exec api node --experimental-vm-modules node_modules/.bin/jest"
   },
   "keywords": [],
   "author": "",

@@ -9,9 +9,12 @@ import {
 } from "./libro.controller.js";
 import { ejemplarRouter } from "../ejemplar/ejemplar.routes.js";
 import { validateInput } from "../middlewares/middleware.validateInput.js";
-import { schemaParamsId } from "../schemas/schema.paramsId.js";
-import { libroAltaSchema, libroPatchSchema } from "../schemas/schemas.libro.js";
-import { libroGetByPageSchema } from "../schemas/getByPage/libro.schema.js";
+import { schemaParamsId } from "../shared/schemas/schema.paramsId.js";
+import {
+  libroAltaSchema,
+  libroPatchSchema,
+} from "../shared/schemas/schemas.libro.js";
+import { libroGetByPageSchema } from "../shared/schemas/getByPage/libro.schema.js";
 
 export const libroRouter = Router();
 

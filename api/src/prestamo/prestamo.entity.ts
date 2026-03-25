@@ -3,18 +3,18 @@ import {
   ManyToOne,
   Property,
   DateType,
-  Rel,
   OneToMany,
   Collection,
   Cascade,
 } from "@mikro-orm/core";
+import type { Rel } from "@mikro-orm/core";
 import { Socio } from "../socio/socio.entity.js";
 import { BaseEntity } from "../shared/DB/baseEntity.entity.js";
 import { LineaPrestamo } from "../lineaPrestamo/lineaPrestamo.entity.js";
 
 import { Libro } from "../libro/libro.entity.js";
 import { Ejemplar } from "../ejemplar/ejemplar.entity.js";
-import { EstadoPrestamo } from "./prestamoEstado.type.js";
+import type { EstadoPrestamo } from "./prestamoEstado.type.js";
 
 @Entity()
 export class Prestamo extends BaseEntity {

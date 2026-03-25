@@ -4,7 +4,6 @@ import {
   PrimaryKey,
   DateTimeType,
   ManyToOne,
-  Rel,
   PrimaryKeyProp,
   Collection,
   OneToMany,
@@ -12,6 +11,8 @@ import {
 import { Libro } from "../libro/libro.entity.js";
 import { LineaPrestamo } from "../lineaPrestamo/lineaPrestamo.entity.js";
 import { EstadoEjemplar } from "./estadoEjemplar.type.js";
+
+import type { Rel } from "@mikro-orm/core";
 
 @Entity()
 export class Ejemplar {

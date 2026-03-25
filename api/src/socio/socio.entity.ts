@@ -3,7 +3,6 @@ import {
   Property,
   Collection,
   OneToMany,
-  Rel,
   OneToOne,
 } from "@mikro-orm/core";
 import { Prestamo } from "../prestamo/prestamo.entity.js";
@@ -12,7 +11,9 @@ import { Sancion } from "../sancion/sancion.entity.js";
 import { Libro } from "../libro/libro.entity.js";
 import { Ejemplar } from "../ejemplar/ejemplar.entity.js";
 import { User } from "../users/user.entity.js";
-import { EstadoSocio } from "./estadoSocio.type.js";
+import type { EstadoSocio } from "./estadoSocio.type.js";
+import type { Rel } from "@mikro-orm/core";
+
 @Entity()
 export class Socio extends BaseEntity {
   @Property()

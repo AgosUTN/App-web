@@ -4,7 +4,6 @@ import {
   Property,
   Collection,
   ManyToOne,
-  Rel,
   OneToMany,
 } from "@mikro-orm/core";
 
@@ -13,6 +12,8 @@ import { BaseEntity } from "../shared/DB/baseEntity.entity.js";
 import { Autor } from "../autor/autor.entity.js";
 import { Editorial } from "../editorial/editorial.entity.js";
 import { Ejemplar } from "../ejemplar/ejemplar.entity.js";
+
+import type { Rel } from "@mikro-orm/core";
 
 @Entity()
 export class Libro extends BaseEntity {

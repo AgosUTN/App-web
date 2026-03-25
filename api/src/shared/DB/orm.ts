@@ -2,13 +2,15 @@ import { MikroORM } from "@mikro-orm/core";
 import { MySqlDriver } from "@mikro-orm/mysql";
 import { SqlHighlighter } from "@mikro-orm/sql-highlighter";
 
+const dbHost = process.env.DB_HOST ?? "localhost";
+
 export const orm = await MikroORM.init({
   entities: ["dist/**/*.entity.js"],
   entitiesTs: ["src/**/*.entity.ts"],
-  dbName: process.env.API_DB_NAME,
+  dbName: process.env.API_DB_NAME, //?? "apiDB",
   driver: MySqlDriver,
-  //type: "mysql",// Version 6 en adelante no necesario.
-  clientUrl: `mysql://${process.env.API_DB_USER}:${process.env.API_DB_PASSWORD}@${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.API_DB_NAME}`, // "mysql://dsw:dsw@mysql:3306/TpORM" cambiar localhost por mysql para docker.
+
+  clientUrl: `mysql://${process.env.API_DB_USER}:${process.env.API_DB_PASSWORD}@${dbHost}:${process.env.DB_PORT}/${process.env.API_DB_NAME}`, //`mysql://${process.env.API_DB_USER}:${process.env.API_DB_PASSWORD}@${dbHost}:${process.env.DB_PORT}/${process.env.API_DB_NAME}`,   `mysql://${process.env.API_DB_USER ?? "root"}:${process.env.API_DB_PASSWORD ?? "root"}@${process.env.DB_HOST ?? "localhost"}:${process.env.DB_PORT ?? "3306"}/${process.env.API_DB_NAME ?? "apiDB"}`,
   highlighter: new SqlHighlighter(),
   debug: true,
   schemaGenerator: {

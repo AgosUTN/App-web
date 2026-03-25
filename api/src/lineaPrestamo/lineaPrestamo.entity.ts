@@ -3,7 +3,6 @@ import {
   ManyToOne,
   Property,
   DateType,
-  Rel,
   PrimaryKey,
   PrimaryKeyProp,
   OneToOne,
@@ -14,6 +13,7 @@ import { Ejemplar } from "../ejemplar/ejemplar.entity.js";
 import { Libro } from "../libro/libro.entity.js";
 import { isBefore, isAfter } from "date-fns";
 import { Sancion } from "../sancion/sancion.entity.js";
+import type { Rel } from "@mikro-orm/core";
 
 @Entity()
 export class LineaPrestamo {

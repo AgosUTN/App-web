@@ -22,8 +22,8 @@ import { verifyRol } from "./middlewares/middleware.authorization.js";
 import { userRouter } from "./users/user.routes.js";
 import { authRouter } from "./auth/auth.routes.js";
 
-const app = express();
-const httpServer = createServer(app);
+export const app = express();
+export const httpServer = createServer(app);
 export const io = new Server(httpServer, {
   cors: { origin: process.env.FRONTEND_URL, credentials: true },
 });
@@ -67,7 +67,7 @@ app.use((_, res) => {
   });
 });
 
-await syncSchema(); // Sacar en producción.
+await syncSchema(); //Sacar en producción.
 
 httpServer.listen(process.env.API_PORT, () =>
   console.log("Running on port 3000"),

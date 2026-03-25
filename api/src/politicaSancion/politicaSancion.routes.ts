@@ -7,12 +7,12 @@ import {
   actualizarPoliticaSancion,
 } from "./politicaSancion.controller.js";
 import { validateInput } from "../middlewares/middleware.validateInput.js";
-import { schemaParamsId } from "../schemas/schema.paramsId.js";
+import { schemaParamsId } from "../shared/schemas/schema.paramsId.js";
 import {
   politicaSancionAltaSchema,
   politicaSancionPatchSchema,
-} from "../schemas/schemas.politicaSancion.js";
-import { psGetByPageSchema } from "../schemas/getByPage/politicaSancion.schema.js";
+} from "../shared/schemas/schemas.politicaSancion.js";
+import { psGetByPageSchema } from "../shared/schemas/getByPage/politicaSancion.schema.js";
 export const politicaSancionRouter = Router();
 
 politicaSancionRouter.get(

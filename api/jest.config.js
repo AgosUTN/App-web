@@ -2,6 +2,7 @@
 export default {
   preset: "ts-jest",
   testEnvironment: "node",
+  experimentalVmModules: true,
   extensionsToTreatAsEsm: [".ts"],
   moduleNameMapper: {
     "^(\\.{1,2}/.*)\\.js$": "$1",

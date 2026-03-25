@@ -7,9 +7,12 @@ import {
   bajaAutor,
 } from "./autor.controller.js";
 import { validateInput } from "../middlewares/middleware.validateInput.js";
-import { autorAltaSchema, autorPatchSchema } from "../schemas/schemas.autor.js";
-import { schemaParamsId } from "../schemas/schema.paramsId.js";
-import { autorGetByPageSchema } from "../schemas/getByPage/autor.schema.js";
+import {
+  autorAltaSchema,
+  autorPatchSchema,
+} from "../shared/schemas/schemas.autor.js";
+import { schemaParamsId } from "../shared/schemas/schema.paramsId.js";
+import { autorGetByPageSchema } from "../shared/schemas/getByPage/autor.schema.js";
 export const autorRouter = Router();
 
 autorRouter.get(

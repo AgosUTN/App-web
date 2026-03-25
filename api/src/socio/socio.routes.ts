@@ -9,9 +9,12 @@ import {
   buscarSocioDetail,
 } from "./socio.controller.js";
 import { validateInput } from "../middlewares/middleware.validateInput.js";
-import { schemaParamsId } from "../schemas/schema.paramsId.js";
-import { socioAltaSchema, socioPatchSchema } from "../schemas/schemas.socio.js";
-import { socioGetByPageSchema } from "../schemas/getByPage/socio.schema.js";
+import { schemaParamsId } from "../shared/schemas/schema.paramsId.js";
+import {
+  socioAltaSchema,
+  socioPatchSchema,
+} from "../shared/schemas/schemas.socio.js";
+import { socioGetByPageSchema } from "../shared/schemas/getByPage/socio.schema.js";
 import { verifyToken } from "../middlewares/middleware.authentication.js";
 import { verifyRol } from "../middlewares/middleware.authorization.js";
 

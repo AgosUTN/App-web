@@ -13,11 +13,11 @@ import {
   devolverLibroParams,
   devolverLibroRequest,
   getByEjemplarSchema,
-} from "../schemas/schemas.prestamo.js";
-import { prestamoAltaSchema } from "../schemas/schemas.prestamo.js";
-import { deadlockTestSchema } from "../schemas/testConcurrencia.schema.js";
-import { prestamoGetByPageSchema } from "../schemas/getByPage/prestamo.schema.js";
-import { schemaParamsId } from "../schemas/schema.paramsId.js";
+} from "../shared/schemas/schemas.prestamo.js";
+import { prestamoAltaSchema } from "../shared/schemas/schemas.prestamo.js";
+import { deadlockTestSchema } from "../shared/schemas/testConcurrencia.schema.js";
+import { prestamoGetByPageSchema } from "../shared/schemas/getByPage/prestamo.schema.js";
+import { schemaParamsId } from "../shared/schemas/schema.paramsId.js";
 import { verifyToken } from "../middlewares/middleware.authentication.js";
 import { verifyRol } from "../middlewares/middleware.authorization.js";
 

@@ -1,8 +1,8 @@
 import { Router } from "express";
 import { buscarSancionesByPage, bajaSancion } from "./sancion.controller.js";
 import { validateInput } from "../middlewares/middleware.validateInput.js";
-import { schemaParamsId } from "../schemas/schema.paramsId.js";
-import { sancionGetByPageSchema } from "../schemas/getByPage/sancion.schema.js";
+import { schemaParamsId } from "../shared/schemas/schema.paramsId.js";
+import { sancionGetByPageSchema } from "../shared/schemas/getByPage/sancion.schema.js";
 import { verifyToken } from "../middlewares/middleware.authentication.js";
 import { verifyRol } from "../middlewares/middleware.authorization.js";
 
