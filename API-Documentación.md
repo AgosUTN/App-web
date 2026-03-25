@@ -139,7 +139,7 @@ Nota: Misma aclaración que en el CRUD anterior.
 | GET    | /:id          | Obtener un socio por ID                        | admin         |
 | GET    | /:id/detail   | Obtener detalle completo de un socio           | admin         |
 | GET    | /:id/validate | Validar que el socio puede realizar un préstamo| admin         |
-| POST   | /             | Crear un nuevo socio                           | admin         |
+| POST   | /             | Crear un nuevo socio (y usuario con rol USER)  | admin         |
 | PATCH  | /:id          | Actualizar un socio                            | admin         |
 | DELETE | /:id          | Eliminar un socio (baja lógica/física)         | admin         |
 
