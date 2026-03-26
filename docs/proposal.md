@@ -15,6 +15,8 @@ El sistema:
   - NO está pensado para que un socio saque préstamos de forma virtual, los préstamos se deben realizar de forma              presencial, por ello no existe un cátalogo de libros.
   - NO Maneja cuestiones financieras.
 
+Nota: Se agregó la posibilidad de que un socio pueda ver sus préstamos y sus sanciones para cumplir con el requerimiento de 2 tipos de usuarios en la API 
+
 ### Modelo
 
 Pendiente.
