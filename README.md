@@ -36,7 +36,7 @@ docker compose up --build
 > La primera vez puede tardar varios minutos mientras se construyen las imágenes y se inicializa la base de datos.
  
 - API: `http://localhost:3000`
-- Frontend: `http://IP-Maquina:4200` NO USAR LOCALHOST. El cors espera la IP de la máquina.
+- Frontend: `http://IP-Maquina:4200` NO USAR LOCALHOST. El cors espera la IP de la máquina. (La misma del front url / base url)
 - MySQL (acceso externo desde Workbench): `localhost:3307`
  
 ---
