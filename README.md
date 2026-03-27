@@ -1,4 +1,25 @@
-Nota: El DER quedó desactualizado, se abandono la idea de crear un microservicio.
+
+## Índice
+ 
+| # | Recurso | Estado |
+|---|---------|--------|
+| 1 | [Proposal — Descripción del sistema, alcance funcional y técnico](https://github.com/AgosUTN/App-web/blob/main/docs/proposal.md) | ✅ |
+| 2 | [Documentación de la API](https://github.com/AgosUTN/App-web/blob/main/docs/API-Documentaci%C3%B3n.md) | ✅ |
+| 3 | [Casos de uso y reglas de negocio](https://github.com/AgosUTN/App-web/tree/main/docs) | ✅ |
+| 4 | Modelo entidad relación (DER) | ⏳ Pendiente |
+| 5 | Vídeo de la aplicación funcionando | ⏳ Pendiente |
+| 6 | Link de la aplicación deployada | ⏳ Pendiente |
+ 
+---
+ 
+## Credenciales de acceso
+ 
+| Rol | Usuario | Contraseña |
+|-----|---------|------------|
+| USER | ⏳ Pendiente | ⏳ Pendiente |
+| ADMIN | ⏳ Pendiente | ⏳ Pendiente |
+ 
+---
 
 # Pasos de instalación
  
