@@ -19,7 +19,7 @@ export class LoginGuard implements CanActivate {
 
     return this.authService.verificarToken().pipe(
       map(() => {
-        this.router.navigateByUrl(rol === 'ADMIN' ? '/dashboard' : '/prestamos');
+        this.router.navigateByUrl(rol === 'ADMIN' ? '/prestamos' : '/prestamos'); // Dejo el condicional por si incorporo dashboard.
         return false;
       }),
       catchError(() => of(true)),

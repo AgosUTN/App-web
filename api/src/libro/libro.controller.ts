@@ -158,6 +158,20 @@ async function actualizarLibro(
     io.emit(SOCKET_EVENTS.CACHE_INVALIDATE, { crud: CRUD_names.Libro });
     return res.status(200).json({ message: "Libro actualizado" });
   } catch (error: any) {
+    if (error instanceof UniqueConstraintViolationException) {
+      if (error.message.includes("libro.libro_isbn_unique")) {
+        return res.status(409).json({
+          message: "El ISBN del Libro ya existe",
+          code: "ISBN_DUPLICATE",
+        });
+      }
+      if (error.message.includes("libro.libro_titulo_unique")) {
+        return res.status(409).json({
+          message: "El Titulo del Libro ya existe",
+          code: "TITULO_DUPLICATE",
+        });
+      }
+    }
     next(error);
   }
 }

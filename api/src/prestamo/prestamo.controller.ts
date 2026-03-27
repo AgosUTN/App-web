@@ -148,7 +148,9 @@ async function altaPrestamo(req: Request, res: Response, next: NextFunction) {
         .json({ message: "Politica biblioteca inaccesible" });
     }
     if (error.message?.includes("Socio") && error instanceof NotFoundError) {
-      return res.status(400).json({ message: "Socio inexistente" });
+      return res
+        .status(400)
+        .json({ message: "Socio inexistente", code: "SOCIO_NOT_FOUND" });
     }
     next(error);
   }
@@ -488,7 +490,6 @@ async function devolverLibro(req: Request, res: Response, next: NextFunction) {
         .json({ message: "Politica biblioteca  inaccesible" });
     }
     if (error instanceof NotFoundError) {
-      console.log(error);
       return res.status(404).json({
         message: "Una entidad no fue encontrada",
         code: "ENTITY_NOT_FOUND",

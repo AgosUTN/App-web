@@ -99,6 +99,12 @@ async function actualizarAutor(
     io.emit(SOCKET_EVENTS.CACHE_INVALIDATE, { crud: CRUD_names.Autor });
     return res.status(200).json({ message: "Autor actualizado" });
   } catch (error: any) {
+    if (error instanceof UniqueConstraintViolationException) {
+      return res.status(409).json({
+        message: "El nombre del autor ya existe",
+        code: "NOMBRE_DUPLICATED",
+      });
+    }
     next(error);
   }
 }

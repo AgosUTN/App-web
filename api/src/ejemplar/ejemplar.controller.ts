@@ -107,7 +107,7 @@ async function validarEjemplarPendiente(
     );
     if (!ejemplar.estasPendiente()) {
       return res
-        .status(400)
+        .status(409)
         .json({ message: "El ejemplar no esta pendiente de devolución" });
     }
     return res
@@ -115,7 +115,12 @@ async function validarEjemplarPendiente(
       .send({ message: "El ejemplar está pendiente de devolución" });
   } catch (error: any) {
     if (error instanceof NotFoundError) {
-      return res.status(404).send({ message: "Ejemplar no encontrado" });
+      return res
+        .status(404)
+        .send({
+          message: "Ejemplar no encontrado",
+          code: "EJEMPLAR_NOT_FOUND",
+        });
     }
     next(error);
   }
