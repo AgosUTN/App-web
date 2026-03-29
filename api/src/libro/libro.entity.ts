@@ -20,7 +20,7 @@ export class Libro extends BaseEntity {
   @Property({ unique: true })
   titulo!: string;
 
-  @Property()
+  @Property({ length: 500 })
   descripcion!: string;
 
   @Property({ unique: true })

@@ -67,8 +67,6 @@ export class PrestamosRead extends BasePagedComponent<PrestamoTableDTO> {
     this.isAdmin = this.authService.isAdmin();
     this.defineColumnsByRol();
     this.initTrackers();
-    this.loadData();
-
     this.defineInitialization();
   }
   ngOnDestroy(): void {
@@ -166,7 +164,6 @@ export class PrestamosRead extends BasePagedComponent<PrestamoTableDTO> {
   onToggleChange(event: MatButtonToggleChange): void {
     console.log(event);
     if (event.value) {
-     
       this.estadoFilter = event.value;
     } else {
       this.estadoFilter = null;
@@ -196,10 +193,14 @@ export class PrestamosRead extends BasePagedComponent<PrestamoTableDTO> {
       this.setFilterValue(state.idSocio!);
       this.resetPaginator();
       this.loadData();
+
       history.replaceState({}, '');
     }
     if (state?.origen === 'socioDetail' && state?.idPrestamo) {
       this.openDetailDialog(state?.idPrestamo!);
+      this.loadData();
+    } else {
+      this.loadData();
     }
   }
   private defineColumnsByRol(): void {

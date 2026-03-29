@@ -108,6 +108,8 @@ async function altaLibro(req: Request, res: Response, next: NextFunction) {
 
     await em.flush();
     io.emit(SOCKET_EVENTS.CACHE_INVALIDATE, { crud: CRUD_names.Libro });
+    io.emit(SOCKET_EVENTS.CACHE_INVALIDATE, { crud: CRUD_names.Autor }); // Puede cambiar cantLibros de las tablas paginadas.
+    io.emit(SOCKET_EVENTS.CACHE_INVALIDATE, { crud: CRUD_names.Editorial });
 
     const libroDTO = LibroMapper.toWriteDTO(libro);
 
@@ -192,6 +194,8 @@ async function bajaLibro(req: Request, res: Response, next: NextFunction) {
 
     await em.removeAndFlush(libro);
     io.emit(SOCKET_EVENTS.CACHE_INVALIDATE, { crud: CRUD_names.Libro });
+    io.emit(SOCKET_EVENTS.CACHE_INVALIDATE, { crud: CRUD_names.Autor });
+    io.emit(SOCKET_EVENTS.CACHE_INVALIDATE, { crud: CRUD_names.Editorial });
     return res.status(200).json({ message: "Libro eliminado" });
   } catch (error: any) {
     if (error instanceof NotFoundError) {

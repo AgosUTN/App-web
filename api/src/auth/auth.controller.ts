@@ -9,29 +9,7 @@ import { User } from "../users/user.entity.js";
 
 const em = orm.em;
 
-async function crearUsuarioUSER(
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) {
-  // Endpoint temporal.
-  try {
-    const password_hash = await bcrypt.hash(req.body.password, 10);
-
-    const user = em.create(User, {
-      email: req.body.email as string,
-      password_hash: password_hash,
-      rol: "USER",
-      miSocio: req.body.socio,
-    });
-    await em.persistAndFlush(user);
-    return res.status(201).json({ message: "Usuario creado" });
-  } catch (error: any) {
-    // Error mail unique.
-    next(error);
-  }
-}
-
+/*
 async function crearUsuarioADMIN(
   req: Request,
   res: Response,
@@ -54,6 +32,7 @@ async function crearUsuarioADMIN(
     next(error);
   }
 }
+  */
 async function loguearUsuario(req: Request, res: Response, next: NextFunction) {
   try {
     const user = await em.findOneOrFail(
@@ -127,8 +106,7 @@ function verificarToken(req: Request, res: Response) {
 }
 
 export {
-  crearUsuarioADMIN,
-  crearUsuarioUSER,
+
   loguearUsuario,
   logOut,
   verificarToken,

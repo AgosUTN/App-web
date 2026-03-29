@@ -19,6 +19,7 @@ import { SancionTableDTO } from '../../models/sancionTable.dto';
 import { EstadoSancion } from '../../models/estadoSancion.type';
 import { SancionService } from '../../services/sancion-service';
 import { AuthService } from '../../../../core/services/authService/auth-service';
+import { NotificationService } from '../../../../shared/services/notificationService/notification-service';
 
 @Component({
   selector: 'app-sanciones-read',
@@ -58,6 +59,7 @@ export class SancionesRead extends BasePagedComponent<SancionTableDTO> {
     private dialogService: DialogService,
     private sancionService: SancionService,
     private authService: AuthService,
+    private notificationService: NotificationService,
   ) {
     super();
   }
@@ -65,7 +67,6 @@ export class SancionesRead extends BasePagedComponent<SancionTableDTO> {
     this.isAdmin = this.authService.isAdmin();
     this.defineColumnsByRol();
     this.initTrackers();
-    this.loadData();
     this.defineInitialization();
   }
   ngOnDestroy(): void {
@@ -155,8 +156,13 @@ export class SancionesRead extends BasePagedComponent<SancionTableDTO> {
         'Confirmar',
       )
       .subscribe(() => {
-        this.sancionService.delete(id).subscribe(() => {
-          this.loadData();
+        this.sancionService.delete(id).subscribe({
+          next: () => {
+            this.loadData();
+          },
+          error: () => {
+            this.notificationService.error('No se puede revocar una sanción no vigente');
+          }, // Error no alcanzable flujo normal.
         });
       });
   }
@@ -179,6 +185,8 @@ export class SancionesRead extends BasePagedComponent<SancionTableDTO> {
       this.resetPaginator();
       this.loadData();
       history.replaceState({}, '');
+    } else {
+      this.loadData();
     }
   }
   private defineColumnsByRol(): void {

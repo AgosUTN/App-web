@@ -24,7 +24,7 @@
     <div class="prestamo-meta">
       <div class="meta-item">
         <span class="section-label">Fecha préstamo</span>
-        <span class="meta-value">{{ prestamo.fechaPrestamo | date: 'dd/MM/yyyy' }}</span>
+        <span class="meta-value">{{ prestamo.fechaPrestamo | date: 'dd/MM/yy' : '+0000' }}</span>
       </div>
       <div class="meta-item">
         <span class="section-label section-label--estado">Estado</span>
@@ -62,13 +62,13 @@
             </td>
 
             <td class="id-cell">#{{ lp.miEjemplar.id }}</td>
-            <td>{{ lp.fechaDevolucionTeorica | date: 'dd/MM/yy' }}</td>
+            <td>{{ lp.fechaDevolucionTeorica | date: 'dd/MM/yy' : '+0000' }}</td>
             <td>
               <span
                 *ngIf="lp.fechaDevolucionReal; else pendiente"
                 [class.fecha-atrasada]="isAtrasada(lp)"
               >
-                {{ lp.fechaDevolucionReal | date: 'dd/MM/yy' }}
+                {{ lp.fechaDevolucionReal | date: 'dd/MM/yy' : '+0000' }}
               </span>
               <ng-template #pendiente>
                 <span class="estado-badge estado-nuevo">Pendiente</span>

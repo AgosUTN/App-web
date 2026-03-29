@@ -16,8 +16,8 @@ POST http://localhost:3000/api/auth/admin
 Content-Type: application/json
 
 {
-    "email": "agosMonti2@hotmail.com",
-    "password": "password12345"
+    "email": "admin2@hotmail.com",
+    "password": "admin123"
 
 }
 

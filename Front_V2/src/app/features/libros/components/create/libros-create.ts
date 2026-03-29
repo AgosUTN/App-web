@@ -50,7 +50,6 @@ export class LibrosCreate {
     });
   }
   selectAutor(): void {
-    console.log('Anda el selectAutor');
     this.dialogService.selectAutor().subscribe((autor) => {
       if (autor) {
         this.libroForm.patchValue({ autor: autor.nombrecompleto });

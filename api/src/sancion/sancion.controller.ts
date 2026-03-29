@@ -91,15 +91,26 @@ async function buscarSancionesByPage(
 async function bajaSancion(req: Request, res: Response, next: NextFunction) {
   try {
     const id = Number.parseInt(req.params.id);
-    const sancion = em.getReference(Sancion, id);
+    const sancion = await em.findOneOrFail(Sancion, id);
+
+    if (!sancion.estasVigente()) {
+      return res
+        .status(409)
+        .json({
+          message: "No se puede borrar una sanción que no está vigente.",
+        });
+    }
 
     em.assign(sancion, { fechaRevocacion: new Date() });
     await em.flush();
 
     io.emit(SOCKET_EVENTS.CACHE_INVALIDATE, { crud: CRUD_names.Sancion });
 
-    return res.status(200).json({ message: "Sancion revocada" });
+    return res.status(200).json({ message: "Sanción revocada" });
   } catch (error: any) {
+    if (error instanceof NotFoundError) {
+      return res.status(200).json({ message: "Sanción revocada" });
+    }
     next(error);
   }
 }

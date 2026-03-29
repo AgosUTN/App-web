@@ -54,7 +54,6 @@ export class DialogService {
       .afterClosed();
   }
   selectAutor(): Observable<AutorTableDTO | undefined> {
-    console.log('Anda el select del dialog');
     return this.dialog
       .open(AutorReadDialog, {
         width: '900px',

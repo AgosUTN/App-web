@@ -4,7 +4,7 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 
 import { autorRouter } from "./autor/autor.routes.js";
-import { orm, syncSchema } from "./shared/DB/orm.js";
+import { orm } from "./shared/DB/orm.js";
 import { RequestContext } from "@mikro-orm/core";
 import { editorialRouter } from "./editorial/editorial.routes.js";
 import { libroRouter } from "./libro/libro.routes.js";
@@ -66,7 +66,7 @@ app.use((_, res) => {
   });
 });
 
-await syncSchema(); //Sacar en producción.
+// await syncSchema(); Sacar en producción.
 
 httpServer.listen(process.env.API_PORT, () =>
   console.log("Running on port 3000"),

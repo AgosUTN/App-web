@@ -129,7 +129,6 @@
                 mat-button
                 class="actions-button"
                 [disabled]="socio.estado === 'ELIMINADO' || isLoading"
-                [class.actions-button--disabled]="socio.estado === 'ELIMINADO' || isLoading"
                 (click)="deleteSocio(socio)"
               >
                 <svg
@@ -145,7 +144,6 @@
                 type="button"
                 class="actions-button"
                 (click)="openDetailDialog(socio.id)"
-                [disabled]="isLoading || socio.estado === 'ELIMINADO'"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -253,7 +251,6 @@
                   type="button"
                   class="actions-button"
                   (click)="openDetailDialog(socio.id)"
-                  [disabled]="isLoading || socio.estado === 'ELIMINADO'"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"

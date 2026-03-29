@@ -7,7 +7,13 @@ import {
 } from "@mikro-orm/core";
 import { Socio } from "../socio/socio.entity.js";
 import { BaseEntity } from "../shared/DB/baseEntity.entity.js";
-import { addDays, differenceInDays, isAfter, isBefore } from "date-fns";
+import {
+  addDays,
+  differenceInDays,
+  isAfter,
+  isBefore,
+  startOfDay,
+} from "date-fns";
 import type { EstadoSancion } from "./estadoSancion.type.js";
 import { LineaPrestamo } from "../lineaPrestamo/lineaPrestamo.entity.js";
 import type { Rel } from "@mikro-orm/core";
@@ -37,8 +43,7 @@ export class Sancion extends BaseEntity {
     if (this.fechaRevocacion) {
       return false;
     } else {
-      const hoy = new Date();
-
+      const hoy = startOfDay(new Date());
       return isAfter(this.getFechaFinSancion(), hoy);
     }
   }
@@ -47,7 +52,7 @@ export class Sancion extends BaseEntity {
   }
 
   getDiasSancionRestantes(): number {
-    const hoy = new Date();
+    const hoy = startOfDay(new Date());
     return differenceInDays(this.getFechaFinSancion(), hoy);
   }
 

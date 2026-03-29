@@ -407,8 +407,7 @@ async function devolverLibro(req: Request, res: Response, next: NextFunction) {
     const idSocio = req.body.idSocio;
     const idEjemplar = req.body.idEjemplar;
     const idLibro = req.body.idLibro;
-    console.log(idEjemplar);
-    console.log(idLibro);
+
     const socio = await em.findOneOrFail(Socio, { id: idSocio });
     const ejemplar = await em.findOneOrFail(
       Ejemplar,
@@ -425,7 +424,12 @@ async function devolverLibro(req: Request, res: Response, next: NextFunction) {
     const prestamo = await em.findOneOrFail(
       Prestamo,
       { id: idPrestamo },
-      { populate: ["miSocioPrestamo", "misLpPrestamo.miEjemplar.miLibro"] },
+      {
+        populate: [
+          "miSocioPrestamo.miUser",
+          "misLpPrestamo.miEjemplar.miLibro",
+        ],
+      },
     );
     const hoy = new Date();
     const lpPendiente = prestamo.getLinea(idLP);
@@ -462,7 +466,7 @@ async function devolverLibro(req: Request, res: Response, next: NextFunction) {
       em.create(Sancion, {
         diasSancion: diasSancion,
         miSocioSancion: idSocio,
-        fechaSancion: hoy,
+        fechaSancion: hoy, // hoy new Date("2026-01-01")
         miLineaPrestamo: lpPendiente,
       });
     }

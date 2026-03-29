@@ -119,8 +119,8 @@
               type="button"
               class="actions-button"
               (click)="revocarSancion(sancion.id, sancion.idSocio)"
-              [disabled]="isLoading || sancion.estado === 'REVOCADA'"
-              [class.actions-button--disabled]="isLoading || sancion.estado === 'REVOCADA'"
+              [disabled]="isLoading || sancion.estado !== 'VIGENTE'"
+              [class.actions-button--disabled]="isLoading || sancion.estado !== 'VIGENTE'"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -199,8 +199,8 @@
                   type="button"
                   class="actions-button"
                   (click)="revocarSancion(sancion.id, sancion.idSocio)"
-                  [disabled]="isLoading || sancion.estado === 'REVOCADA'"
-                  [class.actions-button--disabled]="isLoading || sancion.estado === 'REVOCADA'"
+                  [disabled]="isLoading || sancion.estado !== 'VIGENTE'"
+                  [class.actions-button--disabled]="isLoading || sancion.estado !== 'VIGENTE'"
                   *ngIf="isAdmin"
                 >
                   <svg
