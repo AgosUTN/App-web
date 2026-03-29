@@ -20,8 +20,7 @@ import type { EstadoPrestamo } from "./prestamoEstado.type.js";
 export class Prestamo extends BaseEntity {
   @Property({ columnType: "datetime" })
   fechaPrestamo = new Date();
-  @Property()
-  ordenLinea = 0;
+
   @Property()
   estadoPrestamo?: EstadoPrestamo = "PENDIENTE";
 
@@ -40,10 +39,7 @@ export class Prestamo extends BaseEntity {
     }
     return rta;
   }
-  getOrdenLinea(): number {
-    this.ordenLinea++;
-    return this.ordenLinea;
-  }
+
   getCantPendientes(): number {
     let contador = 0;
     for (const lp of this.misLpPrestamo) {

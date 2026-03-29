@@ -107,18 +107,19 @@ async function altaPrestamo(req: Request, res: Response, next: NextFunction) {
         const prestamo = em.create(Prestamo, {
           miSocioPrestamo: socio,
           fechaPrestamo: new Date(),
-          ordenLinea: 0,
         });
         const hoy = new Date();
         const diasPrestamo = politicaBiblioteca.getDiasPrestamo();
         const fechaDevolucionTeorica = addDays(hoy, diasPrestamo);
+        let x = 1;
         for (const ejemplar of ejemplaresEncontrados) {
           const lp = em.create(LineaPrestamo, {
             miEjemplar: ejemplar,
-            ordenLinea: prestamo.getOrdenLinea(),
+            ordenLinea: x,
             fechaDevolucionTeorica: fechaDevolucionTeorica,
           });
           prestamo.misLpPrestamo.add(lp);
+          x++;
         }
         await em.flush();
         return PrestamoMapper.toWriteDTO(prestamo);
@@ -246,18 +247,19 @@ async function altaPrestamoDeadlock(
       const prestamo = em.create(Prestamo, {
         miSocioPrestamo: socio,
         fechaPrestamo: new Date(),
-        ordenLinea: 0,
       });
       const hoy = new Date();
       const diasPrestamo = politicaBiblioteca.getDiasPrestamo();
       const fechaDevolucionTeorica = addDays(hoy, diasPrestamo);
+      let x = 1;
       for (const ejemplar of ejemplaresEncontrados) {
         const lp = em.create(LineaPrestamo, {
           miEjemplar: ejemplar,
-          ordenLinea: prestamo.getOrdenLinea(),
+          ordenLinea: x,
           fechaDevolucionTeorica: fechaDevolucionTeorica,
         });
         prestamo.misLpPrestamo.add(lp);
+        x++;
       }
       await em.flush();
       prestamoWriteDTO = PrestamoMapper.toWriteDTO(prestamo);
