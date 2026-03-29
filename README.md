@@ -1,4 +1,4 @@
-https://github.com/AgosUTN/App-web/tree/main/docs/CasosDeUso_ReglasDeNegocio
+
 ## Índice
  
 | # | Recurso | Estado |
