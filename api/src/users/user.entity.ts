@@ -25,3 +25,5 @@ export class User extends BaseEntity {
     this.bajaLogica = true;
   }
 }
+
+// Si hubiese implementado el CU "Cambiar contraseña", haría falta un controller y routes.

@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { Dashboard } from './features/dashboard/dashboard';
+
 import { EditorialesCreate } from './features/editoriales/components/create/editoriales-create';
 import { EditorialesRead } from './features/editoriales/components/read/editoriales-read';
 import { ErrorPage } from './core/pages/error-page/error-page';
@@ -33,11 +33,6 @@ export const routes: Routes = [
     path: '',
     component: MainLayoutComponent,
     children: [
-      {
-        path: 'dashboard',
-        component: Dashboard,
-        data: { breadcrumb: 'Dashboard', crud: 'dashboard' },
-      },
       {
         path: 'editoriales',
         canActivate: [AuthGuard],

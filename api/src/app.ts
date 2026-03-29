@@ -19,7 +19,7 @@ import { createServer } from "http";
 import { Server } from "socket.io";
 import { verifyToken } from "./middlewares/middleware.authentication.js";
 import { verifyRol } from "./middlewares/middleware.authorization.js";
-import { userRouter } from "./users/user.routes.js";
+
 import { authRouter } from "./auth/auth.routes.js";
 
 export const app = express();
@@ -55,7 +55,6 @@ app.use(
 app.use("/api/socios", verifyToken, verifyRol("ADMIN"), socioRouter);
 app.use("/api/prestamos", prestamoRouter);
 app.use("/api/sanciones", sancionRouter);
-app.use("/api/users", verifyToken, verifyRol("ADMIN", "USER"), userRouter); // Redudante el verifyRol pero por explicitud.
 app.use("/api/auth", authRouter);
 
 app.use(handleInternalError);

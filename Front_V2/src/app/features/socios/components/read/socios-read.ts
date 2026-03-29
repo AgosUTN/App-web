@@ -115,7 +115,9 @@ export class SociosRead extends BasePagedComponent<SocioTableDTO> {
         },
 
         error: () => {
-          this.notificationService.error('No se puede eliminar un socio que tenga préstamos'); // Error no accesible en flujo normal
+          this.notificationService.error(
+            'No se puede eliminar un socio que tenga préstamos activos',
+          );
         },
       });
     });
