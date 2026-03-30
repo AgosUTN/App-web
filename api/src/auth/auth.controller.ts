@@ -76,7 +76,7 @@ async function loguearUsuario(req: Request, res: Response, next: NextFunction) {
       .cookie("access_token", token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "PRODUCTION",
-        sameSite: "strict",
+        sameSite: "none", // Api y front no están en el mismo dominio de railway.
         maxAge: 1000 * 60 * 60,
       })
       .status(200)
@@ -105,9 +105,4 @@ function verificarToken(req: Request, res: Response) {
   res.status(200).json({ message: "Token válido" }); // Si no es válido / ya expiro, el error lo retorna el middleware.
 }
 
-export {
-
-  loguearUsuario,
-  logOut,
-  verificarToken,
-};
+export { loguearUsuario, logOut, verificarToken };
