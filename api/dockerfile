@@ -1,9 +1,8 @@
-FROM node:20-alpine
-WORKDIR /usr/src/frontend
-RUN npm install -g @angular/cli
+FROM node:20
+WORKDIR /usr/src/api
 COPY package*.json ./
 RUN npm install
-COPY . .
-RUN ng build --configuration production
-EXPOSE 80
-CMD ["npx", "serve", "-s", "dist/nombre-de-tu-app", "-l", "80"]
+COPY . .        
+RUN npm run build 
+EXPOSE ${API_PORT}
+CMD ["node", "dist/app.js"]
