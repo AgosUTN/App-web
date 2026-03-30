@@ -1,15 +1,9 @@
-FROM node:20 
-# Verificar que funcione, antes tenia 18.
-
-WORKDIR /usr/src/api
-
+FROM node:20-alpine
+WORKDIR /usr/src/frontend
+RUN npm install -g @angular/cli
 COPY package*.json ./
 RUN npm install
-
-# No necesitamos copiar los archivos ni hacer build aquí
-# ya que usaremos bind mount en desarrollo
-# COPY . .
-
-
-EXPOSE ${API_PORT} 
-CMD ["npm", "run", "start:dev"]
+COPY . .
+RUN ng build --configuration production
+EXPOSE 80
+CMD ["npx", "serve", "-s", "dist/nombre-de-tu-app", "-l", "80"]
