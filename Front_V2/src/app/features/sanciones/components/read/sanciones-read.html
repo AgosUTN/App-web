@@ -77,7 +77,7 @@
           </td>
         </ng-container>
         <ng-container matColumnDef="fechaSancion">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header[class.column-user]="!isAdmin">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header [class.column-user]="!isAdmin">
             Fecha de inicio
           </th>
           <td mat-cell *matCellDef="let sancion" [class.column-user]="!isAdmin">
