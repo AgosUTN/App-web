@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://midominio.com',
+  apiUrl: 'https://api-production-b06f.up.railway.app',
 };
