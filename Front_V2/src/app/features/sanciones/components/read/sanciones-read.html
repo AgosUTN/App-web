@@ -60,8 +60,8 @@
             </ng-template></td
         ></ng-container>
         <ng-container matColumnDef="titulo">
-          <th mat-header-cell *matHeaderCellDef>Libro</th>
-          <td mat-cell *matCellDef="let sancion">
+          <th mat-header-cell *matHeaderCellDef [class.column-user]="!isAdmin">Libro</th>
+          <td mat-cell *matCellDef="let sancion" [class.column-user]="!isAdmin">
             <ng-container *ngIf="!isLoading; else skeleton2">
               <span
                 #textRef
@@ -77,8 +77,10 @@
           </td>
         </ng-container>
         <ng-container matColumnDef="fechaSancion">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha de inicio</th>
-          <td mat-cell *matCellDef="let sancion">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header[class.column-user]="!isAdmin">
+            Fecha de inicio
+          </th>
+          <td mat-cell *matCellDef="let sancion" [class.column-user]="!isAdmin">
             <ng-container *ngIf="!isLoading; else skeleton3">
               <span #textRef>{{ sancion.fechaInicio | date: 'dd/MM/yyyy' }}</span>
             </ng-container>
@@ -88,8 +90,8 @@
           </td>
         </ng-container>
         <ng-container matColumnDef="fechaFin">
-          <th mat-header-cell *matHeaderCellDef>Fecha de fin</th>
-          <td mat-cell *matCellDef="let sancion">
+          <th mat-header-cell *matHeaderCellDef [class.column-user]="!isAdmin">Fecha de fin</th>
+          <td mat-cell *matCellDef="let sancion" [class.column-user]="!isAdmin">
             <ng-container *ngIf="!isLoading; else skeleton4">
               <span #textRef>{{ sancion.fechaFin | date: 'dd/MM/yyyy' }}</span>
             </ng-container>
@@ -99,8 +101,8 @@
           </td>
         </ng-container>
         <ng-container matColumnDef="estado">
-          <th mat-header-cell *matHeaderCellDef>Estado</th>
-          <td mat-cell *matCellDef="let sancion">
+          <th mat-header-cell *matHeaderCellDef [class.column-user]="!isAdmin">Estado</th>
+          <td mat-cell *matCellDef="let sancion" [class.column-user]="!isAdmin">
             <ng-container *ngIf="!isLoading; else skeleton5">
               <span #textRef>{{ sancion.estado }}</span>
             </ng-container>
