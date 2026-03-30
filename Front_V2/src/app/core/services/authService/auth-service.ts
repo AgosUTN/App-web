@@ -16,6 +16,7 @@ export class AuthService {
   constructor(private http: HttpClient) {}
 
   login(loginDTO: LoginDTO): Observable<string> {
+    console.log(this.baseUrl + '/login');
     return this.http.post<ApiResponseLogin>(this.baseUrl + '/login', loginDTO).pipe(
       tap((res) => {
         localStorage.setItem('rol', res.data.rol);
