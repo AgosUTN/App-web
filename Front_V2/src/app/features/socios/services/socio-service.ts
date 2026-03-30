@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
-import { environment } from '../../../../enviroments/enviroment';
+import { environment } from '../../../../environments/environment';
 import { ApiResponseGet } from '../../../shared/models/apiResponseGet.model';
 import { SocioReadDTO } from '../models/socioRead.dto';
 import { BaseCrudService } from '../../../shared/base/baseCrudService';

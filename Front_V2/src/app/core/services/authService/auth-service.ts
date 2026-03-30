@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { environment } from '../../../../enviroments/enviroment';
+import { environment } from '../../../../environments/environment';
 import { map, Observable, tap } from 'rxjs';
 import { LoginDTO } from '../../models/login.dto';
 import { ApiResponseLogin } from '../../models/apiResponseLogin.model';

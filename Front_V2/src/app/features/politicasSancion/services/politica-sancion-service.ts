@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BaseCrudService } from '../../../shared/base/baseCrudService';
 import { HttpClient } from '@angular/common/http';
-import { environment } from '../../../../enviroments/enviroment';
+import { environment } from '../../../../environments/environment';
 import { PoliticaSancionCreateDTO } from '../models/politicaSancionCreate.dto';
 import { PoliticaSancionReadDTO } from '../models/politicaSancionRead.dto';
 import { PoliticaSancionUpdateDTO } from '../models/politicaSancionUpdate.dto';

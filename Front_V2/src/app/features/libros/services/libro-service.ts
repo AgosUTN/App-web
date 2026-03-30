@@ -4,7 +4,7 @@ import { BaseCrudService } from '../../../shared/base/baseCrudService';
 import { LibroReadDTO } from '../models/libroRead.dto';
 import { LibroCreateDTO } from '../models/libroCreate.dto';
 import { LibroUpdateDTO } from '../models/libroUpdate.dto';
-import { environment } from '../../../../enviroments/enviroment';
+import { environment } from '../../../../environments/environment';
 import { LibroTableDTO } from '../models/libroTable.dto';
 import { HttpClient } from '@angular/common/http';
 import { LibroDetailDTO } from '../models/libroDetail.dto';

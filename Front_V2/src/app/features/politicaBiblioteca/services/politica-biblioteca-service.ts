@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { environment } from '../../../../enviroments/enviroment';
+import { environment } from '../../../../environments/environment';
 import { map, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { ApiResponseGet } from '../../../shared/models/apiResponseGet.model';

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { io } from 'socket.io-client';
 import { InvalidateCacheData, SOCKET_EVENTS } from '../../constants/socketEvents.config.';
-import { environment } from '../../../../enviroments/enviroment';
+import { environment } from '../../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',

@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { environment } from '../../../../enviroments/enviroment';
+import { environment } from '../../../../environments/environment';
 import { map, Observable } from 'rxjs';
 import { apiResponseDelete } from '../../../shared/models/apiResponseDelete.model';
 import { SancionTableDTO } from '../models/sancionTable.dto';
