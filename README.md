@@ -1,3 +1,4 @@
+Nota: Esta es la rama Main. La rama de Deploy tiene algunos fixes descubiertos durante las pruebas con la aplicación deployada.
 
 ## Índice
  
