@@ -9,8 +9,9 @@
 | 4 | [Modelo entidad relación (DER)](https://github.com/AgosUTN/App-web/blob/main/docs/DER.pdf) | 
 | 5 | [Repositorio de la API original (regularidad de la asignatura)](https://github.com/AgosUTN/TP-DSW)|
 | 6 | [Video de la app funcionando](https://www.youtube.com/watch?v=DQ9VbSIOKQk)| 
-| 7 | [Link de la aplicación deployada](https://front-production-32fd.up.railway.app)|
- 
+| 7 | [Link de la aplicación deployada](https://front-production-32fd.up.railway.app)| 
+| 8 | [Resultado de las pruebas](https://github.com/AgosUTN/App-web/blob/main/docs/Resultados-Pruebas.md)|
+
 ---
  
 ## Credenciales de acceso
