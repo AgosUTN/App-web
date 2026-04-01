@@ -12,6 +12,7 @@ Nota: Esta es la rama Main. La rama de Deploy tiene algunos fixes descubiertos d
 | 6 | [Video de la app funcionando](https://www.youtube.com/watch?v=DQ9VbSIOKQk)| 
 | 7 | [Link de la aplicación deployada](https://front-production-32fd.up.railway.app)| 
 | 8 | [Resultado de las pruebas](https://github.com/AgosUTN/App-web/blob/main/docs/Resultados-Pruebas.md)|
+| 9 | [Mejoras propuestas / Funcionalidades pendientes](https://github.com/AgosUTN/App-web/blob/main/docs/Evaluaci%C3%B3n%20t%C3%A9cnica%20y%20mejoras%20propuestas.md)|
 
 ---
  
