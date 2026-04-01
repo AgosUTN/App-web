@@ -8,7 +8,7 @@ Durante el transcurso del TP fui identificando cosas que estaban mal o eran mejo
 - Notificación por mail de préstamo por vencer / vencido.
 - Permitir carga masiva de libros, utilizando algún formato estandarizado para sistemas que alberguen información de libros.
 - QR asociado a un ejemplar, que al leerlo se cargue el libro en el paso 2 del CU "retirar varios libros".
-- Funcionalidades relativas a la gestión de cuotas.
+- Módulo de cuotas / membresías.
 
 Dado que el alcance del sistema superaba por mucho al solicitado, incluso para un grupo de 4 integrantes, no implementé esas cuestiones. 
 
